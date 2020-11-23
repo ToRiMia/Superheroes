@@ -6,6 +6,7 @@ import torimia.superheroes.model.Superhero;
 import torimia.superheroes.repo.SuperheroRepo;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("superhero")
@@ -25,6 +26,16 @@ public class SuperheroesController {
     @PostMapping
     public Superhero create(@RequestBody Superhero newSuperhero) {
         return superheroRepo.save(newSuperhero);
+    }
+
+    @PostMapping("add_friend/{id}")
+    public Superhero addNewFriend(@PathVariable("id") Superhero superhero,
+                                  @RequestBody Long friendId) {
+        List<Superhero> friends = superhero.getListOfFriends();
+        Superhero friend = superheroRepo.getOne(friendId);
+        friends.add(friend);
+        superhero.setListOfFriends(friends);
+        return superhero;
     }
 
     @PutMapping("{id}")

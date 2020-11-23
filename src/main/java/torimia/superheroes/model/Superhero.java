@@ -1,9 +1,13 @@
 package torimia.superheroes.model;
 
+import lombok.Data;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table
+@Data
 public class Superhero{
 
     @Id
@@ -21,51 +25,6 @@ public class Superhero{
     @Column(length = 1000)
     private String superPower;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public String getSuperPower() {
-        return superPower;
-    }
-
-    public void setSuperPower(String superPower) {
-        this.superPower = superPower;
-    }
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<Superhero> listOfFriends;
 }
