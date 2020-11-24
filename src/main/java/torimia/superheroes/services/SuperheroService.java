@@ -5,6 +5,12 @@ import torimia.superheroes.model.dto.SuperheroDTO;
 
 public interface SuperheroService {
 
-    SuperheroDTO addNewFriend(Long superheroId, IdRequest friendId);
+    SuperheroDTO addNewFriend(Long superheroId, IdRequest id);
+
+    SuperheroDTO deleteFriend(Long superheroId, IdRequest id);
+
+    SuperheroDTO addEnemy(Long superheroId, IdRequest id);
+
+    SuperheroDTO deleteEnemy(Long superheroId, IdRequest id);
 
 }

@@ -20,4 +20,6 @@ public class SuperheroDTO {
     private String superPower;
 
     private List<Long> listOfFriendsId;
+
+    private List<Long> listOfEnemiesId;
 }

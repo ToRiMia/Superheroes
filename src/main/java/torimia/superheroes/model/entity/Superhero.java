@@ -27,4 +27,7 @@ public class Superhero{
 
     @ManyToMany()
     private List<Superhero> listOfFriends;
+
+    @ManyToMany()
+    private List<Superhero> listOfEnemies;
 }

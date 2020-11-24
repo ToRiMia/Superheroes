@@ -12,8 +12,8 @@ public interface SuperheroRepo extends JpaRepository<Superhero, Long> {
 
     @Query(value = "SELECT superhero.id, superhero.name, superhero.first_name, " +
             "superhero.last_name, superhero.age, superhero.super_power " +
-            "FROM superhero JOIN friend " +
-            "ON (superhero.id = friend.superhero_id) " +
+            "FROM superhero JOIN superhero_list_of_friends " +
+            "ON (superhero.id = superhero_list_of_friends.superhero_id) " +
             "GROUP BY superhero.id " +
             "ORDER BY COUNT(superhero.id) DESC " +
             "LIMIT 5",

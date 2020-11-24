@@ -16,7 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SuperheroesController {
 
-    private final SuperheroRepo superheroRepo;
+    private final SuperheroRepo superheroRepo; // change
     private final SuperheroService service;
 
     @GetMapping
@@ -30,8 +30,23 @@ public class SuperheroesController {
     }
 
     @PostMapping("add_friend/{id}")
-    public SuperheroDTO addFriend(@PathVariable("id") Long superheroId, @RequestBody IdRequest friendId) {
-        return service.addNewFriend(superheroId, friendId);
+    public SuperheroDTO addNewFriend(@PathVariable("id") Long superheroId, @RequestBody IdRequest id) {
+        return service.addNewFriend(superheroId, id);
+    }
+
+    @DeleteMapping("delete_friend/{id}")
+    public SuperheroDTO deleteFriend(@PathVariable("id") Long superheroId, @RequestBody IdRequest id) {
+        return service.deleteFriend(superheroId, id);
+    }
+
+    @PostMapping("add_enemy/{id}")
+    public SuperheroDTO addEnemy(@PathVariable("id") Long superheroId, @RequestBody IdRequest id) {
+        return service.addEnemy(superheroId, id);
+    }
+
+    @DeleteMapping("delete_enemy/{id}")
+    public SuperheroDTO deleteEnemy(@PathVariable("id") Long superheroId, @RequestBody IdRequest id) {
+        return service.deleteEnemy(superheroId, id);
     }
 
     @PutMapping("{id}")
