@@ -3,7 +3,7 @@ package torimia.superheroes.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import torimia.superheroes.model.Enemy;
-import torimia.superheroes.model.Superhero;
+import torimia.superheroes.model.entity.Superhero;
 import torimia.superheroes.repo.EnemyRepo;
 
 import javax.transaction.Transactional;

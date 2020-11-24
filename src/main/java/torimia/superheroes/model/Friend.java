@@ -1,5 +1,7 @@
 package torimia.superheroes.model;
 
+import torimia.superheroes.model.entity.Superhero;
+
 import javax.persistence.*;
 
 @Entity

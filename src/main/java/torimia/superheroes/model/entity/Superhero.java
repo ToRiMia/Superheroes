@@ -1,4 +1,4 @@
-package torimia.superheroes.model;
+package torimia.superheroes.model.entity;
 
 import lombok.Data;
 
@@ -25,6 +25,6 @@ public class Superhero{
     @Column(length = 1000)
     private String superPower;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @ManyToMany()
     private List<Superhero> listOfFriends;
 }

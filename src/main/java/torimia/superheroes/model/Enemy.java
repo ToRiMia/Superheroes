@@ -1,7 +1,6 @@
 package torimia.superheroes.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.sun.istack.NotNull;
+import torimia.superheroes.model.entity.Superhero;
 
 import javax.persistence.*;
 
