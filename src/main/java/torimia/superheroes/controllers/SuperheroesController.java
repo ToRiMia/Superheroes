@@ -20,8 +20,8 @@ public class SuperheroesController {
     private final SuperheroService service;
 
     @GetMapping
-    public List<Superhero> getMessages() {
-        return superheroRepo.findAll();
+    public List<SuperheroDTO> getMessages() {
+        return service.findAll();
     }
 
     @PostMapping

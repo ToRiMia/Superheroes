@@ -7,7 +7,7 @@ import torimia.superheroes.model.dto.SuperheroDTO;
 import torimia.superheroes.model.entity.Superhero;
 import torimia.superheroes.repo.SuperheroRepo;
 
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -15,6 +15,12 @@ import java.util.stream.Collectors;
 public class SuperheroServiceInput implements SuperheroService{
 
     private final SuperheroRepo superheroRepo;
+
+    @Override
+    public List<SuperheroDTO> findAll() {
+        List<Superhero> superheroes = superheroRepo.findAll();
+        return superheroes.stream().map(this::superheroToDTO).collect(Collectors.toList());
+    }
 
     @Override
     public SuperheroDTO addNewFriend(Long superheroId, IdRequest id) {
