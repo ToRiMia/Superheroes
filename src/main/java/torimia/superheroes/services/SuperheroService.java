@@ -18,6 +18,8 @@ public interface SuperheroService {
 
     List<SuperheroDTO> findAll();
 
-    SuperheroDTO save(Superhero superhero);
+    SuperheroDTO save(SuperheroDTO superheroDTO);
+
+    SuperheroDTO update (Long superheroId, SuperheroDTO updatedSuperheroDTO);
 
 }

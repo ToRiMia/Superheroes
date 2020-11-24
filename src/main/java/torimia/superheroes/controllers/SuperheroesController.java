@@ -1,7 +1,6 @@
 package torimia.superheroes.controllers;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 import torimia.superheroes.model.dto.IdRequest;
 import torimia.superheroes.model.dto.SuperheroDTO;
@@ -24,9 +23,10 @@ public class SuperheroesController {
         return service.findAll();
     }
 
+    //????????????????????????????????????????????/
     @PostMapping
-    public SuperheroDTO create(@RequestBody Superhero newSuperhero) {
-        return service.save(newSuperhero);
+    public SuperheroDTO create(@RequestBody SuperheroDTO newSuperheroDTO) {
+        return service.save(newSuperheroDTO);
     }
 
     @PostMapping("add_friend/{id}")
@@ -50,11 +50,10 @@ public class SuperheroesController {
     }
 
     @PutMapping("{id}")
-    public Superhero update(
-            @PathVariable("id") Superhero superheroFromDB,
-            @RequestBody Superhero superhero) {
-        BeanUtils.copyProperties(superhero, superheroFromDB, "id");
-        return superheroRepo.save(superheroFromDB);
+    public SuperheroDTO update(
+            @PathVariable("id") Long superheroId,
+            @RequestBody SuperheroDTO updatedSuperheroDTO) {
+        return service.update(superheroId, updatedSuperheroDTO);
     }
 
     @DeleteMapping("{id}")
