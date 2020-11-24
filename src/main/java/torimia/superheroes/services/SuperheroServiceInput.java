@@ -23,6 +23,11 @@ public class SuperheroServiceInput implements SuperheroService{
     }
 
     @Override
+    public SuperheroDTO save(Superhero superhero) {
+        return superheroToDTO(superheroRepo.save(superhero));
+    }
+
+    @Override
     public SuperheroDTO addNewFriend(Long superheroId, IdRequest id) {
         Superhero superhero = superheroRepo.getOne(superheroId);
         List<Superhero> listOfFriends = superhero.getListOfFriends();

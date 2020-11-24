@@ -20,13 +20,13 @@ public class SuperheroesController {
     private final SuperheroService service;
 
     @GetMapping
-    public List<SuperheroDTO> getMessages() {
+    public List<SuperheroDTO> getAll() {
         return service.findAll();
     }
 
     @PostMapping
-    public Superhero create(@RequestBody Superhero newSuperhero) {
-        return superheroRepo.save(newSuperhero);
+    public SuperheroDTO create(@RequestBody Superhero newSuperhero) {
+        return service.save(newSuperhero);
     }
 
     @PostMapping("add_friend/{id}")
