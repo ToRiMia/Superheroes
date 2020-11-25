@@ -10,7 +10,6 @@ import java.util.List;
 @Repository
 public interface SuperheroRepo extends JpaRepository<Superhero, Long> {
 
-    //stackOverflow
     @Query(value = "SELECT superhero.id, superhero.name, superhero.first_name, " +
             "superhero.last_name, superhero.age, superhero.super_power " +
             "FROM superhero JOIN superhero_list_of_friends " +
@@ -21,11 +20,10 @@ public interface SuperheroRepo extends JpaRepository<Superhero, Long> {
             nativeQuery = true)
     List<Superhero> getFiveSuperheroesWithTheBiggestAmountsOfFriends();
 
-    //stackOverflow
     @Query(value = "SELECT superhero.id, superhero.name, superhero.first_name, " +
             "superhero.last_name, superhero.age, superhero.super_power " +
-            "FROM superhero JOIN enemy " +
-            "ON (superhero.id = enemy.superhero_id) " +
+            "FROM superhero JOIN superhero_list_of_enemies " +
+            "ON (superhero.id = superhero_list_of_enemies.superhero_id) " +
             "GROUP BY superhero.id " +
             "ORDER BY COUNT(superhero.id) DESC " +
             "LIMIT 5",

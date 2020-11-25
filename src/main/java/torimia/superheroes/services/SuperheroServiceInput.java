@@ -77,6 +77,18 @@ public class SuperheroServiceInput implements SuperheroService {
         return toDTO(superheroRepo.save(superhero));
     }
 
+    @Override
+    public List<SuperheroDTO> getFiveSuperheroesWithTheBiggestAmountsOfFriends() {
+        List<Superhero> superheroes = superheroRepo.getFiveSuperheroesWithTheBiggestAmountsOfFriends();
+        return superheroes.stream().map(this::toDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SuperheroDTO> getFiveSuperheroesWithTheBiggestAmountsOfEnemies() {
+        List<Superhero> superheroes = superheroRepo.getFiveSuperheroesWithTheBiggestAmountsOfEnemies();
+        return superheroes.stream().map(this::toDTO).collect(Collectors.toList());
+    }
+
     //Треба винести його в маппер
     private SuperheroDTO toDTO(Superhero superhero) {
         SuperheroDTO superheroDTO = new SuperheroDTO();
@@ -86,7 +98,7 @@ public class SuperheroServiceInput implements SuperheroService {
         superheroDTO.setLastName(superhero.getLastName());
         superheroDTO.setAge(superhero.getAge());
         superheroDTO.setSuperPower(superhero.getSuperPower());
-        superheroDTO.setListOfFriendsId(superhero.getListOfFriends().stream().map(Superhero::getId).collect(Collectors.toList()));//вилытаэ на моменты мапа, не доходить до сетера
+        superheroDTO.setListOfFriendsId(superhero.getListOfFriends().stream().map(Superhero::getId).collect(Collectors.toList()));
         superheroDTO.setListOfEnemiesId(superhero.getListOfEnemies().stream().map(Superhero::getId).collect(Collectors.toList()));
         return superheroDTO;
     }
@@ -104,7 +116,7 @@ public class SuperheroServiceInput implements SuperheroService {
         return superhero;
     }
 
-    private Superhero toEntityUpdate(SuperheroDTO superheroDTO, Superhero superhero) {
+    private void toEntityUpdate(SuperheroDTO superheroDTO, Superhero superhero) {
         superhero.setName(superheroDTO.getName());
         superhero.setFirstName(superheroDTO.getFirstName());
         superhero.setLastName(superheroDTO.getLastName());
@@ -112,17 +124,5 @@ public class SuperheroServiceInput implements SuperheroService {
         superhero.setSuperPower(superheroDTO.getSuperPower());
         superhero.setListOfFriends(superheroDTO.getListOfFriendsId().stream().map(superheroRepo::getOne).collect(Collectors.toList()));
         superhero.setListOfEnemies(superheroDTO.getListOfEnemiesId().stream().map(superheroRepo::getOne).collect(Collectors.toList()));
-        return superhero;
-    }
-
-    private Superhero toEntityCreate(SuperheroDTO superheroDTO) {
-        Superhero superhero = new Superhero();
-        superhero.setId(superheroDTO.getId());
-        superhero.setName(superheroDTO.getName());
-        superhero.setFirstName(superheroDTO.getFirstName());
-        superhero.setLastName(superheroDTO.getLastName());
-        superhero.setAge(superheroDTO.getAge());
-        superhero.setSuperPower(superheroDTO.getSuperPower());
-        return superhero;
     }
 }

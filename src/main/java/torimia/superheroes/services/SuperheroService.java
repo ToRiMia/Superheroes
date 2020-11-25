@@ -19,8 +19,12 @@ public interface SuperheroService {
 
     SuperheroDTO save(SuperheroDTO superheroDTO);
 
-    SuperheroDTO update (Long superheroId, SuperheroDTO updatedSuperheroDTO);
+    SuperheroDTO update(Long superheroId, SuperheroDTO updatedSuperheroDTO);
 
-    void delete (Long superheroId);
+    void delete(Long superheroId);
+
+    List<SuperheroDTO> getFiveSuperheroesWithTheBiggestAmountsOfFriends();
+
+    List<SuperheroDTO> getFiveSuperheroesWithTheBiggestAmountsOfEnemies();
 
 }

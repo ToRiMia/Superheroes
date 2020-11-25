@@ -15,7 +15,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SuperheroesController {
 
-    private final SuperheroRepo superheroRepo; // change
     private final SuperheroService service;
 
     @GetMapping
@@ -28,7 +27,7 @@ public class SuperheroesController {
         return service.save(newSuperheroDTO);
     }
 
-    @PutMapping("{id}")
+    @PutMapping("{id}") // якщо не присилати листи?
     public SuperheroDTO update(
             @PathVariable("id") Long superheroId,
             @RequestBody SuperheroDTO updatedSuperheroDTO) {
@@ -40,7 +39,7 @@ public class SuperheroesController {
         service.delete(superheroId);
     }
 
-    @PostMapping("add_friend/{id}")
+    @PatchMapping("add_friend/{id}")
     public SuperheroDTO addNewFriend(@PathVariable("id") Long superheroId, @RequestBody IdRequest id) {
         return service.addNewFriend(superheroId, id);
     }
@@ -50,7 +49,7 @@ public class SuperheroesController {
         return service.deleteFriend(superheroId, id);
     }
 
-    @PostMapping("add_enemy/{id}")
+    @PatchMapping("add_enemy/{id}")
     public SuperheroDTO addEnemy(@PathVariable("id") Long superheroId, @RequestBody IdRequest id) {
         return service.addEnemy(superheroId, id);
     }
@@ -61,13 +60,13 @@ public class SuperheroesController {
     }
 
     @GetMapping("top5_friends")
-    public List<Superhero> getTop5SuperheroWithFriends() {
-        return superheroRepo.getFiveSuperheroesWithTheBiggestAmountsOfFriends();
+    public List<SuperheroDTO> getTop5SuperheroWithFriends() {
+        return service.getFiveSuperheroesWithTheBiggestAmountsOfFriends();
     }
 
     @GetMapping("top5_enemies")
-    public List<Superhero> getTop5SuperheroWithEnemies() {
-        return superheroRepo.getFiveSuperheroesWithTheBiggestAmountsOfEnemies();
+    public List<SuperheroDTO> getTop5SuperheroWithEnemies() {
+        return service.getFiveSuperheroesWithTheBiggestAmountsOfEnemies();
     }
 
 /*
