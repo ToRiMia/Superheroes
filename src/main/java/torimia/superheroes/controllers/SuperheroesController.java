@@ -17,7 +17,7 @@ public class SuperheroesController {
     private final SuperheroService service;
 
     @GetMapping
-    public List<SuperheroDTO> getAll(HttpServletRequest request) {
+    public List<SuperheroDTO> getAll() {
         return service.findAll();
     }
 

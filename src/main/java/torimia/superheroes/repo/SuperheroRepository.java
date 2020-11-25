@@ -3,12 +3,13 @@ package torimia.superheroes.repo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import torimia.superheroes.exceptions.NotFoundException;
 import torimia.superheroes.model.entity.Superhero;
 
 import java.util.List;
 
 @Repository
-public interface SuperheroRepo extends JpaRepository<Superhero, Long> {
+public interface SuperheroRepository extends JpaRepository<Superhero, Long> {
 
     @Query(value = "SELECT superhero.id, superhero.name, superhero.first_name, " +
             "superhero.last_name, superhero.age, superhero.super_power " +

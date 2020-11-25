@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import torimia.superheroes.model.dto.IdRequest;
 import torimia.superheroes.model.dto.SuperheroDTO;
 import torimia.superheroes.model.entity.Superhero;
-import torimia.superheroes.repo.SuperheroRepo;
+import torimia.superheroes.repo.SuperheroRepository;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Service
 public class SuperheroServiceInput implements SuperheroService {
 
-    private final SuperheroRepo superheroRepo;
+    private final SuperheroRepository superheroRepo;
 
     @Override
     public List<SuperheroDTO> findAll() {
