@@ -23,7 +23,6 @@ public class SuperheroesController {
         return service.findAll();
     }
 
-    //????????????????????????????????????????????/
     @PostMapping
     public SuperheroDTO create(@RequestBody SuperheroDTO newSuperheroDTO) {
         return service.save(newSuperheroDTO);
@@ -72,13 +71,24 @@ public class SuperheroesController {
     }
 
 /*
-    {
-        "name":"Batman",
-            "firstName":"Bruce",
-            "lastName":"Wayne",
-            "age":48,
-            "superPower":"The brutal voice"
-    }
+{
+    "name":"Batman",
+    "firstName":"Bruce",
+    "lastName":"Wayne",
+    "age":48,
+    "superPower":"The brutal voice"
+}
+
+post
+{
+    "name": "Batman",
+    "firstName": "Ka",
+    "lastName": "Oi",
+    "age": 25,
+    "superPower": "The brutal voice",
+    "listOfFriendsId": [3,2],
+    "listOfEnemiesId": [1]
+}
 */
 }
 

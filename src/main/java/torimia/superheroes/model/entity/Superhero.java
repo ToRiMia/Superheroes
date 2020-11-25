@@ -3,12 +3,13 @@ package torimia.superheroes.model.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table
 @Data
-public class Superhero{
+public class Superhero {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,8 +27,8 @@ public class Superhero{
     private String superPower;
 
     @ManyToMany()
-    private List<Superhero> listOfFriends;
+    private List<Superhero> listOfFriends = new ArrayList<>();
 
     @ManyToMany()
-    private List<Superhero> listOfEnemies;
+    private List<Superhero> listOfEnemies = new ArrayList<>();
 }

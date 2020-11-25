@@ -24,7 +24,7 @@ public class SuperheroServiceInput implements SuperheroService {
 
     @Override
     public SuperheroDTO save(SuperheroDTO superheroDTO) {
-        Superhero superhero = toEntityCreate(superheroDTO);
+        Superhero superhero = toEntity(superheroDTO);
         return toDTO(superheroRepo.save(superhero));
     }
 

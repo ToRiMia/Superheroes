@@ -21,9 +21,9 @@ public class SuperheroDTO {
 
     private String superPower;
 
-    private List<Long> listOfFriendsId;
+    private List<Long> listOfFriendsId = new ArrayList<>();
 
-    private List<Long> listOfEnemiesId;
+    private List<Long> listOfEnemiesId = new ArrayList<>();
 
     public void setListOfFriendsId(List<Long> listOfFriendsId) {
         this.listOfFriendsId = Objects.requireNonNullElseGet(listOfFriendsId, ArrayList::new);
