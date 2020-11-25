@@ -31,7 +31,7 @@ public class SuperheroServiceInput implements SuperheroService {
     @Override
     public SuperheroDTO update(Long superheroId, SuperheroDTO updatedSuperheroDTO) {
         Superhero superhero = superheroRepo.getOne(superheroId);
-//        BeanUtils.copyProperties(updatedSuperheroDTO, superhero, "id");
+        toEntityUpdate(updatedSuperheroDTO, superhero);
         return toDTO(superheroRepo.save(superhero));
     }
 
@@ -95,7 +95,17 @@ public class SuperheroServiceInput implements SuperheroService {
         superhero.setSuperPower(superheroDTO.getSuperPower());
         superhero.setListOfFriends(superheroDTO.getListOfFriendsId().stream().map(superheroRepo::getOne).collect(Collectors.toList()));
         superhero.setListOfEnemies(superheroDTO.getListOfEnemiesId().stream().map(superheroRepo::getOne).collect(Collectors.toList()));
+        return superhero;
+    }
 
+    private Superhero toEntityUpdate(SuperheroDTO superheroDTO, Superhero superhero) {
+        superhero.setName(superheroDTO.getName());
+        superhero.setFirstName(superheroDTO.getFirstName());
+        superhero.setLastName(superheroDTO.getLastName());
+        superhero.setAge(superheroDTO.getAge());
+        superhero.setSuperPower(superheroDTO.getSuperPower());
+        superhero.setListOfFriends(superheroDTO.getListOfFriendsId().stream().map(superheroRepo::getOne).collect(Collectors.toList()));
+        superhero.setListOfEnemies(superheroDTO.getListOfEnemiesId().stream().map(superheroRepo::getOne).collect(Collectors.toList()));
         return superhero;
     }
 

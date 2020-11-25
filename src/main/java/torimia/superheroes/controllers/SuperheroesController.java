@@ -28,6 +28,18 @@ public class SuperheroesController {
         return service.save(newSuperheroDTO);
     }
 
+    @PutMapping("{id}")
+    public SuperheroDTO update(
+            @PathVariable("id") Long superheroId,
+            @RequestBody SuperheroDTO updatedSuperheroDTO) {
+        return service.update(superheroId, updatedSuperheroDTO);
+    }
+
+    @DeleteMapping("{id}")
+    public void remove(@PathVariable("id") Superhero superhero) {
+        superheroRepo.delete(superhero);
+    }
+
     @PostMapping("add_friend/{id}")
     public SuperheroDTO addNewFriend(@PathVariable("id") Long superheroId, @RequestBody IdRequest id) {
         return service.addNewFriend(superheroId, id);
@@ -46,18 +58,6 @@ public class SuperheroesController {
     @DeleteMapping("delete_enemy/{id}")
     public SuperheroDTO deleteEnemy(@PathVariable("id") Long superheroId, @RequestBody IdRequest id) {
         return service.deleteEnemy(superheroId, id);
-    }
-
-    @PutMapping("{id}")
-    public SuperheroDTO update(
-            @PathVariable("id") Long superheroId,
-            @RequestBody SuperheroDTO updatedSuperheroDTO) {
-        return service.update(superheroId, updatedSuperheroDTO);
-    }
-
-    @DeleteMapping("{id}")
-    public void remove(@PathVariable("id") Superhero superhero) {
-        superheroRepo.delete(superhero);
     }
 
     @GetMapping("top5_friends")
