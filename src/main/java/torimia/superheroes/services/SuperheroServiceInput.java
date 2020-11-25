@@ -36,6 +36,12 @@ public class SuperheroServiceInput implements SuperheroService {
     }
 
     @Override
+    public void delete(Long superheroId) {
+        Superhero superhero = superheroRepo.getOne(superheroId);
+        superheroRepo.delete(superhero);
+    }
+
+    @Override
     public SuperheroDTO addNewFriend(Long superheroId, IdRequest id) {
         Superhero superhero = superheroRepo.getOne(superheroId);
         List<Superhero> listOfFriends = superhero.getListOfFriends();

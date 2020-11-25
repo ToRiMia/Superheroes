@@ -2,7 +2,6 @@ package torimia.superheroes.services;
 
 import torimia.superheroes.model.dto.IdRequest;
 import torimia.superheroes.model.dto.SuperheroDTO;
-import torimia.superheroes.model.entity.Superhero;
 
 import java.util.List;
 
@@ -21,5 +20,7 @@ public interface SuperheroService {
     SuperheroDTO save(SuperheroDTO superheroDTO);
 
     SuperheroDTO update (Long superheroId, SuperheroDTO updatedSuperheroDTO);
+
+    void delete (Long superheroId);
 
 }

@@ -36,8 +36,8 @@ public class SuperheroesController {
     }
 
     @DeleteMapping("{id}")
-    public void remove(@PathVariable("id") Superhero superhero) {
-        superheroRepo.delete(superhero);
+    public void remove(@PathVariable("id") Long superheroId) {
+        service.delete(superheroId);
     }
 
     @PostMapping("add_friend/{id}")
