@@ -31,4 +31,14 @@ public class Superhero {
 
     @ManyToMany()
     private List<Superhero> listOfEnemies = new ArrayList<>();
+
+    public void setListOfFriends(List<Superhero> listOfFriends) {
+        if (listOfFriends != null && !listOfFriends.isEmpty())
+            this.listOfFriends = listOfFriends;
+    }
+
+    public void setListOfEnemies(List<Superhero> listOfEnemies) {
+        if (listOfEnemies != null && !listOfEnemies.isEmpty())
+            this.listOfEnemies = listOfEnemies;
+    }
 }

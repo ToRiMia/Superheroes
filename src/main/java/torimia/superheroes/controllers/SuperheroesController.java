@@ -4,10 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import torimia.superheroes.model.dto.IdRequest;
 import torimia.superheroes.model.dto.SuperheroDTO;
-import torimia.superheroes.model.entity.Superhero;
-import torimia.superheroes.repo.SuperheroRepo;
 import torimia.superheroes.services.SuperheroService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -18,16 +17,16 @@ public class SuperheroesController {
     private final SuperheroService service;
 
     @GetMapping
-    public List<SuperheroDTO> getAll() {
+    public List<SuperheroDTO> getAll(HttpServletRequest request) {
         return service.findAll();
     }
 
     @PostMapping
     public SuperheroDTO create(@RequestBody SuperheroDTO newSuperheroDTO) {
-        return service.save(newSuperheroDTO);
+        return service.create(newSuperheroDTO);
     }
 
-    @PutMapping("{id}") // якщо не присилати листи?
+    @PutMapping("{id}")
     public SuperheroDTO update(
             @PathVariable("id") Long superheroId,
             @RequestBody SuperheroDTO updatedSuperheroDTO) {
@@ -59,14 +58,14 @@ public class SuperheroesController {
         return service.deleteEnemy(superheroId, id);
     }
 
-    @GetMapping("top5_friends")
-    public List<SuperheroDTO> getTop5SuperheroWithFriends() {
-        return service.getFiveSuperheroesWithTheBiggestAmountsOfFriends();
+    @GetMapping("top_friends")
+    public List<SuperheroDTO> getTopSuperheroWithFriends(@RequestParam(value = "amount", defaultValue = "5", required = false) Integer amountOfSuperhero) {
+        return service.getSuperheroesWithTheBiggestAmountsOfFriends(amountOfSuperhero);
     }
 
-    @GetMapping("top5_enemies")
-    public List<SuperheroDTO> getTop5SuperheroWithEnemies() {
-        return service.getFiveSuperheroesWithTheBiggestAmountsOfEnemies();
+    @GetMapping("top_enemies")
+    public List<SuperheroDTO> getTop5SuperheroWithEnemies(@RequestParam(value = "amount", defaultValue = "5", required = false) Integer amountOfSuperhero) {
+        return service.getSuperheroesWithTheBiggestAmountsOfEnemies(amountOfSuperhero);
     }
 
 /*

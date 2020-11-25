@@ -17,14 +17,14 @@ public interface SuperheroService {
 
     List<SuperheroDTO> findAll();
 
-    SuperheroDTO save(SuperheroDTO superheroDTO);
+    SuperheroDTO create(SuperheroDTO superheroDTO);
 
     SuperheroDTO update(Long superheroId, SuperheroDTO updatedSuperheroDTO);
 
     void delete(Long superheroId);
 
-    List<SuperheroDTO> getFiveSuperheroesWithTheBiggestAmountsOfFriends();
+    List<SuperheroDTO> getSuperheroesWithTheBiggestAmountsOfFriends(Integer amountOfSuperhero);
 
-    List<SuperheroDTO> getFiveSuperheroesWithTheBiggestAmountsOfEnemies();
+    List<SuperheroDTO> getSuperheroesWithTheBiggestAmountsOfEnemies(Integer amountOfSuperhero);
 
 }

@@ -23,8 +23,9 @@ public class SuperheroServiceInput implements SuperheroService {
     }
 
     @Override
-    public SuperheroDTO save(SuperheroDTO superheroDTO) {
+    public SuperheroDTO create(SuperheroDTO superheroDTO) {
         Superhero superhero = toEntity(superheroDTO);
+        superhero.setId(null);
         return toDTO(superheroRepo.save(superhero));
     }
 
@@ -78,14 +79,14 @@ public class SuperheroServiceInput implements SuperheroService {
     }
 
     @Override
-    public List<SuperheroDTO> getFiveSuperheroesWithTheBiggestAmountsOfFriends() {
-        List<Superhero> superheroes = superheroRepo.getFiveSuperheroesWithTheBiggestAmountsOfFriends();
+    public List<SuperheroDTO> getSuperheroesWithTheBiggestAmountsOfFriends(Integer amountOfSuperhero) {
+        List<Superhero> superheroes = superheroRepo.getSuperheroesWithTheBiggestAmountsOfFriends(amountOfSuperhero);
         return superheroes.stream().map(this::toDTO).collect(Collectors.toList());
     }
 
     @Override
-    public List<SuperheroDTO> getFiveSuperheroesWithTheBiggestAmountsOfEnemies() {
-        List<Superhero> superheroes = superheroRepo.getFiveSuperheroesWithTheBiggestAmountsOfEnemies();
+    public List<SuperheroDTO> getSuperheroesWithTheBiggestAmountsOfEnemies(Integer amountOfSuperhero) {
+        List<Superhero> superheroes = superheroRepo.getSuperheroesWithTheBiggestAmountsOfEnemies(amountOfSuperhero);
         return superheroes.stream().map(this::toDTO).collect(Collectors.toList());
     }
 

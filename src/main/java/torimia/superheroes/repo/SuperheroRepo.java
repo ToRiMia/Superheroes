@@ -16,9 +16,9 @@ public interface SuperheroRepo extends JpaRepository<Superhero, Long> {
             "ON (superhero.id = superhero_list_of_friends.superhero_id) " +
             "GROUP BY superhero.id " +
             "ORDER BY COUNT(superhero.id) DESC " +
-            "LIMIT 5",
+            "LIMIT :amountOfSuperhero",
             nativeQuery = true)
-    List<Superhero> getFiveSuperheroesWithTheBiggestAmountsOfFriends();
+    List<Superhero> getSuperheroesWithTheBiggestAmountsOfFriends(Integer amountOfSuperhero);
 
     @Query(value = "SELECT superhero.id, superhero.name, superhero.first_name, " +
             "superhero.last_name, superhero.age, superhero.super_power " +
@@ -26,8 +26,8 @@ public interface SuperheroRepo extends JpaRepository<Superhero, Long> {
             "ON (superhero.id = superhero_list_of_enemies.superhero_id) " +
             "GROUP BY superhero.id " +
             "ORDER BY COUNT(superhero.id) DESC " +
-            "LIMIT 5",
+            "LIMIT :amountOfSuperhero",
             nativeQuery = true)
-    List<Superhero> getFiveSuperheroesWithTheBiggestAmountsOfEnemies();
+    List<Superhero> getSuperheroesWithTheBiggestAmountsOfEnemies(Integer amountOfSuperhero);
 
 }
