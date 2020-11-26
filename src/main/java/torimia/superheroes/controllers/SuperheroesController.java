@@ -5,8 +5,6 @@ import org.springframework.web.bind.annotation.*;
 import torimia.superheroes.model.dto.IdRequest;
 import torimia.superheroes.model.dto.SuperheroDTO;
 import torimia.superheroes.services.SuperheroService;
-
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController

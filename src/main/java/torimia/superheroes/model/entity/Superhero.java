@@ -1,14 +1,18 @@
 package torimia.superheroes.model.entity;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table
 @Data
+@EqualsAndHashCode(exclude = {"listOfFriends", "listOfEnemies"})
 public class Superhero {
 
     @Id
@@ -26,19 +30,29 @@ public class Superhero {
     @Column(length = 1000)
     private String superPower;
 
+    @Setter(AccessLevel.PRIVATE)
     @ManyToMany()
-    private List<Superhero> listOfFriends = new ArrayList<>();
+    private Set<Superhero> listOfFriends = new HashSet<>();
 
+    @Setter(AccessLevel.PRIVATE)
     @ManyToMany()
-    private List<Superhero> listOfEnemies = new ArrayList<>();
+    private Set<Superhero> listOfEnemies = new HashSet<>();
 
-    public void setListOfFriends(List<Superhero> listOfFriends) {
-        if (listOfFriends != null && !listOfFriends.isEmpty())
-            this.listOfFriends = listOfFriends;
+    public void addFriend(Superhero friend) {
+        listOfEnemies.remove(friend);
+        listOfFriends.add(friend);
     }
 
-    public void setListOfEnemies(List<Superhero> listOfEnemies) {
-        if (listOfEnemies != null && !listOfEnemies.isEmpty())
-            this.listOfEnemies = listOfEnemies;
+    public void addEnemy(Superhero enemy) {
+        listOfFriends.remove(enemy);
+        listOfEnemies.add(enemy);
+    }
+
+    public void deleteEnemy(Superhero enemy) {
+        listOfEnemies.remove(enemy);
+    }
+
+    public void deleteFriend(Superhero friend) {
+        listOfFriends.remove(friend);
     }
 }

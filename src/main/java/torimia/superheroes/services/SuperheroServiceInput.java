@@ -2,6 +2,7 @@ package torimia.superheroes.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import torimia.superheroes.exceptions.AddingToListException;
 import torimia.superheroes.model.dto.IdRequest;
 import torimia.superheroes.model.dto.SuperheroDTO;
 import torimia.superheroes.model.entity.Superhero;
@@ -44,37 +45,39 @@ public class SuperheroServiceInput implements SuperheroService {
 
     @Override
     public SuperheroDTO addNewFriend(Long superheroId, IdRequest id) {
+        if (superheroId.equals(id.getId())) {
+            throw new AddingToListException("It's forbidden to add yourself to the list of your friends or enemies");
+        }
         Superhero superhero = superheroRepo.getOne(superheroId);
-        List<Superhero> listOfFriends = superhero.getListOfFriends();
         Superhero friend = superheroRepo.getOne(id.getId());
-        listOfFriends.add(friend);
+        superhero.addFriend(friend);
         return toDTO(superheroRepo.save(superhero));
     }
 
     @Override
     public SuperheroDTO deleteFriend(Long superheroId, IdRequest id) {
         Superhero superhero = superheroRepo.getOne(superheroId);
-        List<Superhero> listOfFriends = superhero.getListOfFriends();
         Superhero friend = superheroRepo.getOne(id.getId());
-        listOfFriends.remove(friend);
+        superhero.deleteFriend(friend);
         return toDTO(superheroRepo.save(superhero));
     }
 
     @Override
     public SuperheroDTO addEnemy(Long superheroId, IdRequest id) {
+        if (superheroId.equals(id.getId())) {
+            throw new AddingToListException("It's forbidden to add yourself to the list of your friends or enemies");
+        }
         Superhero superhero = superheroRepo.getOne(superheroId);
-        List<Superhero> listOfEnemies = superhero.getListOfEnemies();
         Superhero enemy = superheroRepo.getOne(id.getId());
-        listOfEnemies.add(enemy);
+        superhero.addEnemy(enemy);
         return toDTO(superheroRepo.save(superhero));
     }
 
     @Override
     public SuperheroDTO deleteEnemy(Long superheroId, IdRequest id) {
         Superhero superhero = superheroRepo.getOne(superheroId);
-        List<Superhero> listOfEnemies = superhero.getListOfEnemies();
         Superhero enemy = superheroRepo.getOne(id.getId());
-        listOfEnemies.remove(enemy);
+        superhero.deleteEnemy(enemy);
         return toDTO(superheroRepo.save(superhero));
     }
 
@@ -112,8 +115,6 @@ public class SuperheroServiceInput implements SuperheroService {
         superhero.setLastName(superheroDTO.getLastName());
         superhero.setAge(superheroDTO.getAge());
         superhero.setSuperPower(superheroDTO.getSuperPower());
-        superhero.setListOfFriends(superheroDTO.getListOfFriendsId().stream().map(superheroRepo::getOne).collect(Collectors.toList()));
-        superhero.setListOfEnemies(superheroDTO.getListOfEnemiesId().stream().map(superheroRepo::getOne).collect(Collectors.toList()));
         return superhero;
     }
 
@@ -123,7 +124,5 @@ public class SuperheroServiceInput implements SuperheroService {
         superhero.setLastName(superheroDTO.getLastName());
         superhero.setAge(superheroDTO.getAge());
         superhero.setSuperPower(superheroDTO.getSuperPower());
-        superhero.setListOfFriends(superheroDTO.getListOfFriendsId().stream().map(superheroRepo::getOne).collect(Collectors.toList()));
-        superhero.setListOfEnemies(superheroDTO.getListOfEnemiesId().stream().map(superheroRepo::getOne).collect(Collectors.toList()));
     }
 }
