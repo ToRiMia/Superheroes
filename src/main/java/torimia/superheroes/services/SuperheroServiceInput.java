@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import torimia.superheroes.exceptions.AddingToListException;
 import torimia.superheroes.model.dto.IdRequest;
 import torimia.superheroes.model.dto.SuperheroDTO;
+import torimia.superheroes.model.dto.SuperheroDTOForTop;
+import torimia.superheroes.model.dto.SuperheroViewForTop;
 import torimia.superheroes.model.entity.Superhero;
 import torimia.superheroes.repo.SuperheroRepository;
 
@@ -82,15 +84,13 @@ public class SuperheroServiceInput implements SuperheroService {
     }
 
     @Override
-    public List<SuperheroDTO> getSuperheroesWithTheBiggestAmountsOfFriends(Integer amountOfSuperhero) {
-        List<Superhero> superheroes = superheroRepo.getSuperheroesWithTheBiggestAmountsOfFriends(amountOfSuperhero);
-        return superheroes.stream().map(this::toDTO).collect(Collectors.toList());
+    public List<SuperheroViewForTop> getSuperheroesWithTheBiggestAmountsOfFriends(Integer amountOfSuperhero) {
+        return superheroRepo.getSuperheroesWithTheBiggestAmountsOfFriends(amountOfSuperhero);
     }
 
     @Override
-    public List<SuperheroDTO> getSuperheroesWithTheBiggestAmountsOfEnemies(Integer amountOfSuperhero) {
-        List<Superhero> superheroes = superheroRepo.getSuperheroesWithTheBiggestAmountsOfEnemies(amountOfSuperhero);
-        return superheroes.stream().map(this::toDTO).collect(Collectors.toList());
+    public List<SuperheroViewForTop> getSuperheroesWithTheBiggestAmountsOfEnemies(Integer amountOfSuperhero) {
+        return superheroRepo.getSuperheroesWithTheBiggestAmountsOfEnemies(amountOfSuperhero);
     }
 
     //Треба винести його в маппер

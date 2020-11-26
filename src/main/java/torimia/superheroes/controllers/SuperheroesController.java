@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import torimia.superheroes.model.dto.IdRequest;
 import torimia.superheroes.model.dto.SuperheroDTO;
+import torimia.superheroes.model.dto.SuperheroDTOForTop;
+import torimia.superheroes.model.dto.SuperheroViewForTop;
 import torimia.superheroes.services.SuperheroService;
 import java.util.List;
 
@@ -57,12 +59,12 @@ public class SuperheroesController {
     }
 
     @GetMapping("top_friends")
-    public List<SuperheroDTO> getTopSuperheroWithFriends(@RequestParam(value = "amount", defaultValue = "5", required = false) Integer amountOfSuperhero) {
+    public List<SuperheroViewForTop> getTopSuperheroWithFriends(@RequestParam(value = "amount", defaultValue = "5", required = false) Integer amountOfSuperhero) {
         return service.getSuperheroesWithTheBiggestAmountsOfFriends(amountOfSuperhero);
     }
 
     @GetMapping("top_enemies")
-    public List<SuperheroDTO> getTop5SuperheroWithEnemies(@RequestParam(value = "amount", defaultValue = "5", required = false) Integer amountOfSuperhero) {
+    public List<SuperheroViewForTop> getTop5SuperheroWithEnemies(@RequestParam(value = "amount", defaultValue = "5", required = false) Integer amountOfSuperhero) {
         return service.getSuperheroesWithTheBiggestAmountsOfEnemies(amountOfSuperhero);
     }
 

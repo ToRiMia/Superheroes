@@ -2,6 +2,8 @@ package torimia.superheroes.services;
 
 import torimia.superheroes.model.dto.IdRequest;
 import torimia.superheroes.model.dto.SuperheroDTO;
+import torimia.superheroes.model.dto.SuperheroDTOForTop;
+import torimia.superheroes.model.dto.SuperheroViewForTop;
 
 import java.util.List;
 
@@ -23,8 +25,8 @@ public interface SuperheroService {
 
     void delete(Long superheroId);
 
-    List<SuperheroDTO> getSuperheroesWithTheBiggestAmountsOfFriends(Integer amountOfSuperhero);
+    List<SuperheroViewForTop> getSuperheroesWithTheBiggestAmountsOfFriends(Integer amountOfSuperhero);
 
-    List<SuperheroDTO> getSuperheroesWithTheBiggestAmountsOfEnemies(Integer amountOfSuperhero);
+    List<SuperheroViewForTop> getSuperheroesWithTheBiggestAmountsOfEnemies(Integer amountOfSuperhero);
 
 }
