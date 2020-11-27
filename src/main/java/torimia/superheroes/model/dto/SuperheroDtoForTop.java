@@ -3,7 +3,7 @@ package torimia.superheroes.model.dto;
 import lombok.Data;
 
 @Data
-public class SuperheroDTOForTop implements SuperheroViewForTop{
+public class SuperheroDtoForTop implements SuperheroViewForTop{
 
     private Long id;
 

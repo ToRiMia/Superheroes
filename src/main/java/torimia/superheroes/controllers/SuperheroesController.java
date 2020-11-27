@@ -3,8 +3,7 @@ package torimia.superheroes.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import torimia.superheroes.model.dto.IdRequest;
-import torimia.superheroes.model.dto.SuperheroDTO;
-import torimia.superheroes.model.dto.SuperheroDTOForTop;
+import torimia.superheroes.model.dto.SuperheroDto;
 import torimia.superheroes.model.dto.SuperheroViewForTop;
 import torimia.superheroes.services.SuperheroService;
 import java.util.List;
@@ -17,19 +16,19 @@ public class SuperheroesController {
     private final SuperheroService service;
 
     @GetMapping
-    public List<SuperheroDTO> getAll() {
+    public List<SuperheroDto> getAll() {
         return service.findAll();
     }
 
     @PostMapping
-    public SuperheroDTO create(@RequestBody SuperheroDTO newSuperheroDTO) {
+    public SuperheroDto create(@RequestBody SuperheroDto newSuperheroDTO) {
         return service.create(newSuperheroDTO);
     }
 
     @PutMapping("{id}")
-    public SuperheroDTO update(
+    public SuperheroDto update(
             @PathVariable("id") Long superheroId,
-            @RequestBody SuperheroDTO updatedSuperheroDTO) {
+            @RequestBody SuperheroDto updatedSuperheroDTO) {
         return service.update(superheroId, updatedSuperheroDTO);
     }
 
@@ -39,22 +38,22 @@ public class SuperheroesController {
     }
 
     @PatchMapping("add_friend/{id}")
-    public SuperheroDTO addNewFriend(@PathVariable("id") Long superheroId, @RequestBody IdRequest id) {
+    public SuperheroDto addNewFriend(@PathVariable("id") Long superheroId, @RequestBody IdRequest id) {
         return service.addNewFriend(superheroId, id);
     }
 
     @DeleteMapping("delete_friend/{id}")
-    public SuperheroDTO deleteFriend(@PathVariable("id") Long superheroId, @RequestBody IdRequest id) {
+    public SuperheroDto deleteFriend(@PathVariable("id") Long superheroId, @RequestBody IdRequest id) {
         return service.deleteFriend(superheroId, id);
     }
 
     @PatchMapping("add_enemy/{id}")
-    public SuperheroDTO addEnemy(@PathVariable("id") Long superheroId, @RequestBody IdRequest id) {
+    public SuperheroDto addEnemy(@PathVariable("id") Long superheroId, @RequestBody IdRequest id) {
         return service.addEnemy(superheroId, id);
     }
 
     @DeleteMapping("delete_enemy/{id}")
-    public SuperheroDTO deleteEnemy(@PathVariable("id") Long superheroId, @RequestBody IdRequest id) {
+    public SuperheroDto deleteEnemy(@PathVariable("id") Long superheroId, @RequestBody IdRequest id) {
         return service.deleteEnemy(superheroId, id);
     }
 

@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Data
-public class SuperheroDTO {
+public class SuperheroDto {
 
     private Long id;
 

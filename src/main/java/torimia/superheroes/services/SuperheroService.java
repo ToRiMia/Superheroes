@@ -1,27 +1,26 @@
 package torimia.superheroes.services;
 
 import torimia.superheroes.model.dto.IdRequest;
-import torimia.superheroes.model.dto.SuperheroDTO;
-import torimia.superheroes.model.dto.SuperheroDTOForTop;
+import torimia.superheroes.model.dto.SuperheroDto;
 import torimia.superheroes.model.dto.SuperheroViewForTop;
 
 import java.util.List;
 
 public interface SuperheroService {
 
-    SuperheroDTO addNewFriend(Long superheroId, IdRequest id);
+    SuperheroDto addNewFriend(Long superheroId, IdRequest id);
 
-    SuperheroDTO deleteFriend(Long superheroId, IdRequest id);
+    SuperheroDto deleteFriend(Long superheroId, IdRequest id);
 
-    SuperheroDTO addEnemy(Long superheroId, IdRequest id);
+    SuperheroDto addEnemy(Long superheroId, IdRequest id);
 
-    SuperheroDTO deleteEnemy(Long superheroId, IdRequest id);
+    SuperheroDto deleteEnemy(Long superheroId, IdRequest id);
 
-    List<SuperheroDTO> findAll();
+    List<SuperheroDto> findAll();
 
-    SuperheroDTO create(SuperheroDTO superheroDTO);
+    SuperheroDto create(SuperheroDto superheroDTO);
 
-    SuperheroDTO update(Long superheroId, SuperheroDTO updatedSuperheroDTO);
+    SuperheroDto update(Long superheroId, SuperheroDto updatedSuperheroDTO);
 
     void delete(Long superheroId);
 

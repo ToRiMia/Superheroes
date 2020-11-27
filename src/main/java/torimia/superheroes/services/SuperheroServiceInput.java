@@ -3,9 +3,9 @@ package torimia.superheroes.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import torimia.superheroes.exceptions.AddingToListException;
+import torimia.superheroes.mappers.SuperheroMapper;
 import torimia.superheroes.model.dto.IdRequest;
-import torimia.superheroes.model.dto.SuperheroDTO;
-import torimia.superheroes.model.dto.SuperheroDTOForTop;
+import torimia.superheroes.model.dto.SuperheroDto;
 import torimia.superheroes.model.dto.SuperheroViewForTop;
 import torimia.superheroes.model.entity.Superhero;
 import torimia.superheroes.repo.SuperheroRepository;
@@ -17,112 +17,80 @@ import java.util.stream.Collectors;
 @Service
 public class SuperheroServiceInput implements SuperheroService {
 
-    private final SuperheroRepository superheroRepo;
+    private final SuperheroRepository repository;
+    private final SuperheroMapper mapper;
 
     @Override
-    public List<SuperheroDTO> findAll() {
-        List<Superhero> superheroes = superheroRepo.findAll();
-        return superheroes.stream().map(this::toDTO).collect(Collectors.toList());
+    public SuperheroDto deleteFriend(Long superheroId, IdRequest id) {
+        Superhero superhero = repository.getOne(superheroId);
+        Superhero friend = repository.getOne(id.getId());
+        superhero.deleteFriend(friend);
+        return mapper.toDto(repository.save(superhero));
     }
 
     @Override
-    public SuperheroDTO create(SuperheroDTO superheroDTO) {
-        Superhero superhero = toEntity(superheroDTO);
+    public List<SuperheroDto> findAll() {
+        List<Superhero> superheroes = repository.findAll();
+        return superheroes.stream().map(mapper::toDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public SuperheroDto create(SuperheroDto superheroDTO) {
+        Superhero superhero = mapper.toEntity(superheroDTO);
         superhero.setId(null);
-        return toDTO(superheroRepo.save(superhero));
+        return mapper.toDto(repository.save(superhero));
     }
 
     @Override
-    public SuperheroDTO update(Long superheroId, SuperheroDTO updatedSuperheroDTO) {
-        Superhero superhero = superheroRepo.getOne(superheroId);
-        toEntityUpdate(updatedSuperheroDTO, superhero);
-        return toDTO(superheroRepo.save(superhero));
+    public SuperheroDto update(Long superheroId, SuperheroDto updatedSuperheroDTO) {
+        Superhero superhero = repository.getOne(superheroId);
+        mapper.toEntityUpdate(updatedSuperheroDTO, superhero);
+        return mapper.toDto(repository.save(superhero));
     }
 
     @Override
     public void delete(Long superheroId) {
-        Superhero superhero = superheroRepo.getOne(superheroId);
-        superheroRepo.delete(superhero);
+        Superhero superhero = repository.getOne(superheroId);
+        repository.delete(superhero);
     }
 
     @Override
-    public SuperheroDTO addNewFriend(Long superheroId, IdRequest id) {
+    public SuperheroDto addNewFriend(Long superheroId, IdRequest id) {
         if (superheroId.equals(id.getId())) {
             throw new AddingToListException("It's forbidden to add yourself to the list of your friends or enemies");
         }
-        Superhero superhero = superheroRepo.getOne(superheroId);
-        Superhero friend = superheroRepo.getOne(id.getId());
+        Superhero superhero = repository.getOne(superheroId);
+        Superhero friend = repository.getOne(id.getId());
         superhero.addFriend(friend);
-        return toDTO(superheroRepo.save(superhero));
+        return mapper.toDto(repository.save(superhero));
     }
 
     @Override
-    public SuperheroDTO deleteFriend(Long superheroId, IdRequest id) {
-        Superhero superhero = superheroRepo.getOne(superheroId);
-        Superhero friend = superheroRepo.getOne(id.getId());
-        superhero.deleteFriend(friend);
-        return toDTO(superheroRepo.save(superhero));
-    }
-
-    @Override
-    public SuperheroDTO addEnemy(Long superheroId, IdRequest id) {
+    public SuperheroDto addEnemy(Long superheroId, IdRequest id) {
         if (superheroId.equals(id.getId())) {
             throw new AddingToListException("It's forbidden to add yourself to the list of your friends or enemies");
         }
-        Superhero superhero = superheroRepo.getOne(superheroId);
-        Superhero enemy = superheroRepo.getOne(id.getId());
+        Superhero superhero = repository.getOne(superheroId);
+        Superhero enemy = repository.getOne(id.getId());
         superhero.addEnemy(enemy);
-        return toDTO(superheroRepo.save(superhero));
+        return mapper.toDto(repository.save(superhero));
     }
 
     @Override
-    public SuperheroDTO deleteEnemy(Long superheroId, IdRequest id) {
-        Superhero superhero = superheroRepo.getOne(superheroId);
-        Superhero enemy = superheroRepo.getOne(id.getId());
+    public SuperheroDto deleteEnemy(Long superheroId, IdRequest id) {
+        Superhero superhero = repository.getOne(superheroId);
+        Superhero enemy = repository.getOne(id.getId());
         superhero.deleteEnemy(enemy);
-        return toDTO(superheroRepo.save(superhero));
+        return mapper.toDto(repository.save(superhero));
     }
 
     @Override
     public List<SuperheroViewForTop> getSuperheroesWithTheBiggestAmountsOfFriends(Integer amountOfSuperhero) {
-        return superheroRepo.getSuperheroesWithTheBiggestAmountsOfFriends(amountOfSuperhero);
+        return repository.getSuperheroesWithTheBiggestAmountsOfFriends(amountOfSuperhero);
     }
 
     @Override
     public List<SuperheroViewForTop> getSuperheroesWithTheBiggestAmountsOfEnemies(Integer amountOfSuperhero) {
-        return superheroRepo.getSuperheroesWithTheBiggestAmountsOfEnemies(amountOfSuperhero);
-    }
-
-    //Треба винести його в маппер
-    private SuperheroDTO toDTO(Superhero superhero) {
-        SuperheroDTO superheroDTO = new SuperheroDTO();
-        superheroDTO.setId(superhero.getId());
-        superheroDTO.setName(superhero.getName());
-        superheroDTO.setFirstName(superhero.getFirstName());
-        superheroDTO.setLastName(superhero.getLastName());
-        superheroDTO.setAge(superhero.getAge());
-        superheroDTO.setSuperPower(superhero.getSuperPower());
-        superheroDTO.setListOfFriendsId(superhero.getListOfFriends().stream().map(Superhero::getId).collect(Collectors.toList()));
-        superheroDTO.setListOfEnemiesId(superhero.getListOfEnemies().stream().map(Superhero::getId).collect(Collectors.toList()));
-        return superheroDTO;
-    }
-
-    private Superhero toEntity(SuperheroDTO superheroDTO) {
-        Superhero superhero = new Superhero();
-        superhero.setId(superheroDTO.getId());
-        superhero.setName(superheroDTO.getName());
-        superhero.setFirstName(superheroDTO.getFirstName());
-        superhero.setLastName(superheroDTO.getLastName());
-        superhero.setAge(superheroDTO.getAge());
-        superhero.setSuperPower(superheroDTO.getSuperPower());
-        return superhero;
-    }
-
-    private void toEntityUpdate(SuperheroDTO superheroDTO, Superhero superhero) {
-        superhero.setName(superheroDTO.getName());
-        superhero.setFirstName(superheroDTO.getFirstName());
-        superhero.setLastName(superheroDTO.getLastName());
-        superhero.setAge(superheroDTO.getAge());
-        superhero.setSuperPower(superheroDTO.getSuperPower());
+        return repository.getSuperheroesWithTheBiggestAmountsOfEnemies(amountOfSuperhero);
     }
 }
