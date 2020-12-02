@@ -1,6 +1,10 @@
 package torimia.superheroes.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import torimia.superheroes.exceptions.AddingToListException;
 import torimia.superheroes.mappers.SuperheroMapper;
@@ -29,9 +33,9 @@ public class SuperheroServiceInput implements SuperheroService {
     }
 
     @Override
-    public List<SuperheroDto> findAll() {
-        List<Superhero> superheroes = repository.findAll();
-        return superheroes.stream().map(mapper::toDto).collect(Collectors.toList());
+    public Page<SuperheroDto> getPage(Pageable page) {
+        Page<Superhero> superheroes = repository.findAll(page);
+        return superheroes.map(mapper::toDto);
     }
 
     @Override

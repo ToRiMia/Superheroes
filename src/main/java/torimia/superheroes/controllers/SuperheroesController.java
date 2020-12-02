@@ -1,11 +1,16 @@
 package torimia.superheroes.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.web.bind.annotation.*;
 import torimia.superheroes.model.dto.IdRequest;
 import torimia.superheroes.model.dto.SuperheroDto;
 import torimia.superheroes.model.dto.SuperheroViewForTop;
 import torimia.superheroes.services.SuperheroService;
+
 import java.util.List;
 
 @RestController
@@ -15,9 +20,10 @@ public class SuperheroesController {
 
     private final SuperheroService service;
 
-    @GetMapping
-    public List<SuperheroDto> getAll() {
-        return service.findAll();
+    @GetMapping()
+    public Page<SuperheroDto> getAllPage(@PageableDefault(size = 10)
+                                     @SortDefault(sort = "id") Pageable page) {
+        return service.getPage(page);
     }
 
     @PostMapping

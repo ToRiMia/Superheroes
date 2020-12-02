@@ -1,5 +1,7 @@
 package torimia.superheroes.services;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import torimia.superheroes.model.dto.IdRequest;
 import torimia.superheroes.model.dto.SuperheroDto;
 import torimia.superheroes.model.dto.SuperheroViewForTop;
@@ -16,7 +18,7 @@ public interface SuperheroService {
 
     SuperheroDto deleteEnemy(Long superheroId, IdRequest id);
 
-    List<SuperheroDto> findAll();
+    Page<SuperheroDto> getPage(Pageable page);
 
     SuperheroDto create(SuperheroDto superheroDTO);
 
