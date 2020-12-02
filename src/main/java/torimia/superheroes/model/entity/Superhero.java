@@ -19,7 +19,7 @@ public class Superhero {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String name;
+    private String nickname;
 
     private String firstName;
 

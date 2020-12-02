@@ -5,12 +5,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import torimia.superheroes.model.dto.IdRequest;
 import torimia.superheroes.model.dto.SuperheroDto;
 import torimia.superheroes.model.dto.SuperheroViewForTop;
 import torimia.superheroes.services.SuperheroService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -21,20 +24,19 @@ public class SuperheroesController {
     private final SuperheroService service;
 
     @GetMapping()
-    public Page<SuperheroDto> getAllPage(@PageableDefault(size = 10)
-                                     @SortDefault(sort = "id") Pageable page) {
+    public Page<SuperheroDto> getAllPage(@SortDefault(sort = "id") Pageable page) {
         return service.getPage(page);
     }
 
     @PostMapping
-    public SuperheroDto create(@RequestBody SuperheroDto newSuperheroDTO) {
+    public SuperheroDto create(@Valid @RequestBody SuperheroDto newSuperheroDTO) {
         return service.create(newSuperheroDTO);
     }
 
     @PutMapping("{id}")
     public SuperheroDto update(
             @PathVariable("id") Long superheroId,
-            @RequestBody SuperheroDto updatedSuperheroDTO) {
+            @Valid @RequestBody SuperheroDto updatedSuperheroDTO) {
         return service.update(superheroId, updatedSuperheroDTO);
     }
 
@@ -44,22 +46,22 @@ public class SuperheroesController {
     }
 
     @PatchMapping("add_friend/{id}")
-    public SuperheroDto addNewFriend(@PathVariable("id") Long superheroId, @RequestBody IdRequest id) {
+    public SuperheroDto addNewFriend(@PathVariable("id") Long superheroId, @Valid @RequestBody IdRequest id) {
         return service.addNewFriend(superheroId, id);
     }
 
     @DeleteMapping("delete_friend/{id}")
-    public SuperheroDto deleteFriend(@PathVariable("id") Long superheroId, @RequestBody IdRequest id) {
+    public SuperheroDto deleteFriend(@PathVariable("id") Long superheroId, @Valid @RequestBody IdRequest id) {
         return service.deleteFriend(superheroId, id);
     }
 
     @PatchMapping("add_enemy/{id}")
-    public SuperheroDto addEnemy(@PathVariable("id") Long superheroId, @RequestBody IdRequest id) {
+    public SuperheroDto addEnemy(@PathVariable("id") Long superheroId, @Valid @RequestBody IdRequest id) {
         return service.addEnemy(superheroId, id);
     }
 
     @DeleteMapping("delete_enemy/{id}")
-    public SuperheroDto deleteEnemy(@PathVariable("id") Long superheroId, @RequestBody IdRequest id) {
+    public SuperheroDto deleteEnemy(@PathVariable("id") Long superheroId, @Valid  @RequestBody IdRequest id) {
         return service.deleteEnemy(superheroId, id);
     }
 
@@ -75,7 +77,7 @@ public class SuperheroesController {
 
 /*
 {
-    "name":"Batman",
+    "nickname":"Batman",
     "firstName":"Bruce",
     "lastName":"Wayne",
     "age":48,
@@ -84,7 +86,7 @@ public class SuperheroesController {
 
 post
 {
-    "name": "Batman",
+    "nickname": "Batman",
     "firstName": "Ka",
     "lastName": "Oi",
     "age": 25,

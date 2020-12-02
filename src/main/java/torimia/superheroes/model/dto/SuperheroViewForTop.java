@@ -4,7 +4,7 @@ public interface SuperheroViewForTop {
 
     Long getId();
 
-    String getName();
+    String getNickname();
 
     String getFirstName();
 

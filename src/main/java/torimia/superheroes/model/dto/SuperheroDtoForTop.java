@@ -7,7 +7,7 @@ public class SuperheroDtoForTop implements SuperheroViewForTop{
 
     private Long id;
 
-    private String name;
+    private String nickname;
 
     private String firstName;
 
