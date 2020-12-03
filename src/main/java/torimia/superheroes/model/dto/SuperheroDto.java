@@ -36,4 +36,6 @@ public class SuperheroDto {
     private List<Long> listOfFriendsId = new ArrayList<>();
 
     private List<Long> listOfEnemiesId = new ArrayList<>();
+
+    private List<Long> awardsId = new ArrayList<>();
 }

@@ -8,9 +8,7 @@ import org.springframework.data.web.SortDefault;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import torimia.superheroes.model.dto.IdRequest;
-import torimia.superheroes.model.dto.SuperheroDto;
-import torimia.superheroes.model.dto.SuperheroViewForTop;
+import torimia.superheroes.model.dto.*;
 import torimia.superheroes.services.SuperheroService;
 
 import javax.validation.Valid;
@@ -29,20 +27,20 @@ public class SuperheroesController {
     }
 
     @PostMapping
-    public SuperheroDto create(@Valid @RequestBody SuperheroDto newSuperheroDTO) {
-        return service.create(newSuperheroDTO);
+    public SuperheroDto create(@Valid @RequestBody SuperheroDto dto) {
+        return service.create(dto);
     }
 
     @PutMapping("{id}")
     public SuperheroDto update(
-            @PathVariable("id") Long superheroId,
-            @Valid @RequestBody SuperheroDto updatedSuperheroDTO) {
-        return service.update(superheroId, updatedSuperheroDTO);
+            @PathVariable("id") Long id,
+            @Valid @RequestBody SuperheroDto dto) {
+        return service.update(id, dto);
     }
 
     @DeleteMapping("{id}")
-    public void remove(@PathVariable("id") Long superheroId) {
-        service.delete(superheroId);
+    public void remove(@PathVariable("id") Long id) {
+        service.delete(id);
     }
 
     @PatchMapping("add_friend/{id}")
@@ -73,6 +71,21 @@ public class SuperheroesController {
     @GetMapping("top_enemies")
     public List<SuperheroViewForTop> getTop5SuperheroWithEnemies(@RequestParam(value = "amount", defaultValue = "5", required = false) Integer amountOfSuperhero) {
         return service.getSuperheroesWithTheBiggestAmountsOfEnemies(amountOfSuperhero);
+    }
+
+    @PatchMapping("add_award/{id}")
+    public SuperheroDto addAward(@PathVariable("id") Long superheroId, @Valid @RequestBody IdRequest id) {
+        return service.addAward(superheroId, id);
+    }
+
+    @DeleteMapping("delete_award/{id}")
+    public SuperheroDto deleteAward(@PathVariable("id") Long superheroId, @Valid @RequestBody IdRequest id) {
+        return service.deleteAward(superheroId, id);
+    }
+
+    @GetMapping("awards/{id}")
+    public List<AwardView> getSuperheroAwards(@PathVariable("id") Long superheroId) {
+        return service.getSuperheroAwards(superheroId);
     }
 
 /*

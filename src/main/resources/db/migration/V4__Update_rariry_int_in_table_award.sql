@@ -1,0 +1,1 @@
+ALTER TABLE public.award ALTER COLUMN rarity TYPE int USING rarity::int;

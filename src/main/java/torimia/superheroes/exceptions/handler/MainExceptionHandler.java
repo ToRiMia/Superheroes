@@ -38,7 +38,7 @@ public class MainExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<String> handleEntityNotFound() {
-        return new ResponseEntity<>("Superhero with this id does not exist", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("Entity with this id does not exist", HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(AddingToListException.class)

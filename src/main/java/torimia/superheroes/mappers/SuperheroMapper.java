@@ -6,14 +6,17 @@ import org.mapstruct.MappingTarget;
 import torimia.superheroes.model.dto.SuperheroDto;
 import torimia.superheroes.model.entity.Superhero;
 import java.util.stream.Collectors;
+import torimia.superheroes.model.entity.Award;
 
-@Mapper(imports = Collectors.class, componentModel = "spring")
+@Mapper(imports = {Collectors.class, Award.class}, componentModel = "spring")
 public interface SuperheroMapper {
 
     @Mapping(target = "listOfFriendsId",
             expression = "java(superhero.getListOfFriends().stream().map(Superhero::getId).collect(Collectors.toList()))")
     @Mapping(target = "listOfEnemiesId",
             expression = "java(superhero.getListOfEnemies().stream().map(Superhero::getId).collect(Collectors.toList()))")
+    @Mapping(target = "awardsId",
+            expression = "java(superhero.getAwards().stream().map(Award::getId).collect(Collectors.toList()))")
     SuperheroDto toDto(Superhero superhero);
 
     @Mapping(target = "listOfFriends", ignore = true)

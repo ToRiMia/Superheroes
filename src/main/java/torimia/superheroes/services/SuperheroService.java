@@ -2,9 +2,7 @@ package torimia.superheroes.services;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import torimia.superheroes.model.dto.IdRequest;
-import torimia.superheroes.model.dto.SuperheroDto;
-import torimia.superheroes.model.dto.SuperheroViewForTop;
+import torimia.superheroes.model.dto.*;
 
 import java.util.List;
 
@@ -20,14 +18,20 @@ public interface SuperheroService {
 
     Page<SuperheroDto> getPage(Pageable page);
 
-    SuperheroDto create(SuperheroDto superheroDTO);
+    SuperheroDto create(SuperheroDto dto);
 
-    SuperheroDto update(Long superheroId, SuperheroDto updatedSuperheroDTO);
+    SuperheroDto update(Long id, SuperheroDto dto);
 
-    void delete(Long superheroId);
+    void delete(Long id);
 
     List<SuperheroViewForTop> getSuperheroesWithTheBiggestAmountsOfFriends(Integer amountOfSuperhero);
 
     List<SuperheroViewForTop> getSuperheroesWithTheBiggestAmountsOfEnemies(Integer amountOfSuperhero);
+
+    SuperheroDto addAward(Long superheroId, IdRequest id);
+
+    SuperheroDto deleteAward(Long superheroId, IdRequest id);
+
+    List<AwardView> getSuperheroAwards(Long superheroId);
 
 }

@@ -18,6 +18,6 @@ public class Award {
     private String name;
 
     @NotNull
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     private Rarity rarity;
 }

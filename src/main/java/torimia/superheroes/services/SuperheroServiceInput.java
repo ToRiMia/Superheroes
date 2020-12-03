@@ -7,11 +7,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import torimia.superheroes.exceptions.AddingToListException;
+import torimia.superheroes.mappers.AwardMapper;
 import torimia.superheroes.mappers.SuperheroMapper;
-import torimia.superheroes.model.dto.IdRequest;
-import torimia.superheroes.model.dto.SuperheroDto;
-import torimia.superheroes.model.dto.SuperheroViewForTop;
+import torimia.superheroes.model.dto.*;
+import torimia.superheroes.model.entity.Award;
 import torimia.superheroes.model.entity.Superhero;
+import torimia.superheroes.repo.AwardRepository;
 import torimia.superheroes.repo.SuperheroRepository;
 
 import java.util.*;
@@ -22,15 +23,9 @@ import java.util.stream.Collectors;
 public class SuperheroServiceInput implements SuperheroService {
 
     private final SuperheroRepository repository;
+    private final AwardRepository awardRepository;
     private final SuperheroMapper mapper;
-
-    @Override
-    public SuperheroDto deleteFriend(Long superheroId, IdRequest id) {
-        Superhero superhero = repository.getOne(superheroId);
-        Superhero friend = repository.getOne(id.getId());
-        superhero.deleteFriend(friend);
-        return mapper.toDto(repository.save(superhero));
-    }
+    private final AwardMapper awardMapper;
 
     @Override
     public Page<SuperheroDto> getPage(Pageable page) {
@@ -39,22 +34,22 @@ public class SuperheroServiceInput implements SuperheroService {
     }
 
     @Override
-    public SuperheroDto create(SuperheroDto superheroDTO) {
-        Superhero superhero = mapper.toEntity(superheroDTO);
+    public SuperheroDto create(SuperheroDto dto) {
+        Superhero superhero = mapper.toEntity(dto);
         superhero.setId(null);
         return mapper.toDto(repository.save(superhero));
     }
 
     @Override
-    public SuperheroDto update(Long superheroId, SuperheroDto updatedSuperheroDTO) {
-        Superhero superhero = repository.getOne(superheroId);
-        mapper.toEntityUpdate(updatedSuperheroDTO, superhero);
+    public SuperheroDto update(Long id, SuperheroDto dto) {
+        Superhero superhero = repository.getOne(id);
+        mapper.toEntityUpdate(dto, superhero);
         return mapper.toDto(repository.save(superhero));
     }
 
     @Override
-    public void delete(Long superheroId) {
-        Superhero superhero = repository.getOne(superheroId);
+    public void delete(Long id) {
+        Superhero superhero = repository.getOne(id);
         repository.delete(superhero);
     }
 
@@ -66,6 +61,14 @@ public class SuperheroServiceInput implements SuperheroService {
         Superhero superhero = repository.getOne(superheroId);
         Superhero friend = repository.getOne(id.getId());
         superhero.addFriend(friend);
+        return mapper.toDto(repository.save(superhero));
+    }
+
+    @Override
+    public SuperheroDto deleteFriend(Long superheroId, IdRequest id) {
+        Superhero superhero = repository.getOne(superheroId);
+        Superhero friend = repository.getOne(id.getId());
+        superhero.deleteFriend(friend);
         return mapper.toDto(repository.save(superhero));
     }
 
@@ -96,5 +99,26 @@ public class SuperheroServiceInput implements SuperheroService {
     @Override
     public List<SuperheroViewForTop> getSuperheroesWithTheBiggestAmountsOfEnemies(Integer amountOfSuperhero) {
         return repository.getSuperheroesWithTheBiggestAmountsOfEnemies(amountOfSuperhero);
+    }
+
+    @Override
+    public SuperheroDto addAward(Long superheroId, IdRequest id) {
+        Superhero superhero = repository.getOne(superheroId);
+        Award award = awardRepository.getOne(id.getId());
+        superhero.addAward(award);
+        return mapper.toDto(repository.save(superhero));
+    }
+
+    @Override
+    public SuperheroDto deleteAward(Long superheroId, IdRequest id) {
+        Superhero superhero = repository.getOne(superheroId);
+        Award award = awardRepository.getOne(id.getId());
+        superhero.deleteAward(award);
+        return mapper.toDto(repository.save(superhero));
+    }
+
+    @Override
+    public List<AwardView> getSuperheroAwards(Long superheroId) {
+        return repository.getSuperheroAwards(superheroId);
     }
 }
