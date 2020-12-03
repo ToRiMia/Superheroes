@@ -41,6 +41,9 @@ public class Superhero {
     @ManyToMany()
     private Set<Superhero> listOfEnemies = new HashSet<>();
 
+    @ManyToMany()
+    private Set<Award> listOfAwards = new HashSet<>();
+
     public void addFriend(Superhero friend) {
         listOfEnemies.remove(friend);
         listOfFriends.add(friend);
