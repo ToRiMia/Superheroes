@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -21,8 +22,10 @@ public class Superhero {
 
     private String nickname;
 
+    @NotNull
     private String firstName;
 
+    @NotNull
     private String lastName;
 
     private int age;
