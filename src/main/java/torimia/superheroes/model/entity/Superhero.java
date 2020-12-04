@@ -13,7 +13,7 @@ import java.util.Set;
 @Entity
 @Table
 @Data
-@EqualsAndHashCode(exclude = {"listOfFriends", "listOfEnemies"})
+@EqualsAndHashCode(exclude = {"listOfFriends", "listOfEnemies", "awards"})
 public class Superhero {
 
     @Id
@@ -41,7 +41,7 @@ public class Superhero {
     @ManyToMany()
     private Set<Superhero> listOfEnemies = new HashSet<>();
 
-    @ManyToMany()
+    @OneToMany(mappedBy = "superhero")
     private Set<Award> awards = new HashSet<>();
 
     public void addFriend(Superhero friend) {

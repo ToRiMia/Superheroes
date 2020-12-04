@@ -1,5 +1,7 @@
 package torimia.superheroes.repo;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -9,16 +11,13 @@ import torimia.superheroes.model.entity.Award;
 import torimia.superheroes.model.entity.Superhero;
 
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface SuperheroRepository extends JpaRepository<Superhero, Long> {
 
-    @Query(value = "select award.id, award.\"name\", award.rarity from superhero " +
-            "join superhero_awards on (superhero.id = superhero_awards.superhero_id) " +
-            "join award on (superhero_awards.awards_id = award.id) " +
-            "where superhero.id = :superheroId " +
-            "order by rarity desc", nativeQuery = true)
-    List<AwardView> getSuperheroAwards(Long superheroId);
+    @Query("select a from Award a where a.superhero.id = :superheroId order by a.rarity desc")
+    Page<AwardView> getSuperheroAwards(Long superheroId, Pageable page);
 
     @Query(value = "SELECT superhero.id, superhero.name, superhero.first_name AS firstName, " +
             "superhero.last_name AS lastName, COUNT(superhero.id) AS amount " +

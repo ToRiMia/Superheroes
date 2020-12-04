@@ -34,6 +34,9 @@ public interface SuperheroService {
 
     SuperheroDto deleteAward(Long superheroId, IdRequest id);
 
-    List<AwardView> getSuperheroAwards(Long superheroId);
+    SuperheroAwardsDto getSuperheroTop5Awards(Long superheroId);
+
+    Page<AwardView> getSuperheroAwards(Long superheroId, Pageable pageable);
 
 }
+

@@ -7,7 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import torimia.superheroes.exceptions.AddingToListException;
-import torimia.superheroes.mappers.AwardMapper;
 import torimia.superheroes.mappers.SuperheroMapper;
 import torimia.superheroes.model.dto.*;
 import torimia.superheroes.model.entity.Award;
@@ -122,7 +121,19 @@ public class SuperheroServiceInput implements SuperheroService {
     }
 
     @Override
-    public List<AwardView> getSuperheroAwards(Long superheroId) {
-        return repository.getSuperheroAwards(superheroId);
+    public SuperheroAwardsDto getSuperheroTop5Awards(Long id) {
+        PageRequest page = PageRequest.of(0, 5, Sort.unsorted());
+        Page<AwardView> responsePage = repository.getSuperheroAwards(id, page);
+        List<AwardView> awards = responsePage.stream().collect(Collectors.toList());
+        Superhero superhero = repository.getOne(id);
+        return mapper.toDtoSuperheroAwards(superhero, awards);
     }
+
+    @Override
+    public Page<AwardView> getSuperheroAwards(Long id, Pageable pageable) {
+        return repository.getSuperheroAwards(id, pageable);
+    }
+
+
+
 }

@@ -20,4 +20,7 @@ public class Award {
     @NotNull
     @Enumerated(EnumType.ORDINAL)
     private Rarity rarity;
+
+    @ManyToOne
+    private Superhero superhero;
 }

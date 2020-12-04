@@ -3,10 +3,7 @@ package torimia.superheroes.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import torimia.superheroes.model.dto.*;
 import torimia.superheroes.services.SuperheroService;
@@ -88,9 +85,14 @@ public class SuperheroesController {
         return service.deleteAward(superheroId, id);
     }
 
+    @GetMapping("awards_top_5/{id}")
+    public SuperheroAwardsDto getSuperheroTop5Awards(@PathVariable("id") Long superheroId) {
+        return service.getSuperheroTop5Awards(superheroId);
+    }
+
     @GetMapping("awards/{id}")
-    public List<AwardView> getSuperheroAwards(@PathVariable("id") Long superheroId) {
-        return service.getSuperheroAwards(superheroId);
+    public Page<AwardView> getSuperheroAwards(@PathVariable("id") Long superheroId, Pageable page) {
+        return service.getSuperheroAwards(superheroId, page);
     }
 
 /*
