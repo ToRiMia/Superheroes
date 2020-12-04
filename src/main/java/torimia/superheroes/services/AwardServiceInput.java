@@ -22,6 +22,11 @@ public class AwardServiceInput implements AwardService{
     }
 
     @Override
+    public AwardDto getById(Long id) {
+        return mapper.toDto(repository.getOne(id));
+    }
+
+    @Override
     public AwardDto create(AwardDto dto) {
         Award award = mapper.toEntity(dto);
         award.setId(null);

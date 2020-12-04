@@ -22,6 +22,11 @@ public class AwardsController {
         return service.getPage(page);
     }
 
+    @GetMapping("{id}")
+    public AwardDto getById(@PathVariable("id") Long id) {
+        return service.getById(id);
+    }
+
     @PostMapping
     public AwardDto create(@Valid @RequestBody AwardDto dto) {
         return service.create(dto);
@@ -35,7 +40,7 @@ public class AwardsController {
     }
 
     @DeleteMapping("{id}")
-    public void remove(@PathVariable("id") Long awardId) {
-        service.delete(awardId);
+    public void remove(@PathVariable("id") Long id) {
+        service.delete(id);
     }
 }

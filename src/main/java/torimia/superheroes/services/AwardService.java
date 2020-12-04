@@ -8,6 +8,8 @@ public interface AwardService {
 
     Page<AwardDto> getPage(Pageable page);
 
+    AwardDto getById(Long id);
+
     AwardDto create(AwardDto dto);
 
     AwardDto update(Long id, AwardDto dto);

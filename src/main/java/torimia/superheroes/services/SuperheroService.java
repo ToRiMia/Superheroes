@@ -8,6 +8,16 @@ import java.util.List;
 
 public interface SuperheroService {
 
+    Page<SuperheroDto> getPage(Pageable page);
+
+    SuperheroDto getById(Long id);
+
+    SuperheroDto create(SuperheroDto dto);
+
+    SuperheroDto update(Long id, SuperheroDto dto);
+
+    void delete(Long id);
+
     SuperheroDto addNewFriend(Long superheroId, IdRequest id);
 
     SuperheroDto deleteFriend(Long superheroId, IdRequest id);
@@ -15,14 +25,6 @@ public interface SuperheroService {
     SuperheroDto addEnemy(Long superheroId, IdRequest id);
 
     SuperheroDto deleteEnemy(Long superheroId, IdRequest id);
-
-    Page<SuperheroDto> getPage(Pageable page);
-
-    SuperheroDto create(SuperheroDto dto);
-
-    SuperheroDto update(Long id, SuperheroDto dto);
-
-    void delete(Long id);
 
     List<SuperheroViewForTop> getSuperheroesWithTheBiggestAmountsOfFriends(Integer amountOfSuperhero);
 

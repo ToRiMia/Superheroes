@@ -25,12 +25,16 @@ public class SuperheroServiceInput implements SuperheroService {
     private final SuperheroRepository repository;
     private final AwardRepository awardRepository;
     private final SuperheroMapper mapper;
-    private final AwardMapper awardMapper;
 
     @Override
     public Page<SuperheroDto> getPage(Pageable page) {
         Page<Superhero> superheroes = repository.findAll(page);
         return superheroes.map(mapper::toDto);
+    }
+
+    @Override
+    public SuperheroDto getById(Long id) {
+        return mapper.toDto(repository.getOne(id));
     }
 
     @Override

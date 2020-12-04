@@ -21,9 +21,14 @@ public class SuperheroesController {
 
     private final SuperheroService service;
 
-    @GetMapping()
+    @GetMapping
     public Page<SuperheroDto> getAllPage(@SortDefault(sort = "id") Pageable page) {
         return service.getPage(page);
+    }
+
+    @GetMapping("{id}")
+    public SuperheroDto getById(@PathVariable("id") Long id) {
+        return service.getById(id);
     }
 
     @PostMapping
