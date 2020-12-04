@@ -36,5 +36,6 @@ public interface SuperheroMapper {
             expression = "java(superhero.getListOfFriends().stream().map(Superhero::getId).collect(Collectors.toList()))")
     @Mapping(target = "listOfEnemiesId",
             expression = "java(superhero.getListOfEnemies().stream().map(Superhero::getId).collect(Collectors.toList()))")
+    @Mapping(target = "awards", source = "awards")
     SuperheroAwardsDto toDtoSuperheroAwards(Superhero superhero, List<AwardView> awards);
 }

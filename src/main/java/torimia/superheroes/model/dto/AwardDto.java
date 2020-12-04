@@ -15,7 +15,7 @@ public class AwardDto implements AwardView{
     @Size(min = 2, message = "Name cannot be less than 1 letter!")
     private String name;
 
-    @NotNull
+    @NotNull(message = "Rarity must be COMMON, RARE or LEGENDARY!")
     private Rarity rarity;
 }
 
