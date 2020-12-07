@@ -8,6 +8,9 @@ import torimia.superheroes.mappers.AwardMapper;
 import torimia.superheroes.model.dto.AwardDto;
 import torimia.superheroes.model.entity.Award;
 import torimia.superheroes.repo.AwardRepository;
+
+import java.util.Locale;
+
 @RequiredArgsConstructor
 @Service
 public class AwardServiceInput implements AwardService{

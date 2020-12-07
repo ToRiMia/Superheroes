@@ -2,12 +2,14 @@ package torimia.superheroes.model.dto;
 
 import lombok.Data;
 import torimia.superheroes.model.entity.Rarity;
+import torimia.superheroes.model.entity.ValueOfEnum;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Locale;
 
 @Data
-public class AwardDto implements AwardView{
+public class AwardDto implements AwardView {
 
     private Long id;
 
@@ -15,7 +17,15 @@ public class AwardDto implements AwardView{
     @Size(min = 2, message = "Name cannot be less than 1 letter!")
     private String name;
 
-    @NotNull(message = "Rarity must be COMMON, RARE or LEGENDARY!")
-    private Rarity rarity;
+    @NotNull(message = "Rarity must be not null!")
+    @ValueOfEnum(enumClass = Rarity.class)
+    private String rarity;
+
+    public void setRarity(String rarity) {
+        if (rarity == null)
+            this.rarity = null;
+        else
+            this.rarity = rarity.toUpperCase(Locale.ROOT);
+    }
 }
 

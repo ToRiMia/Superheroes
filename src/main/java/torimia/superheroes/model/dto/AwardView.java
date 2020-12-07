@@ -8,5 +8,5 @@ public interface AwardView {
 
     String getName();
 
-    Rarity getRarity();
+    String getRarity();
 }

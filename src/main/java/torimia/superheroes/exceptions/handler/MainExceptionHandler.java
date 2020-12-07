@@ -1,5 +1,6 @@
 package torimia.superheroes.exceptions.handler;
 
+import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

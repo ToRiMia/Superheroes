@@ -4,10 +4,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class RarityTest {
+class RarityTest {}
 
 
-    @Test
-    void wrong_string() {
-        Rarity.forValues("unknown");    }
-}
+//    @Test
+//    void wrong_string() {
+//        Rarity.forValues("unknown");    }
+//}

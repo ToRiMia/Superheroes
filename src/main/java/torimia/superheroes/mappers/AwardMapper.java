@@ -6,6 +6,8 @@ import org.mapstruct.MappingTarget;
 import torimia.superheroes.model.dto.AwardDto;
 import torimia.superheroes.model.entity.Award;
 
+import javax.swing.text.TabExpander;
+
 @Mapper(componentModel = "spring")
 public interface AwardMapper {
 
