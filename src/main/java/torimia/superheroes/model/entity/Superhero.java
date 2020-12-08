@@ -41,7 +41,8 @@ public class Superhero {
     @ManyToMany()
     private Set<Superhero> listOfEnemies = new HashSet<>();
 
-    @OneToMany(mappedBy = "superhero")
+    @OneToMany(mappedBy = "superhero",
+            cascade = CascadeType.ALL)
     private Set<Award> awards = new HashSet<>();
 
     public void addFriend(Superhero friend) {
@@ -56,6 +57,11 @@ public class Superhero {
 
     public void addAward(Award award) {
         awards.add(award);
+        award.setSuperhero(this);
+    }
+    public void deleteAward(Award award) {
+        awards.remove(award);
+        award.setSuperhero(null);
     }
 
     public void deleteEnemy(Superhero enemy) {
@@ -64,9 +70,5 @@ public class Superhero {
 
     public void deleteFriend(Superhero friend) {
         listOfFriends.remove(friend);
-    }
-
-    public void deleteAward(Award award) {
-        awards.remove(award);
     }
 }

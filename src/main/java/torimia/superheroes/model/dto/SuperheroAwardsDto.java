@@ -23,5 +23,5 @@ public class SuperheroAwardsDto {
 
     private List<Long> listOfEnemiesId;
 
-    private List<AwardView> awards;
+    private List<AwardDto> awards;
 }

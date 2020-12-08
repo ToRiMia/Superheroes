@@ -21,6 +21,7 @@ public class Award {
     @Enumerated(EnumType.ORDINAL)
     private Rarity rarity;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "superhero_id")
     private Superhero superhero;
 }
