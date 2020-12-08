@@ -2,7 +2,7 @@ package torimia.superheroes.model.dto;
 
 import lombok.Data;
 import torimia.superheroes.model.entity.Rarity;
-import torimia.superheroes.model.entity.ValueOfEnum;
+import torimia.superheroes.model.enums.ValueOfEnum;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
