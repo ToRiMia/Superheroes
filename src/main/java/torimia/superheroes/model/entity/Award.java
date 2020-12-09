@@ -1,6 +1,6 @@
 package torimia.superheroes.model.entity;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -8,6 +8,9 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Award {
 
     @Id

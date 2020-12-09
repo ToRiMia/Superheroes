@@ -1,98 +1,213 @@
 package torimia.superheroes.mappers;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import torimia.superheroes.model.dto.AwardDto;
+import torimia.superheroes.model.dto.AwardView;
+import torimia.superheroes.model.dto.SuperheroAwardsDto;
 import torimia.superheroes.model.dto.SuperheroDto;
 import torimia.superheroes.model.entity.Award;
 import torimia.superheroes.model.entity.Superhero;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class SuperheroMapperTest {
 
-    static Superhero superhero = new Superhero();
-    static SuperheroDto superheroDto = new SuperheroDto();
-    static Superhero superheroFriend1 = new Superhero();
-    static Superhero superheroFriend2 = new Superhero();
-    static Superhero superheroEnemy1 = new Superhero();
-    static Superhero superheroEnemy2 = new Superhero();
-    static Award award1 = new Award();
-    static Award award2 = new Award();
+    private Superhero superhero;
+    private SuperheroDto superheroDto;
+    private Superhero superheroFriend1;
+    private Superhero superheroFriend2;
+    private Superhero superheroEnemy1;
+    private Superhero superheroEnemy2;
+    private Award award1;
+    private Award award2;
 
-    @BeforeAll
-    static void init() {
-        superheroFriend1.setId((long) 57);
-        superheroFriend2.setId((long) 58);
-        superheroEnemy1.setId((long) 59);
-        superheroEnemy2.setId((long) 60);
-        award1.setId((long) 80);
-        award2.setId((long) 81);
+    private SuperheroMapperImpl mapper;
 
-        //superhero
-        superhero.setId((long) 56);
-        superhero.setAge(65);
-        superhero.setNickname("Toliia");
-        superhero.setFirstName("Andrew");
-        superhero.setLastName("Semenuk");
-        superhero.setSuperPower("No super power");
-        superhero.addAward(award1);
-        superhero.addEnemy(superheroEnemy1);
-        superhero.addFriend(superheroFriend1);
-        superhero.addAward(award2);
-        superhero.addEnemy(superheroEnemy2);
-        superhero.addFriend(superheroFriend2);
+    private final Long SUPERHERO_ID = 56L;
+    private final String SUPERHERO_NICKNAME = "Toliia";
+    private final String SUPERHERO_FIRST_NAME = "Andrew";
+    private final String SUPERHERO_LAST_NAME = "Semenuk";
+    private final int SUPERHERO_AGE = 25;
+    private final String SUPERHERO_SUPER_POWER = "No super power";
 
-        //superheroDto
-        superheroDto.setId((long) 56);
-        superheroDto.setAge(65);
-        superheroDto.setNickname("Toliia");
-        superheroDto.setFirstName("Andrew");
-        superheroDto.setLastName("Semenuk");
-        superheroDto.setSuperPower("No super power");
-        superheroDto.setListOfFriendsId(Arrays.asList(superheroFriend1.getId(), superheroFriend2.getId()));
-        superheroDto.setListOfEnemiesId(Arrays.asList(superheroEnemy1.getId(), superheroEnemy1.getId()));
-        superheroDto.setAwardsId(Arrays.asList(award1.getId(), award2.getId()));
+    @BeforeEach
+    void setUp() {
+        mapper = new SuperheroMapperImpl();
+        superhero = new Superhero();
 
+        superheroDto = new SuperheroDto();
+        superheroFriend1 = new Superhero();
+        superheroFriend2 = new Superhero();
+        superheroEnemy1 = new Superhero();
+        superheroEnemy2 = new Superhero();
+        award1 = new Award();
+        award2 = new Award();
+
+        superheroFriend1.setId(57L);
+        superheroFriend2.setId(58L);
+        superheroEnemy1.setId(59L);
+        superheroEnemy2.setId(60L);
+        award1.setId(80L);
+        award2.setId(81L);
+
+        superhero = Superhero.builder()
+                .id(SUPERHERO_ID)
+                .nickname(SUPERHERO_NICKNAME)
+                .firstName(SUPERHERO_FIRST_NAME)
+                .lastName(SUPERHERO_LAST_NAME)
+                .age(SUPERHERO_AGE)
+                .superPower(SUPERHERO_SUPER_POWER)
+                .listOfFriends(Set.of(superheroFriend1, superheroFriend2))
+                .listOfEnemies(Set.of(superheroEnemy1, superheroEnemy2))
+                .awards(Set.of(award1, award2))
+                .build();
     }
+
 
     @Test
     void toDto() {
-        SuperheroDto superheroDto = new SuperheroMapperImpl().toDto(superhero);
+        SuperheroDto superheroDto = mapper.toDto(superhero);
 
         assertThat(superheroDto)
-                .hasFieldOrPropertyWithValue("id", (long) 56)
-                .hasFieldOrPropertyWithValue("age", 65)
-                .hasFieldOrPropertyWithValue("nickname", "Toliia")
-                .hasFieldOrPropertyWithValue("firstName", "Andrew")
-                .hasFieldOrPropertyWithValue("lastName", "Semenuk")
-                .hasFieldOrPropertyWithValue("superPower", "No super power");
-        assertThat(superheroDto.getListOfFriendsId()).
-                contains(superheroFriend1.getId()).
-                contains(superheroFriend2.getId());
-        assertThat(superheroDto.getListOfEnemiesId()).
-                contains(superheroEnemy1.getId()).
-                contains(superheroEnemy2.getId());
-        assertThat(superheroDto.getAwardsId()).
-                contains(award1.getId()).
-                contains(award2.getId());
+                .returns(SUPERHERO_ID, SuperheroDto::getId)
+                .returns(SUPERHERO_NICKNAME, SuperheroDto::getNickname)
+                .returns(SUPERHERO_FIRST_NAME, SuperheroDto::getFirstName)
+                .returns(SUPERHERO_LAST_NAME, SuperheroDto::getLastName)
+                .returns(SUPERHERO_AGE, SuperheroDto::getAge)
+                .returns(SUPERHERO_SUPER_POWER, SuperheroDto::getSuperPower);
+        assertThat(superheroDto.getListOfFriendsId())
+                .contains(superheroFriend1.getId())
+                .contains(superheroFriend2.getId())
+                .hasSize(2);
+        assertThat(superheroDto.getListOfEnemiesId())
+                .contains(superheroEnemy1.getId())
+                .contains(superheroEnemy2.getId())
+                .hasSize(2);
+        assertThat(superheroDto.getAwardsId())
+                .contains(award1.getId())
+                .contains(award2.getId())
+                .hasSize(2);
     }
 
     @Test
     void toEntity() {
+        superheroDto = SuperheroDto.builder()
+                .id(SUPERHERO_ID)
+                .nickname(SUPERHERO_NICKNAME)
+                .firstName(SUPERHERO_FIRST_NAME)
+                .lastName(SUPERHERO_LAST_NAME)
+                .age(SUPERHERO_AGE)
+                .superPower(SUPERHERO_SUPER_POWER)
+                .listOfFriendsId(Arrays.asList(superheroFriend1.getId(), superheroFriend2.getId()))
+                .listOfEnemiesId(Arrays.asList(superheroEnemy1.getId(), superheroEnemy2.getId()))
+                .awardsId(Arrays.asList(award1.getId(), award2.getId()))
+                .build();
+
         Superhero superhero = new SuperheroMapperImpl().toEntity(superheroDto);
 
         assertThat(superhero)
-                .hasFieldOrPropertyWithValue("id", (long) 56)
-                .hasFieldOrPropertyWithValue("age", 65)
-                .hasFieldOrPropertyWithValue("nickname", "Toliia")
-                .hasFieldOrPropertyWithValue("firstName", "Andrew")
-                .hasFieldOrPropertyWithValue("lastName", "Semenuk")
-                .hasFieldOrPropertyWithValue("superPower", "No super power");
-        assertThat(superhero.getListOfFriends()).hasSize(0);
-        assertThat(superhero.getListOfEnemies()).hasSize(0);
-        assertThat(superhero.getAwards()).hasSize(0);
+                .returns(SUPERHERO_ID, Superhero::getId)
+                .returns(SUPERHERO_NICKNAME, Superhero::getNickname)
+                .returns(SUPERHERO_FIRST_NAME, Superhero::getFirstName)
+                .returns(SUPERHERO_LAST_NAME, Superhero::getLastName)
+                .returns(SUPERHERO_AGE, Superhero::getAge)
+                .returns(SUPERHERO_SUPER_POWER, Superhero::getSuperPower);
+        assertThat(superhero.getListOfFriends()).isEmpty();
+        assertThat(superhero.getListOfEnemies()).isEmpty();
+        assertThat(superhero.getAwards()).isEmpty();
+    }
 
+    @Test
+    void toEntityUpdate() {
+        superheroDto = SuperheroDto.builder()
+                .id(30L)
+                .nickname("Pavillo")
+                .firstName("Pavel")
+                .lastName("Reno")
+                .age(29)
+                .superPower("Strong")
+                .listOfFriendsId(Arrays.asList(35L, 36L))
+                .listOfEnemiesId(Arrays.asList(37L, 38L))
+                .awardsId(Arrays.asList(39L, 40L))
+                .build();
+
+        mapper.toEntityUpdate(superheroDto, superhero);
+
+        assertThat(superhero)
+                .returns(SUPERHERO_ID, Superhero::getId)
+                .returns(superheroDto.getNickname(), Superhero::getNickname)
+                .returns(superheroDto.getFirstName(), Superhero::getFirstName)
+                .returns(superheroDto.getLastName(), Superhero::getLastName)
+                .returns(superheroDto.getAge(), Superhero::getAge)
+                .returns(superheroDto.getSuperPower(), Superhero::getSuperPower);
+        assertThat(superhero.getListOfFriends())
+                .contains(superheroFriend1)
+                .contains(superheroFriend2)
+                .hasSize(2);
+        assertThat(superhero.getListOfEnemies())
+                .contains(superheroEnemy1)
+                .contains(superheroEnemy2)
+                .hasSize(2);
+        assertThat(superhero.getAwards())
+                .contains(award1)
+                .contains(award2)
+                .hasSize(2);
+    }
+
+    @Test
+    void toDtoSuperheroAwards() {
+        AwardDto awardDto1 = AwardDto.builder()
+                .id(45L)
+                .name("За спасіння 1000 людей від землетрусу")
+                .rarity("RARE")
+                .build();
+
+        AwardDto awardDto2 = AwardDto.builder()
+                .id(46L)
+                .name("За спасіння 10-и людей від потопу")
+                .rarity("COMMON")
+                .build();
+
+        List<AwardView> awards = new ArrayList<>();
+        awards.add(awardDto1);
+        awards.add(awardDto2);
+
+        SuperheroAwardsDto superheroAwardsDto = mapper.toDtoSuperheroAwards(superhero, awards);
+
+        assertThat(superheroAwardsDto)
+                .returns(SUPERHERO_ID, SuperheroAwardsDto::getId)
+                .returns(SUPERHERO_NICKNAME, SuperheroAwardsDto::getNickname)
+                .returns(SUPERHERO_FIRST_NAME, SuperheroAwardsDto::getFirstName)
+                .returns(SUPERHERO_LAST_NAME, SuperheroAwardsDto::getLastName)
+                .returns(SUPERHERO_AGE, SuperheroAwardsDto::getAge)
+                .returns(SUPERHERO_SUPER_POWER, SuperheroAwardsDto::getSuperPower);
+        assertThat(superheroAwardsDto.getListOfFriendsId())
+                .contains(superheroFriend1.getId())
+                .contains(superheroFriend2.getId())
+                .hasSize(2);
+        assertThat(superheroAwardsDto.getListOfEnemiesId())
+                .contains(superheroEnemy1.getId())
+                .contains(superheroEnemy2.getId())
+                .hasSize(2);
+        assertThat(superheroAwardsDto.getAwards())
+                .contains(awardDto1)
+                .contains(awardDto2)
+                .hasSize(2);
+
+        assertThat(superheroAwardsDto.getAwards())
+                .anySatisfy(awardDto -> assertThat(awardDto)
+                        .returns(awardDto1.getId(), AwardDto::getId)
+                        .returns(awardDto1.getName(), AwardDto::getName)
+                        .returns(awardDto1.getRarity(), AwardDto::getRarity))
+                .anySatisfy(awardDto -> assertThat(awardDto)
+                        .returns(awardDto2.getId(), AwardDto::getId)
+                        .returns(awardDto2.getName(), AwardDto::getName)
+                        .returns(awardDto2.getRarity(), AwardDto::getRarity));
     }
 }

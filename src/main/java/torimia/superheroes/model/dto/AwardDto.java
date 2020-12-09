@@ -1,6 +1,6 @@
 package torimia.superheroes.model.dto;
 
-import lombok.Data;
+import lombok.*;
 import torimia.superheroes.model.entity.Rarity;
 import torimia.superheroes.model.enums.ValueOfEnum;
 
@@ -9,6 +9,9 @@ import javax.validation.constraints.Size;
 import java.util.Locale;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class AwardDto implements AwardView {
 
     private Long id;

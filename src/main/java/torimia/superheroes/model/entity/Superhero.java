@@ -1,9 +1,6 @@
 package torimia.superheroes.model.entity;
 
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -14,6 +11,9 @@ import java.util.Set;
 @Table
 @Data
 @EqualsAndHashCode(exclude = {"listOfFriends", "listOfEnemies", "awards"})
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Superhero {
 
     @Id
