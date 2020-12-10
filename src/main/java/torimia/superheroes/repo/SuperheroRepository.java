@@ -19,7 +19,7 @@ public interface SuperheroRepository extends JpaRepository<Superhero, Long> {
     @Query("select a from Award a where a.superhero.id = :superheroId order by a.rarity desc")
     Page<AwardView> getSuperheroAwards(Long superheroId, Pageable page);
 
-    @Query(value = "SELECT superhero.id, superhero.name, superhero.first_name AS firstName, " +
+    @Query(value = "SELECT superhero.id, superhero.nickname, superhero.first_name AS firstName, " +
             "superhero.last_name AS lastName, COUNT(superhero.id) AS amount " +
             "FROM superhero JOIN superhero_list_of_friends " +
             "ON (superhero.id = superhero_list_of_friends.superhero_id) " +
@@ -29,7 +29,7 @@ public interface SuperheroRepository extends JpaRepository<Superhero, Long> {
             nativeQuery = true)
     List<SuperheroViewForTop> getSuperheroesWithTheBiggestAmountsOfFriends(Integer amountOfSuperhero);
 
-    @Query(value = "SELECT superhero.id, superhero.name, superhero.first_name AS firstName, " +
+    @Query(value = "SELECT superhero.id, superhero.nickname, superhero.first_name AS firstName, " +
             "superhero.last_name AS lastName, COUNT(superhero.id) AS amount  " +
             "FROM superhero JOIN superhero_list_of_enemies " +
             "ON (superhero.id = superhero_list_of_enemies.superhero_id) " +

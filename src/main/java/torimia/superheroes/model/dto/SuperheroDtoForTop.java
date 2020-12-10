@@ -14,4 +14,15 @@ public class SuperheroDtoForTop implements SuperheroViewForTop{
     private String lastName;
 
     private Long amount;
+
+    @Override
+    public String toString() {
+        return "SuperheroDtoForTop{" +
+                "id=" + id +
+                ", nickname='" + nickname + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", amount=" + amount +
+                '}';
+    }
 }

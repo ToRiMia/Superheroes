@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.stream.Collectors;
 
 @Entity
 @Table
@@ -27,4 +28,14 @@ public class Award {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "superhero_id")
     private Superhero superhero;
+
+    @Override
+    public String toString() {
+        return "\nAward{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", rarity=" + rarity +
+                ", superhero=" + superhero.getId() +
+                "}";
+    }
 }

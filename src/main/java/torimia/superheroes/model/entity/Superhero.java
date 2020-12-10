@@ -1,11 +1,13 @@
 package torimia.superheroes.model.entity;
 
 import lombok.*;
+import org.hibernate.mapping.Collection;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table
@@ -59,6 +61,7 @@ public class Superhero {
         awards.add(award);
         award.setSuperhero(this);
     }
+
     public void deleteAward(Award award) {
         awards.remove(award);
         award.setSuperhero(null);
@@ -70,5 +73,20 @@ public class Superhero {
 
     public void deleteFriend(Superhero friend) {
         listOfFriends.remove(friend);
+    }
+
+    @Override
+    public String toString() {
+        return "Superhero{" +
+                "id=" + id +
+                ", nickname='" + nickname + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", age=" + age +
+                ", superPower='" + superPower + '\'' +
+                ", listOfFriends=" + listOfFriends.stream().map(Superhero::getId).collect(Collectors.toList()) +
+                ", listOfEnemies=" + listOfEnemies.stream().map(Superhero::getId).collect(Collectors.toList())  +
+                ", awards=" + awards.stream().map(Award::getId).collect(Collectors.toList())  +
+                '}';
     }
 }
