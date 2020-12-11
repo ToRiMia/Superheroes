@@ -25,7 +25,6 @@ import static torimia.superheroes.model.entity.Rarity.*;
 
 @Transactional
 @SpringBootTest
-@ContextConfiguration(initializers = {SuperheroRepositoryAwardsTest.Initializer.class})
 class SuperheroRepositoryAwardsTest extends PostgreSQLContainerForTests{
 
     @Autowired
