@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
-public class SuperheroServiceInput implements SuperheroService {
+public class SuperheroServiceImpl implements SuperheroService {
 
     private final SuperheroRepository repository;
     private final AwardRepository awardRepository;
@@ -52,8 +52,7 @@ public class SuperheroServiceInput implements SuperheroService {
 
     @Override
     public void delete(Long id) {
-        Superhero superhero = repository.getOne(id);
-        repository.delete(superhero);
+        repository.deleteById(id);
     }
 
     @Override

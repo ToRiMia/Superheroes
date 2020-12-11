@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
 @SpringBootTest
-class SuperheroRepositoryTest extends PostgreSQLContainerForTests {
+class SuperheroRepositoryTest extends RepositoryDBForTests {
 
 //    @PersistenceContext
 //    private EntityManager entityManager;

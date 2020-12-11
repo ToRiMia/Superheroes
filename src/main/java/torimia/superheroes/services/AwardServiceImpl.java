@@ -13,7 +13,7 @@ import java.util.Locale;
 
 @RequiredArgsConstructor
 @Service
-public class AwardServiceInput implements AwardService{
+public class AwardServiceImpl implements AwardService{
 
     private final AwardRepository repository;
     private final AwardMapper mapper;

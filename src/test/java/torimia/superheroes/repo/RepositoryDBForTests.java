@@ -6,8 +6,8 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.testcontainers.containers.PostgreSQLContainer;
 
-@ContextConfiguration(initializers = {PostgreSQLContainerForTests.Initializer.class})
-class PostgreSQLContainerForTests {
+@ContextConfiguration(initializers = {RepositoryDBForTests.Initializer.class})
+class RepositoryDBForTests {
 
     private static PostgreSQLContainer postgreSQLContainer;
 
