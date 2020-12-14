@@ -11,6 +11,9 @@ import torimia.superheroes.services.SuperheroService;
 import javax.validation.Valid;
 import java.util.List;
 
+import static torimia.superheroes.controllers.SuperheroesController.Path.BY_ID;
+import static torimia.superheroes.controllers.SuperheroesController.Path.Variable.ID;
+
 @RestController
 @RequestMapping("superhero")
 @RequiredArgsConstructor
@@ -18,13 +21,24 @@ public class SuperheroesController {
 
     private final SuperheroService service;
 
+    interface Path{
+
+        String BASE_URL = "superhero";
+
+        String BY_ID = "/{" + ID + "";
+
+         interface Variable{
+            String ID = "id";
+        }
+    }
+
     @GetMapping
     public Page<SuperheroDto> getAllPage(@SortDefault(sort = "id") Pageable page) {
         return service.getPage(page);
     }
 
-    @GetMapping("{id}")
-    public SuperheroDto getById(@PathVariable("id") Long id) {
+    @GetMapping(BY_ID)
+    public SuperheroDto getById(@PathVariable(ID) Long id) {
         return service.getById(id);
     }
 
