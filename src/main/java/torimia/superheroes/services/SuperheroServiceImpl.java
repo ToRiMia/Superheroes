@@ -132,7 +132,4 @@ public class SuperheroServiceImpl implements SuperheroService {
     public Page<AwardView> getSuperheroAwards(Long id, Pageable pageable) {
         return repository.getSuperheroAwards(id, pageable);
     }
-
-
-
 }

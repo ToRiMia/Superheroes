@@ -1,25 +1,24 @@
 package torimia.superheroes.services;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import torimia.superheroes.exceptions.AddingToListException;
 import torimia.superheroes.mappers.SuperheroMapper;
-import torimia.superheroes.model.dto.IdRequest;
-import torimia.superheroes.model.dto.SuperheroDto;
+import torimia.superheroes.model.dto.*;
+import torimia.superheroes.model.entity.Award;
 import torimia.superheroes.model.entity.Superhero;
 import torimia.superheroes.repo.AwardRepository;
 import torimia.superheroes.repo.SuperheroRepository;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -233,5 +232,127 @@ class SuperheroServiceImplTest {
                 .isEqualTo(dtoForResponse);
 
         verify(mockSuperhero).deleteEnemy(enemy);
+    }
+
+    @Test
+    void getSuperheroesWithTheBiggestAmountsOfFriends() {
+        List<SuperheroViewForTop> superheroesWithFriends = Arrays.asList(new SuperheroDtoForTop(),
+                new SuperheroDtoForTop(), new SuperheroDtoForTop());
+
+        int superheroesAmount = 3;
+        when(repository.getSuperheroesWithTheBiggestAmountsOfFriends(superheroesAmount))
+                .thenReturn(superheroesWithFriends);
+
+        List<SuperheroViewForTop> superheroesResponse = repository
+                .getSuperheroesWithTheBiggestAmountsOfFriends(superheroesAmount);
+
+        assertThat(superheroesResponse)
+                .isEqualTo(superheroesWithFriends)
+                .hasSize(superheroesAmount);
+    }
+
+    @Test
+    void getSuperheroesWithTheBiggestAmountsOfEnemies() {
+        List<SuperheroViewForTop> superheroesWithEnemies = Arrays.asList(new SuperheroDtoForTop(),
+                new SuperheroDtoForTop(), new SuperheroDtoForTop());
+
+        int superheroesAmount = 3;
+        when(repository.getSuperheroesWithTheBiggestAmountsOfEnemies(superheroesAmount))
+                .thenReturn(superheroesWithEnemies);
+
+        List<SuperheroViewForTop> superheroesResponse = repository
+                .getSuperheroesWithTheBiggestAmountsOfEnemies(superheroesAmount);
+
+        assertThat(superheroesResponse)
+                .isEqualTo(superheroesWithEnemies)
+                .hasSize(superheroesAmount);
+    }
+
+    @Test
+    void addAward() {
+        IdRequest awardId = IdRequest.of(2L);
+
+        Superhero mockSuperhero = mock(Superhero.class);
+        Long superheroId = 1L;
+        when(repository.getOne(superheroId)).thenReturn(mockSuperhero);
+
+        Award award = new Award();
+        when(awardRepository.getOne(awardId.getId())).thenReturn(award);
+
+        when(repository.save(mockSuperhero)).thenReturn(mockSuperhero);
+
+        SuperheroDto dtoForResponse = new SuperheroDto();
+        when(mapper.toDto(mockSuperhero)).thenReturn(dtoForResponse);
+
+        SuperheroDto dtoResponse = service.addAward(superheroId, awardId);
+
+        assertThat(dtoResponse)
+                .isEqualTo(dtoForResponse);
+
+        verify(mockSuperhero).addAward(award);
+    }
+
+    @Test
+    void deleteAward() {
+        IdRequest awardId = IdRequest.of(2L);
+
+        Superhero mockSuperhero = mock(Superhero.class);
+        Long superheroId = 1L;
+        when(repository.getOne(superheroId)).thenReturn(mockSuperhero);
+
+        Award award = new Award();
+        when(awardRepository.getOne(awardId.getId())).thenReturn(award);
+
+        when(repository.save(mockSuperhero)).thenReturn(mockSuperhero);
+
+        SuperheroDto dtoForResponse = new SuperheroDto();
+        when(mapper.toDto(mockSuperhero)).thenReturn(dtoForResponse);
+
+        SuperheroDto dtoResponse = service.deleteAward(superheroId, awardId);
+
+        assertThat(dtoResponse)
+                .isEqualTo(dtoForResponse);
+
+        verify(mockSuperhero).deleteAward(award);
+    }
+
+    @Test
+    void getSuperheroTop5Awards() {
+        Long superheroId = 1L;
+        PageRequest pageRequest = PageRequest.of(0, 5, Sort.unsorted());
+
+        List<AwardView> awards = Arrays.asList(new AwardDto(), new AwardDto(),
+                new AwardDto(), new AwardDto(), new AwardDto());
+        PageImpl<AwardView> pageResponse = new PageImpl<>(awards);
+        when(repository.getSuperheroAwards(superheroId, pageRequest)).thenReturn(pageResponse);
+
+        when(repository.getOne(superheroId)).thenReturn(superhero);
+
+        List<AwardDto> superheroAwards = Arrays.asList(new AwardDto(), new AwardDto(),
+                new AwardDto(), new AwardDto(), new AwardDto());
+        SuperheroAwardsDto superheroAwardsDto = new SuperheroAwardsDto();
+        superheroAwardsDto.setAwards(superheroAwards);
+        when(mapper.toDtoSuperheroAwards(superhero, awards))
+                .thenReturn(superheroAwardsDto);
+
+        SuperheroAwardsDto superheroAwardsDtoResponse = service.getSuperheroTop5Awards(superheroId);
+
+        assertThat(superheroAwardsDtoResponse.getAwards()).hasSize(5);
+    }
+
+    @Test
+    void getSuperheroAwards() {
+        Long superheroId = 1L;
+        Pageable pageable = PageRequest.of(0, 5, Sort.unsorted());
+
+        List<AwardView> awards = Arrays.asList(new AwardDto(), new AwardDto(),
+                new AwardDto(), new AwardDto(), new AwardDto());
+        PageImpl<AwardView> page = new PageImpl<>(awards);
+
+        when(repository.getSuperheroAwards(superheroId, pageable)).thenReturn(page);
+
+        Page<AwardView> pageResponse = service.getSuperheroAwards(superheroId, pageable);
+
+        assertThat(pageResponse.getContent()).hasSize(5);
     }
 }
