@@ -18,7 +18,7 @@ public interface SuperheroService {
 
     void delete(Long id);
 
-    SuperheroDto addNewFriend(Long superheroId, IdRequest id);
+    SuperheroDto addFriend(Long superheroId, IdRequest id);
 
     SuperheroDto deleteFriend(Long superheroId, IdRequest id);
 

@@ -56,7 +56,7 @@ public class SuperheroServiceImpl implements SuperheroService {
     }
 
     @Override
-    public SuperheroDto addNewFriend(Long superheroId, IdRequest id) {
+    public SuperheroDto addFriend(Long superheroId, IdRequest id) {
         if (superheroId.equals(id.getId())) {
             throw new AddingToListException("It's forbidden to add yourself to the list of your friends or enemies");
         }

@@ -29,7 +29,7 @@ class SuperheroServiceImplForHandleExceptionsTest {
     @Test()
     void addNewFriendWithAddingToListException() throws AddingToListException {
         assertThrows(AddingToListException.class,
-                () -> service.addNewFriend(SUPERHERO_ID, ID_REQUEST));
+                () -> service.addFriend(SUPERHERO_ID, ID_REQUEST));
     }
 
     @Test()

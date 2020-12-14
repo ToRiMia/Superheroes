@@ -11,7 +11,7 @@ import torimia.superheroes.services.SuperheroService;
 import javax.validation.Valid;
 import java.util.List;
 
-import static torimia.superheroes.controllers.SuperheroesController.Path.BY_ID;
+import static torimia.superheroes.controllers.SuperheroesController.Path.*;
 import static torimia.superheroes.controllers.SuperheroesController.Path.Variable.ID;
 
 @RestController
@@ -21,16 +21,28 @@ public class SuperheroesController {
 
     private final SuperheroService service;
 
-    interface Path{
+    interface Path {
 
-        String BASE_URL = "superhero";
+        String BASE_URL = "/superhero";
 
-        String BY_ID = "/{" + ID + "";
+        String BY_ID = "/{" + ID + "}";
 
-         interface Variable{
+        String ADD_FRIEND = "/add_friend";
+
+        String DELETE_FRIEND = "/delete_friend";
+
+        String ADD_ENEMY = "/add_enemy";
+
+        String DELETE_ENEMY = "/delete_enemy";
+
+        String ADD_AWARD = "/add_award";
+
+        String DELETE_AWARD = "/delete_award";
+
+        interface Variable {
             String ID = "id";
         }
-    }
+    } // TODO: 14.12.20 переправити урли
 
     @GetMapping
     public Page<SuperheroDto> getAllPage(@SortDefault(sort = "id") Pageable page) {
@@ -47,35 +59,35 @@ public class SuperheroesController {
         return service.create(dto);
     }
 
-    @PutMapping("{id}")
+    @PutMapping(BY_ID)
     public SuperheroDto update(
-            @PathVariable("id") Long id,
+            @PathVariable(ID) Long id,
             @Valid @RequestBody SuperheroDto dto) {
         return service.update(id, dto);
     }
 
-    @DeleteMapping("{id}")
-    public void remove(@PathVariable("id") Long id) {
+    @DeleteMapping(BY_ID)
+    public void remove(@PathVariable(ID) Long id) {
         service.delete(id);
     }
 
-    @PatchMapping("add_friend/{id}")
-    public SuperheroDto addNewFriend(@PathVariable("id") Long superheroId, @Valid @RequestBody IdRequest id) {
-        return service.addNewFriend(superheroId, id);
+    @PatchMapping(ADD_FRIEND + BY_ID)
+    public SuperheroDto addFriend(@PathVariable(ID) Long superheroId, @Valid @RequestBody IdRequest id) {
+        return service.addFriend(superheroId, id);
     }
 
-    @DeleteMapping("delete_friend/{id}")
+    @DeleteMapping(DELETE_FRIEND + BY_ID)
     public SuperheroDto deleteFriend(@PathVariable("id") Long superheroId, @Valid @RequestBody IdRequest id) {
         return service.deleteFriend(superheroId, id);
     }
 
-    @PatchMapping("add_enemy/{id}")
+    @PatchMapping(ADD_ENEMY + BY_ID)
     public SuperheroDto addEnemy(@PathVariable("id") Long superheroId, @Valid @RequestBody IdRequest id) {
         return service.addEnemy(superheroId, id);
     }
 
-    @DeleteMapping("delete_enemy/{id}")
-    public SuperheroDto deleteEnemy(@PathVariable("id") Long superheroId, @Valid  @RequestBody IdRequest id) {
+    @DeleteMapping(DELETE_ENEMY + BY_ID)
+    public SuperheroDto deleteEnemy(@PathVariable("id") Long superheroId, @Valid @RequestBody IdRequest id) {
         return service.deleteEnemy(superheroId, id);
     }
 
@@ -89,12 +101,12 @@ public class SuperheroesController {
         return service.getSuperheroesWithTheBiggestAmountsOfEnemies(amountOfSuperhero);
     }
 
-    @PatchMapping("add_award/{id}")
+    @PatchMapping(ADD_AWARD + BY_ID)
     public SuperheroDto addAward(@PathVariable("id") Long superheroId, @Valid @RequestBody IdRequest id) {
         return service.addAward(superheroId, id);
     }
 
-    @DeleteMapping("delete_award/{id}")
+    @DeleteMapping(DELETE_AWARD + BY_ID)
     public SuperheroDto deleteAward(@PathVariable("id") Long superheroId, @Valid @RequestBody IdRequest id) {
         return service.deleteAward(superheroId, id);
     }

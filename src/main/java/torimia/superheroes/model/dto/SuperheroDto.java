@@ -31,7 +31,7 @@ public class SuperheroDto {
     @Min(value = 1, message = "Age cannot be less than 1 year!")
     private int age;
 
-    @NotNull(message = "Id cannot be empty!")
+    @NotNull(message = "Super power cannot be empty!")
     @Size(min = 3, message = "Super power cannot be less than 3 letters!")
     @Size(max = 1000, message = "Super power cannot be more than 1000 letters!")
     private String superPower;

@@ -52,7 +52,7 @@ class SuperheroServiceImplFriendsAndEnemiesTest {
 
     @Test()
     void addNewFriend() {
-        SuperheroDto dtoResponse = service.addNewFriend(SUPERHERO_ID, ID_REQUEST);
+        SuperheroDto dtoResponse = service.addFriend(SUPERHERO_ID, ID_REQUEST);
 
         assertThat(dtoResponse)
                 .isEqualTo(dtoForResponse);
