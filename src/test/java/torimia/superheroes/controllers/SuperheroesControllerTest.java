@@ -1,20 +1,14 @@
 package torimia.superheroes.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import torimia.superheroes.exceptions.handler.MainExceptionHandler;
 import torimia.superheroes.model.dto.IdRequest;
 import torimia.superheroes.model.dto.SuperheroDto;
 import torimia.superheroes.services.SuperheroServiceImpl;
@@ -24,29 +18,26 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static torimia.superheroes.controllers.SuperheroesController.Path.*;
 
 @ExtendWith(MockitoExtension.class)
-class SuperheroesControllerTest {
-
-    private MockMvc mockMvc;
+class SuperheroesControllerTest extends ControllerConfigForTests{
 
     @Mock
     private SuperheroServiceImpl service;
 
     @InjectMocks
-    private SuperheroesController controller;
-
-    private JacksonTester<SuperheroDto> jsonSuperhero;
-    private JacksonTester<IdRequest> jsonId;
+    SuperheroesController controller;
 
     private final String ID = "/1";
 
     @BeforeEach
     void setUp() {
-        JacksonTester.initFields(this, new ObjectMapper());
-
-        mockMvc = MockMvcBuilders.standaloneSetup(controller)
-                .setControllerAdvice(new MainExceptionHandler())
-                .build();
+        super.setUp();
     }
+
+    @Override
+    protected Object getMockMvc() {
+        return controller;
+    }
+
 
     @Test
     void createSuccess() throws Exception {
@@ -253,39 +244,35 @@ class SuperheroesControllerTest {
                 .build();
     }
 
-    @NotNull
     private MockHttpServletResponse createSuperhero(SuperheroDto dto, String url) throws Exception {
         return mockMvc.perform(
                 post(url)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonSuperhero.write(dto).getJson()))
+                        .content(toJson(dto)))
                 .andReturn().getResponse();
     }
 
-    @NotNull
-    private MockHttpServletResponse addItemList(IdRequest idRequest, String url) throws Exception {
-        return mockMvc.perform(
-                patch(url)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonId.write(idRequest).getJson()))
-                .andReturn().getResponse();
-    }
-
-    @NotNull
-    private MockHttpServletResponse deleteItemList(IdRequest idRequest, String url) throws Exception {
-        return mockMvc.perform(
-                delete(url)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonId.write(idRequest).getJson()))
-                .andReturn().getResponse();
-    }
-
-    @NotNull
     private MockHttpServletResponse updateSuperhero(SuperheroDto dto, String url) throws Exception {
         return mockMvc.perform(
                 put(url)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonSuperhero.write(dto).getJson()))
+                        .content(toJson(dto)))
+                .andReturn().getResponse();
+    }
+
+    private MockHttpServletResponse addItemList(IdRequest idRequest, String url) throws Exception {
+        return mockMvc.perform(
+                patch(url)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toJson(idRequest)))
+                .andReturn().getResponse();
+    }
+
+    private MockHttpServletResponse deleteItemList(IdRequest idRequest, String url) throws Exception {
+        return mockMvc.perform(
+                delete(url)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toJson(idRequest)))
                 .andReturn().getResponse();
     }
 }

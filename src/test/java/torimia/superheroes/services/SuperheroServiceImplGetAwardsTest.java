@@ -6,22 +6,23 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import torimia.superheroes.mappers.SuperheroMapper;
 import torimia.superheroes.model.dto.AwardDto;
 import torimia.superheroes.model.dto.AwardView;
 import torimia.superheroes.model.dto.SuperheroAwardsDto;
-import torimia.superheroes.model.dto.SuperheroDto;
 import torimia.superheroes.model.entity.Superhero;
 import torimia.superheroes.repo.AwardRepository;
 import torimia.superheroes.repo.SuperheroRepository;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
+import static torimia.superheroes.TestingUtils.createListOf;
 
 @ExtendWith(MockitoExtension.class)
 class SuperheroServiceImplGetAwardsTest {
@@ -45,8 +46,7 @@ class SuperheroServiceImplGetAwardsTest {
     void setUp() {
         superhero = new Superhero();
         pageRequest = PageRequest.of(0, 5, Sort.unsorted());
-        awards = Arrays.asList(new AwardDto(), new AwardDto(),
-                new AwardDto(), new AwardDto(), new AwardDto());
+        awards = createListOf(5,AwardDto::new);
         page = new PageImpl<>(awards);
     }
 
@@ -56,8 +56,8 @@ class SuperheroServiceImplGetAwardsTest {
 
         when(repository.getOne(SUPERHERO_ID)).thenReturn(superhero);
 
-        List<AwardDto> superheroAwards = Arrays.asList(new AwardDto(), new AwardDto(),
-                new AwardDto(), new AwardDto(), new AwardDto());
+        List<AwardDto> superheroAwards = createListOf(5, AwardDto::new);
+
         SuperheroAwardsDto superheroAwardsDto = new SuperheroAwardsDto();
         superheroAwardsDto.setAwards(superheroAwards);
         when(mapper.toDtoSuperheroAwards(superhero, awards)).thenReturn(superheroAwardsDto);

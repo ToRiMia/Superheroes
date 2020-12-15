@@ -6,19 +6,22 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import torimia.superheroes.mappers.SuperheroMapper;
-import torimia.superheroes.model.dto.*;
+import torimia.superheroes.model.dto.SuperheroDto;
 import torimia.superheroes.model.entity.Superhero;
 import torimia.superheroes.repo.AwardRepository;
 import torimia.superheroes.repo.SuperheroRepository;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static torimia.superheroes.TestingUtils.createListOf;
 
 @ExtendWith(MockitoExtension.class)
 class SuperheroServiceImplTest {
@@ -46,8 +49,7 @@ class SuperheroServiceImplTest {
     void getPage() {
         PageRequest pageRequest = PageRequest.of(0, 5, Sort.unsorted());
 
-        List<Superhero> superheroes = Arrays.asList(new Superhero(), new Superhero(),
-                new Superhero(), new Superhero(), new Superhero());
+        List<Superhero> superheroes = createListOf(5, Superhero::new);
         PageImpl<Superhero> pageResponse = new PageImpl<>(superheroes);
 
         when(repository.findAll(pageRequest)).thenReturn(pageResponse);
