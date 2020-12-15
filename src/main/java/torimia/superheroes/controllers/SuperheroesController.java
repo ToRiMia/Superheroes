@@ -1,8 +1,13 @@
 package torimia.superheroes.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.Cache;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.web.SortDefault;
 import org.springframework.web.bind.annotation.*;
 import torimia.superheroes.model.dto.*;
@@ -18,6 +23,8 @@ import static torimia.superheroes.controllers.SuperheroesController.Path.Variabl
 @RequestMapping("superhero")
 @RequiredArgsConstructor
 public class SuperheroesController {
+
+    private final RedisCacheManager redisCacheManager;
 
     private final SuperheroService service;
 
@@ -91,13 +98,14 @@ public class SuperheroesController {
         return service.deleteEnemy(superheroId, id);
     }
 
+    @Cacheable(value = "getTopSuperheroWithFriends", key = "#root.method.name")
     @GetMapping("top_friends")
     public List<SuperheroViewForTop> getTopSuperheroWithFriends(@RequestParam(value = "amount", defaultValue = "5", required = false) Integer amountOfSuperhero) {
         return service.getSuperheroesWithTheBiggestAmountsOfFriends(amountOfSuperhero);
     }
 
     @GetMapping("top_enemies")
-    public List<SuperheroViewForTop> getTop5SuperheroWithEnemies(@RequestParam(value = "amount", defaultValue = "5", required = false) Integer amountOfSuperhero) {
+    public List<SuperheroViewForTop> getTopSuperheroWithEnemies(@RequestParam(value = "amount", defaultValue = "5", required = false) Integer amountOfSuperhero) {
         return service.getSuperheroesWithTheBiggestAmountsOfEnemies(amountOfSuperhero);
     }
 
