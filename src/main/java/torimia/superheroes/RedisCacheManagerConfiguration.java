@@ -26,7 +26,7 @@ public class RedisCacheManagerConfiguration {
     }
 
     @Bean
-    @Profile("cache")
+    @Profile("!no-cache")
     public CacheManager redisCacheManager(@Value("${spring.cache.redis.time-to-live}")
                                                       Long duration) {
         RedisSerializationContext.SerializationPair<Object> jsonSerializer =
