@@ -1,6 +1,7 @@
 package torimia.superheroes.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +34,7 @@ public class SuperheroServiceImpl implements SuperheroService {
 
     @Override
     public SuperheroDto getById(Long id) {
+        System.out.println("getById");
         return mapper.toDto(repository.getOne(id));
     }
 
@@ -93,14 +95,18 @@ public class SuperheroServiceImpl implements SuperheroService {
         return mapper.toDto(repository.save(superhero));
     }
 
+    @Cacheable(value = "getTopSuperheroWithFriends")
     @Override
-    public List<SuperheroViewForTop> getSuperheroesWithTheBiggestAmountsOfFriends(Integer amountOfSuperhero) {
-        return repository.getSuperheroesWithTheBiggestAmountsOfFriends(amountOfSuperhero);
+    public List<SuperheroDtoForTop> getSuperheroesWithTheBiggestAmountsOfFriends(Integer amountOfSuperhero) {
+        return repository.getSuperheroesWithTheBiggestAmountsOfFriends(amountOfSuperhero)
+                .stream().map(mapper::toDtoForTop).collect(Collectors.toList());
     }
 
+    @Cacheable(value = "getTopSuperheroWithEnemies")
     @Override
-    public List<SuperheroViewForTop> getSuperheroesWithTheBiggestAmountsOfEnemies(Integer amountOfSuperhero) {
-        return repository.getSuperheroesWithTheBiggestAmountsOfEnemies(amountOfSuperhero);
+    public List<SuperheroDtoForTop> getSuperheroesWithTheBiggestAmountsOfEnemies(Integer amountOfSuperhero) {
+        return repository.getSuperheroesWithTheBiggestAmountsOfEnemies(amountOfSuperhero)
+                .stream().map(mapper::toDtoForTop).collect(Collectors.toList());
     }
 
     @Override

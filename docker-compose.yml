@@ -14,7 +14,6 @@ services:
       - /home/user/JavaProjects/Data:/var/lib/postgresql/data
   redis:
     image: "redis:alpine"
-    hostname: redis
     ports:
     - 6379:6379
 

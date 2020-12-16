@@ -26,9 +26,9 @@ public interface SuperheroService {
 
     SuperheroDto deleteEnemy(Long superheroId, IdRequest id);
 
-    List<SuperheroViewForTop> getSuperheroesWithTheBiggestAmountsOfFriends(Integer amountOfSuperhero);
+    List<SuperheroDtoForTop> getSuperheroesWithTheBiggestAmountsOfFriends(Integer amountOfSuperhero);
 
-    List<SuperheroViewForTop> getSuperheroesWithTheBiggestAmountsOfEnemies(Integer amountOfSuperhero);
+    List<SuperheroDtoForTop> getSuperheroesWithTheBiggestAmountsOfEnemies(Integer amountOfSuperhero);
 
     SuperheroDto addAward(Long superheroId, IdRequest id);
 

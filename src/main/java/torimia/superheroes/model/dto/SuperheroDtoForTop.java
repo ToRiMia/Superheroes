@@ -1,8 +1,11 @@
 package torimia.superheroes.model.dto;
 
-import lombok.Data;
+import lombok.*;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class SuperheroDtoForTop implements SuperheroViewForTop{
 
     private Long id;
