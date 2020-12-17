@@ -28,7 +28,7 @@ public class RedisCacheManagerConfiguration {
     @Bean
     @Profile("!no-cache")
     public CacheManager redisCacheManager(@Value("${spring.cache.redis.time-to-live}")
-                                                      Long duration) {
+                                                  Duration duration) {
         RedisSerializationContext.SerializationPair<Object> jsonSerializer =
                 RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer());
 
@@ -36,7 +36,7 @@ public class RedisCacheManagerConfiguration {
                 .fromConnectionFactory(redisConnectionFactory)
                 .cacheDefaults(
                         RedisCacheConfiguration.defaultCacheConfig()
-                                .entryTtl(Duration.ofSeconds(duration))
+                                .entryTtl(duration)
                                 .serializeValuesWith(jsonSerializer)
                 )
                 .build();
