@@ -36,6 +36,10 @@ public class SuperheroDto {
     @Size(max = 1000, message = "Super power cannot be more than 1000 letters!")
     private String superPower;
 
+    private Integer damage;
+
+    private Integer health;
+
     private List<Long> listOfFriendsId = new ArrayList<>();
 
     private List<Long> listOfEnemiesId = new ArrayList<>();

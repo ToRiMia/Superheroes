@@ -51,9 +51,10 @@ class SuperheroRepositoryAwardsTest extends RepositoryDBForTests {
     }
 
     private Superhero createDummySuperhero() {
-        return Superhero.builder().nickname("NICKNAME").firstName("Tiana").
-                lastName("Dobrev").age(26).superPower("Beautiful smile").
-                listOfFriends(new HashSet<>()).listOfEnemies(new HashSet<>()).awards(new HashSet<>())
+        return Superhero.builder().nickname("NICKNAME").firstName("Tiana")
+                .lastName("Dobrev").age(26).superPower("Beautiful smile")
+                .damage(0).health(100)
+                .listOfFriends(new HashSet<>()).listOfEnemies(new HashSet<>()).awards(new HashSet<>())
                 .build();
     }
 

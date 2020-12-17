@@ -19,6 +19,10 @@ public class SuperheroAwardsDto {
 
     private String superPower;
 
+    private Integer damage;
+
+    private Integer health;
+
     private List<Long> listOfFriendsId;
 
     private List<Long> listOfEnemiesId;

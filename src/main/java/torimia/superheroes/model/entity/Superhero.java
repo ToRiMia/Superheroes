@@ -36,6 +36,10 @@ public class Superhero {
     @Column(length = 1000)
     private String superPower;
 
+    private Integer damage;
+
+    private Integer health;
+
     @Setter(AccessLevel.PRIVATE)
     @ManyToMany()
     private Set<Superhero> listOfFriends = new HashSet<>();

@@ -7,6 +7,7 @@ import torimia.superheroes.model.dto.AwardView;
 import torimia.superheroes.model.dto.SuperheroAwardsDto;
 import torimia.superheroes.model.dto.SuperheroDto;
 import torimia.superheroes.model.entity.Award;
+import torimia.superheroes.model.entity.Rarity;
 import torimia.superheroes.model.entity.Superhero;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static torimia.superheroes.model.entity.Rarity.RARE;
 
 class SuperheroMapperTest {
 
@@ -35,6 +37,12 @@ class SuperheroMapperTest {
     private final String SUPERHERO_LAST_NAME = "Semenuk";
     private final int SUPERHERO_AGE = 25;
     private final String SUPERHERO_SUPER_POWER = "No super power";
+    private final Integer SUPERHERO_DAMAGE = 0;
+    private final Integer SUPERHERO_HEALTH = 100;
+
+    private final String AWARD_NAME = "Some name";
+    private final Rarity AWARD_RARITY = RARE;
+
 
     @BeforeEach
     void setUp() {
@@ -46,15 +54,22 @@ class SuperheroMapperTest {
         superheroFriend2 = new Superhero();
         superheroEnemy1 = new Superhero();
         superheroEnemy2 = new Superhero();
-        award1 = new Award();
-        award2 = new Award();
 
         superheroFriend1.setId(57L);
         superheroFriend2.setId(58L);
         superheroEnemy1.setId(59L);
         superheroEnemy2.setId(60L);
-        award1.setId(80L);
-        award2.setId(81L);
+
+        award1 = Award.builder()
+                .id(80L)
+                .name(AWARD_NAME)
+                .rarity(AWARD_RARITY)
+                .build();
+        award2 = Award.builder()
+                .id(81L)
+                .name(AWARD_NAME)
+                .rarity(AWARD_RARITY)
+                .build();
 
         superhero = Superhero.builder()
                 .id(SUPERHERO_ID)
@@ -63,6 +78,8 @@ class SuperheroMapperTest {
                 .lastName(SUPERHERO_LAST_NAME)
                 .age(SUPERHERO_AGE)
                 .superPower(SUPERHERO_SUPER_POWER)
+                .damage(SUPERHERO_DAMAGE)
+                .health(SUPERHERO_HEALTH)
                 .listOfFriends(Set.of(superheroFriend1, superheroFriend2))
                 .listOfEnemies(Set.of(superheroEnemy1, superheroEnemy2))
                 .awards(Set.of(award1, award2))
@@ -80,6 +97,8 @@ class SuperheroMapperTest {
                 .returns(SUPERHERO_FIRST_NAME, SuperheroDto::getFirstName)
                 .returns(SUPERHERO_LAST_NAME, SuperheroDto::getLastName)
                 .returns(SUPERHERO_AGE, SuperheroDto::getAge)
+                .returns(SUPERHERO_DAMAGE, SuperheroDto::getDamage)
+                .returns(SUPERHERO_HEALTH, SuperheroDto::getHealth)
                 .returns(SUPERHERO_SUPER_POWER, SuperheroDto::getSuperPower);
         assertThat(superheroDto.getListOfFriendsId())
                 .contains(superheroFriend1.getId())
@@ -104,6 +123,8 @@ class SuperheroMapperTest {
                 .lastName(SUPERHERO_LAST_NAME)
                 .age(SUPERHERO_AGE)
                 .superPower(SUPERHERO_SUPER_POWER)
+                .damage(SUPERHERO_DAMAGE)
+                .health(SUPERHERO_HEALTH)
                 .listOfFriendsId(Arrays.asList(superheroFriend1.getId(), superheroFriend2.getId()))
                 .listOfEnemiesId(Arrays.asList(superheroEnemy1.getId(), superheroEnemy2.getId()))
                 .awardsId(Arrays.asList(award1.getId(), award2.getId()))
@@ -117,7 +138,9 @@ class SuperheroMapperTest {
                 .returns(SUPERHERO_FIRST_NAME, Superhero::getFirstName)
                 .returns(SUPERHERO_LAST_NAME, Superhero::getLastName)
                 .returns(SUPERHERO_AGE, Superhero::getAge)
-                .returns(SUPERHERO_SUPER_POWER, Superhero::getSuperPower);
+                .returns(SUPERHERO_SUPER_POWER, Superhero::getSuperPower)
+                .returns(SUPERHERO_DAMAGE, Superhero::getDamage)
+                .returns(SUPERHERO_HEALTH, Superhero::getHealth);
         assertThat(superhero.getListOfFriends()).isEmpty();
         assertThat(superhero.getListOfEnemies()).isEmpty();
         assertThat(superhero.getAwards()).isEmpty();

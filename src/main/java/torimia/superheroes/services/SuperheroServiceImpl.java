@@ -2,7 +2,6 @@ package torimia.superheroes.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +15,7 @@ import torimia.superheroes.model.entity.Superhero;
 import torimia.superheroes.repo.AwardRepository;
 import torimia.superheroes.repo.SuperheroRepository;
 
-import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
