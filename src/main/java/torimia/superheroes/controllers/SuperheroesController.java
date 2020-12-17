@@ -129,6 +129,11 @@ public class SuperheroesController {
         return service.getSuperheroAwards(superheroId, page);
     }
 
+    @PostMapping("battle" + BY_ID)
+    public BattleResult battle(@PathVariable(ID) Long superheroId, @Valid @RequestBody IdRequest id) {
+       return service.battle(superheroId,id);
+    }
+
 /*
 {
     "nickname":"Batman",

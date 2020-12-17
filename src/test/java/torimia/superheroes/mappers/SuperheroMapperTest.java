@@ -2,6 +2,7 @@ package torimia.superheroes.mappers;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
 import torimia.superheroes.model.dto.AwardDto;
 import torimia.superheroes.model.dto.AwardView;
 import torimia.superheroes.model.dto.SuperheroAwardsDto;
@@ -10,6 +11,7 @@ import torimia.superheroes.model.entity.Award;
 import torimia.superheroes.model.entity.Rarity;
 import torimia.superheroes.model.entity.Superhero;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,9 +34,9 @@ class SuperheroMapperTest {
     private SuperheroMapperImpl mapper;
 
     private final Long SUPERHERO_ID = 56L;
-    private final String SUPERHERO_NICKNAME = "Toliia";
-    private final String SUPERHERO_FIRST_NAME = "Andrew";
-    private final String SUPERHERO_LAST_NAME = "Semenuk";
+    private final String SUPERHERO_NICKNAME = "Nickname";
+    private final String SUPERHERO_FIRST_NAME = "Name";
+    private final String SUPERHERO_LAST_NAME = "Last name";
     private final int SUPERHERO_AGE = 25;
     private final String SUPERHERO_SUPER_POWER = "No super power";
     private final Integer SUPERHERO_DAMAGE = 0;
@@ -45,8 +47,12 @@ class SuperheroMapperTest {
 
 
     @BeforeEach
-    void setUp() {
-        mapper = new SuperheroMapperImpl();
+    void setUp() throws NoSuchFieldException, IllegalAccessException {
+        mapper = new SuperheroMapperImpl(new AwardMapperImpl());
+//        Field awardMapper = mapper.getClass().getDeclaredField("awardMapper");
+//        awardMapper.setAccessible(true);
+//        awardMapper.set(mapper, new AwardMapperImpl());
+
         superhero = new Superhero();
 
         superheroDto = new SuperheroDto();
@@ -130,7 +136,7 @@ class SuperheroMapperTest {
                 .awardsId(Arrays.asList(award1.getId(), award2.getId()))
                 .build();
 
-        Superhero superhero = new SuperheroMapperImpl().toEntity(superheroDto);
+        Superhero superhero = mapper.toEntity(superheroDto);
 
         assertThat(superhero)
                 .returns(SUPERHERO_ID, Superhero::getId)
@@ -141,9 +147,9 @@ class SuperheroMapperTest {
                 .returns(SUPERHERO_SUPER_POWER, Superhero::getSuperPower)
                 .returns(SUPERHERO_DAMAGE, Superhero::getDamage)
                 .returns(SUPERHERO_HEALTH, Superhero::getHealth);
-        assertThat(superhero.getListOfFriends()).isEmpty();
-        assertThat(superhero.getListOfEnemies()).isEmpty();
-        assertThat(superhero.getAwards()).isEmpty();
+        assertThat(superhero.getListOfFriends()).isNull();
+        assertThat(superhero.getListOfEnemies()).isNull();
+        assertThat(superhero.getAwards()).isNull();
     }
 
     @Test

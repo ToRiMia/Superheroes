@@ -6,7 +6,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import torimia.superheroes.exceptions.AddingToListException;
 import torimia.superheroes.mappers.SuperheroMapper;
 import torimia.superheroes.model.dto.*;
@@ -138,5 +142,18 @@ public class SuperheroServiceImpl implements SuperheroService {
     @Override
     public Page<AwardView> getSuperheroAwards(Long id, Pageable pageable) {
         return repository.getSuperheroAwards(id, pageable);
+    }
+
+    @Override
+    public BattleResult battle(Long superheroId, IdRequest id) {
+        RestTemplate restTemplate = new RestTemplate();
+        Battle battle = new Battle();
+        battle.setSuperhero1(mapper.toDtoForBattle(repository.getOne(superheroId)));
+        battle.setSuperhero2(mapper.toDtoForBattle(repository.getOne(id.getId())));
+
+        String url = "http://localhost:8081/battle";
+        HttpEntity<Battle> request = new HttpEntity<>(battle);
+        ResponseEntity<BattleResult> response = restTemplate.exchange(url, HttpMethod.POST, request, BattleResult.class);
+        return response.getBody();
     }
 }

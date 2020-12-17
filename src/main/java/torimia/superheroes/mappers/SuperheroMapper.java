@@ -1,5 +1,6 @@
 package torimia.superheroes.mappers;
 
+import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Mapper(imports = {Collectors.class, Award.class}, componentModel = "spring", uses = AwardMapper.class)
+@Mapper(imports = {Collectors.class, Award.class}, componentModel = "spring", uses = AwardMapper.class, injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface SuperheroMapper {
 
     @Mapping(target = "listOfFriendsId", source = "listOfFriends")
@@ -40,4 +41,6 @@ public interface SuperheroMapper {
     SuperheroAwardsDto toDtoSuperheroAwards(Superhero superhero, List<AwardView> awards);
 
     SuperheroDtoForTop toDtoForTop(SuperheroViewForTop superhero);
+
+    SuperheroDtoForBattle toDtoForBattle(Superhero superhero);
 }

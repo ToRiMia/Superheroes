@@ -38,5 +38,7 @@ public interface SuperheroService {
 
     Page<AwardView> getSuperheroAwards(Long superheroId, Pageable pageable);
 
+    BattleResult battle(Long superheroId, IdRequest id);
+
 }
 
