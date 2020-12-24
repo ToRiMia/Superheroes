@@ -4,8 +4,6 @@ import lombok.*;
 
 import javax.validation.constraints.NotNull;
 import java.sql.Date;
-import java.sql.Time;
-import java.util.List;
 
 @Data
 @Builder
@@ -20,7 +18,7 @@ public class ArenaBattleDto {
     Long loserId;
 
     @NotNull
-    Time battleTime;
+    Long battleTime;
 
     @NotNull
     Integer attackNumber;

@@ -2,7 +2,7 @@ CREATE TABLE public.arena (
 	id int8 NOT NULL,
 	winner_id int8 NOT NULL,
 	loser_id int8 NOT NULL,
-	battle_time time NOT NULL,
+	battle_time int8 NOT NULL,
 	attack_number int4 NOT NULL,
 	"date" date NOT NULL,
 	CONSTRAINT battle_pkey PRIMARY KEY (id),

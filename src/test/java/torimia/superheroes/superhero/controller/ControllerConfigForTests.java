@@ -22,7 +22,7 @@ public abstract class ControllerConfigForTests {
     }
 
     @SneakyThrows
-    protected String toJson(Object object) { //fixme: too open
+    protected String toJson(Object object) {
         return mapper.writeValueAsString(object);
     }
 

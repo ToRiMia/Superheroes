@@ -1,9 +1,12 @@
 package torimia.superheroes.arena.service;
 
+import torimia.superheroes.MessageDto;
 import torimia.superheroes.arena.model.dto.ArenaBattleDto;
-import torimia.superheroes.superhero.model.dto.IdRequest;
+import torimia.superheroes.arena.model.dto.BattleDto;
 
 public interface ArenaService {
 
-    ArenaBattleDto battle(Long superheroId, IdRequest id);
+    MessageDto battle(BattleDto dto);
+
+    void saveBattleResult(ArenaBattleDto dto);
 }

@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Date;
-import java.sql.Time;
 
 @Entity
 @Table
@@ -22,7 +21,7 @@ public class Arena {
 
     Long loserId;
 
-    Time battleTime;
+    Long battleTime;
 
     Integer attackNumber;
 

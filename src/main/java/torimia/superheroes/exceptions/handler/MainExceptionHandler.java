@@ -14,6 +14,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import torimia.superheroes.exceptions.AddingToListException;
 
 import javax.persistence.EntityNotFoundException;
+import javax.security.sasl.AuthenticationException;
+import java.rmi.AccessException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,5 +54,10 @@ public class MainExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         return super.handleHttpMessageNotReadable(ex, headers, status, request);
     }
+    @ExceptionHandler(AccessException.class)
+    public ResponseEntity<String> handleWrongToken(AccessException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
+    }
+
 }
 
