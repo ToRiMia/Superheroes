@@ -1,8 +1,10 @@
 package torimia.superheroes.arena.model.entity;
 
 import lombok.*;
+import torimia.superheroes.arena.model.enums.FightStatus;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.sql.Date;
 
 @Entity
@@ -17,13 +19,22 @@ public class Arena {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    Long winnerId;
+    @NotNull
+    private Long winnerId;
 
-    Long loserId;
+    @NotNull
+    private Long loserId;
 
-    Long battleTime;
+    @NotNull
+    private Long battleTime;
 
-    Integer attackNumber;
+    @NotNull
+    private Integer attackNumber;
 
-    Date date;
+    @NotNull
+    private Date date;
+
+    @NotNull
+    @Enumerated(EnumType.ORDINAL)
+    private FightStatus fightStatus;
 }

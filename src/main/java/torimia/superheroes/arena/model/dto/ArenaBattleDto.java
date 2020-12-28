@@ -1,6 +1,9 @@
 package torimia.superheroes.arena.model.dto;
 
 import lombok.*;
+import torimia.superheroes.arena.model.enums.FightStatus;
+import torimia.superheroes.award.model.entity.Rarity;
+import torimia.superheroes.award.model.enums.ValueOfEnum;
 
 import javax.validation.constraints.NotNull;
 import java.sql.Date;
@@ -12,18 +15,22 @@ import java.sql.Date;
 public class ArenaBattleDto {
 
     @NotNull
-    Long winnerId;
+    private Long winnerId;
 
     @NotNull
-    Long loserId;
+    private Long loserId;
 
     @NotNull
-    Long battleTime;
+    private Long battleTime;
 
     @NotNull
-    Integer attackNumber;
+    private Integer attackNumber;
 
     @NotNull
-    Date date;
+    private Date date;
+
+    @NotNull
+    @ValueOfEnum(enumClass = FightStatus.class)
+    private FightStatus status;
 
 }

@@ -1,4 +1,4 @@
-package torimia.superheroes.arena;
+package torimia.superheroes.superhero.repository;
 
 import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.context.ApplicationContextInitializer;
