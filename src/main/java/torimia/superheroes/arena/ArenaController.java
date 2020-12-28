@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import torimia.superheroes.MessageDto;
+import torimia.superheroes.arena.annotations.TokenCheckable;
 import torimia.superheroes.arena.model.dto.ArenaBattleDto;
 import torimia.superheroes.arena.model.dto.BattleDto;
 import torimia.superheroes.arena.service.ArenaService;
@@ -24,22 +25,19 @@ public class ArenaController {
         return service.battle(dto);
     }
 
+    @TokenCheckable
     @PostMapping("battle/result")
-    public void battleResult(@Valid @RequestBody ArenaBattleDto dto, @RequestHeader("token") String token) throws AccessException {
+    public void battleResult(@Valid @RequestBody ArenaBattleDto dto,
+                             @RequestHeader("token") String token){
         log.info("Result");
-        if (!token.equals("Arena response"))
-            throw new AccessException("Wrong token, access denied");
-        else
-            service.saveBattleResult(dto);
+        service.saveBattleResult(dto);
     }
 
+    @TokenCheckable
     @PostMapping("battle/result_error")
     public void battleResultError(@Valid @RequestBody MessageDto message,
-                                        @RequestHeader("token") String token) throws AccessException {// TODO: 24.12.20 це опять не гуд, треба створити свою помилку і кидати певний статус без ексепшн хендлера
-        if (!token.equals("Arena response"))
-            throw new AccessException("Wrong token, access denied");// TODO: 24.12.20  АОР, токен туди
-        else {
-            log.error(message.getMessage());
-        }
+                                  @RequestHeader("token") String token) {
+        log.error(message.getMessage());
     }
 }
+
