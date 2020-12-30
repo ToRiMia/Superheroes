@@ -2,7 +2,6 @@ package torimia.superheroes.arena.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.CloseableThreadContext;
 import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -13,13 +12,12 @@ import torimia.superheroes.arena.model.dto.ArenaBattleDto;
 import torimia.superheroes.arena.model.dto.BattleDto;
 import torimia.superheroes.arena.model.entity.Arena;
 import torimia.superheroes.arena.model.entity.Battle;
-import torimia.superheroes.arena.model.enums.FightStatus;
+import torimia.superheroes.arena.model.dto.FightStatus;
 import torimia.superheroes.superhero.SuperheroMapper;
 import torimia.superheroes.superhero.SuperheroRepository;
 import torimia.superheroes.superhero.model.dto.SuperheroDtoForBattle;
 
 import java.sql.Date;
-import java.time.Instant;
 import java.time.LocalDate;
 
 @Slf4j
@@ -39,8 +37,8 @@ public class ArenaServiceImpl implements ArenaService {
     public MessageDto battle(BattleDto dto) {
 
         Arena arena = Arena.builder()
-                .loserId(-1L)
-                .winnerId(-1L)
+                .loserId(1L)
+                .winnerId(1L)
                 .battleTime(0L)
                 .attackNumber(0)
                 .date(Date.valueOf(LocalDate.now()))
@@ -50,10 +48,17 @@ public class ArenaServiceImpl implements ArenaService {
 
         Battle battle = createBattle(dto, arena.getId());
 
-        HttpEntity<Battle> request = new HttpEntity<>(battle);
-        MessageDto response = restTemplate.postForObject(URL_BATTLE, request, MessageDto.class);
+        MessageDto response;
+        try {
+            HttpEntity<Battle> request = new HttpEntity<>(battle);
+            response = restTemplate.postForObject(URL_BATTLE, request, MessageDto.class);
 
-        log.info("Response {}", response);
+            log.info("Response {}", response);
+        } catch (Exception ex) {
+            response = MessageDto.builder().message("Fight not started").build();
+            arena.setFightStatus(FightStatus.NOT_STARTED);
+            repository.save(arena);
+        }
 
         return response;
     }
@@ -73,7 +78,10 @@ public class ArenaServiceImpl implements ArenaService {
     @Override
     public void saveBattleResult(ArenaBattleDto dto) {
 
+        Arena battle = repository.getOne(dto.getId());
+        battle.setFightStatus(FightStatus.FINISHED_SUCCESSFUL);
+        mapper.toEntityUpdate(dto, battle);
 
-        repository.save(mapper.toEntity(dto));
+        repository.save(battle);
     }
 }

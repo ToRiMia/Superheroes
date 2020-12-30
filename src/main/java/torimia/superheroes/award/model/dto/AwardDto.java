@@ -2,7 +2,7 @@ package torimia.superheroes.award.model.dto;
 
 import lombok.*;
 import torimia.superheroes.award.model.entity.Rarity;
-import torimia.superheroes.award.model.enums.ValueOfEnum;
+import torimia.superheroes.enums.ValueOfEnum;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -21,7 +21,7 @@ public class AwardDto implements AwardView {
     private String name;
 
     @NotNull(message = "Rarity must be not null!")
-    @ValueOfEnum(enumClass = Rarity.class)
+    @ValueOfEnum(enumClass = Rarity.class, message = "Rarity must be COMMON, RARE or LEGENDARY")
     private String rarity;
 
     public void setRarity(String rarity) {

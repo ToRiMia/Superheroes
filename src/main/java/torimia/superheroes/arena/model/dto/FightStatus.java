@@ -1,11 +1,11 @@
-package torimia.superheroes.arena.model.enums;
+package torimia.superheroes.arena.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public enum FightStatus {
 
-    STARTED(0), FINISHED_SUCCESSFUL(1), FINISHED_UNSUCCESSFUL(2);
+    NOT_STARTED(0),  STARTED(1), FINISHED_SUCCESSFUL(2), FINISHED_UNSUCCESSFUL(3);
 
     private final int value;
 

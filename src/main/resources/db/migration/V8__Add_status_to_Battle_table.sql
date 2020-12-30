@@ -1,1 +1,1 @@
-ALTER TABLE public.arena ADD COLUMN status int4;
+ALTER TABLE public.arena ADD COLUMN fight_status int4 NOT NULL;

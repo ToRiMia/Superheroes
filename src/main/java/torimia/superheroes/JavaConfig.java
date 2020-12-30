@@ -13,13 +13,6 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 public class JavaConfig {
 
-//    @Bean
-//    @Primary
-//    public Jackson2ObjectMapperBuilder objectMapperBuilder() {
-//        Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
-//        return builder.modulesToInstall(new JavaTimeModule());
-//    }
-
     @Bean
     @Primary
     public ObjectMapper objectMapper() {

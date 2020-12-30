@@ -9,7 +9,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 @ContextConfiguration(initializers = {RepositoryDBForTests.Initializer.class})
 class RepositoryDBForTests {
 
-    private static PostgreSQLContainer postgreSQLContainer;
+    private static final PostgreSQLContainer postgreSQLContainer;
 
 
     static {

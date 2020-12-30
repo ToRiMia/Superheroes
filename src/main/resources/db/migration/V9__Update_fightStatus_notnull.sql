@@ -1,1 +1,0 @@
-ALTER TABLE public.arena ALTER COLUMN status SET NOT NULL;

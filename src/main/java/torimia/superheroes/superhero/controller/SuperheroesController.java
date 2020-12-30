@@ -138,17 +138,6 @@ public class SuperheroesController {
     "age":48,
     "superPower":"The brutal voice"
 }
-
-post
-{
-    "nickname": "Batman",
-    "firstName": "Ka",
-    "lastName": "Oi",
-    "age": 25,
-    "superPower": "The brutal voice",
-    "listOfFriendsId": [3,2],
-    "listOfEnemiesId": [1]
-}
 */
 }
 

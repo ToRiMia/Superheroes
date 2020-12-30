@@ -1,7 +1,7 @@
 package torimia.superheroes.arena.model.entity;
 
 import lombok.*;
-import torimia.superheroes.arena.model.enums.FightStatus;
+import torimia.superheroes.arena.model.dto.FightStatus;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

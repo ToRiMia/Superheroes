@@ -99,7 +99,6 @@ public class SuperheroServiceImpl implements SuperheroService {
     @CachePut(value = "getTopSuperheroWithFriends")
     @Override
     public List<SuperheroDtoForTop> getSuperheroesWithTheBiggestAmountsOfFriends(Integer amountOfSuperhero) {
-        System.out.println("Ya tyt");
         return repository.getSuperheroesWithTheBiggestAmountsOfFriends(amountOfSuperhero)
                 .stream().map(mapper::toDtoForTop).collect(Collectors.toList());
     }

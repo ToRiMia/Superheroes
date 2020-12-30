@@ -1,4 +1,4 @@
-package torimia.superheroes.award.model.enums;
+package torimia.superheroes.enums;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
