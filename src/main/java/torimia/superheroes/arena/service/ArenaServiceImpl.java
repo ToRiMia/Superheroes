@@ -2,7 +2,9 @@ package torimia.superheroes.arena.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpEntity;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import torimia.superheroes.MessageDto;
@@ -11,7 +13,7 @@ import torimia.superheroes.arena.ArenaRepository;
 import torimia.superheroes.arena.model.dto.ArenaBattleDto;
 import torimia.superheroes.arena.model.dto.BattleDto;
 import torimia.superheroes.arena.model.entity.Arena;
-import torimia.superheroes.arena.model.entity.Battle;
+import torimia.superheroes.arena.model.dto.Battle;
 import torimia.superheroes.arena.model.dto.FightStatus;
 import torimia.superheroes.superhero.SuperheroMapper;
 import torimia.superheroes.superhero.SuperheroRepository;
@@ -33,6 +35,11 @@ public class ArenaServiceImpl implements ArenaService {
     private final RestTemplate restTemplate;
     private final static String URL_BATTLE = "/battle";
 
+    private final RabbitTemplate rabbitTemplate;
+    private final Queue queue;
+
+    private final MessageConverter messageConverter;
+
     @Override
     public MessageDto battle(BattleDto dto) {
 
@@ -50,11 +57,17 @@ public class ArenaServiceImpl implements ArenaService {
 
         MessageDto response;
         try {
-            HttpEntity<Battle> request = new HttpEntity<>(battle);
-            response = restTemplate.postForObject(URL_BATTLE, request, MessageDto.class);
+//            HttpEntity<Battle> request = new HttpEntity<>(battle);
+//            response = restTemplate.postForObject(URL_BATTLE, request, MessageDto.class);
+
+            rabbitTemplate.setMessageConverter(messageConverter);
+           // rabbitTemplate.convertAndSend(queue.getName(), battle.toString());
+            response = (MessageDto) rabbitTemplate.convertSendAndReceive(queue.getName(), battle);
+           // response = MessageDto.builder().message("Fight started").build();
 
             log.info("Response {}", response);
         } catch (Exception ex) {
+            log.error(ex.getMessage());
             response = MessageDto.builder().message("Fight not started").build();
             arena.setFightStatus(FightStatus.NOT_STARTED);
             repository.save(arena);
