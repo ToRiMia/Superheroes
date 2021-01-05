@@ -8,7 +8,7 @@ import java.io.Serializable;
 @Data
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class Battle {
 
     private Long id;

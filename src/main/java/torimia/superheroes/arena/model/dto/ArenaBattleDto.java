@@ -9,8 +9,8 @@ import java.sql.Date;
 @Data
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class ArenaBattleDto {
+@AllArgsConstructor
+public class ArenaBattleDto implements ArenaBattleView{
 
     @NotNull
     private Long id;

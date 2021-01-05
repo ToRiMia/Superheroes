@@ -15,7 +15,7 @@ import java.util.List;
 public interface SuperheroRepository extends JpaRepository<Superhero, Long> {
 
     @Query("select a from Award a where a.superhero.id = :superheroId order by a.rarity desc")
-    Page<AwardView> getSuperheroAwards(Long superheroId, Pageable page); // мб винести в авард???
+    Page<AwardView> getSuperheroAwards(Long superheroId, Pageable page);
 
     @Query(value = "SELECT superhero.id, superhero.nickname, superhero.first_name AS firstName, " +
             "superhero.last_name AS lastName, COUNT(superhero.id) AS amount " +

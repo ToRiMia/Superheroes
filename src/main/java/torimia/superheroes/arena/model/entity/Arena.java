@@ -35,6 +35,6 @@ public class Arena {
     private Date date;
 
     @NotNull
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private FightStatus fightStatus;
 }

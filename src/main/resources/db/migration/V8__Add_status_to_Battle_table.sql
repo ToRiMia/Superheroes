@@ -1,1 +1,1 @@
-ALTER TABLE public.arena ADD COLUMN fight_status int4 NOT NULL;
+ALTER TABLE public.arena ADD COLUMN fight_status varchar(255) NOT NULL;

@@ -11,10 +11,10 @@ import torimia.superheroes.superhero.SuperheroMapper;
 import torimia.superheroes.superhero.SuperheroRepository;
 
 @ExtendWith(MockitoExtension.class)
-class ArenaServiceImplTest {
+class ArenaServiceRestTest {
 
     @InjectMocks
-    private ArenaServiceImpl service;
+    private ArenaServiceRest service;
     @Mock
     private ArenaRepository repository;
     @Mock

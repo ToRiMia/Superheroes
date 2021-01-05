@@ -2,30 +2,35 @@ package torimia.superheroes.arena.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.amqp.support.converter.MessageConverter;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import torimia.superheroes.MessageDto;
 import torimia.superheroes.arena.ArenaMapper;
 import torimia.superheroes.arena.ArenaRepository;
 import torimia.superheroes.arena.model.dto.ArenaBattleDto;
-import torimia.superheroes.arena.model.dto.BattleDto;
-import torimia.superheroes.arena.model.entity.Arena;
 import torimia.superheroes.arena.model.dto.Battle;
+import torimia.superheroes.arena.model.dto.BattleDto;
 import torimia.superheroes.arena.model.dto.FightStatus;
+import torimia.superheroes.arena.model.entity.Arena;
 import torimia.superheroes.superhero.SuperheroMapper;
 import torimia.superheroes.superhero.SuperheroRepository;
 import torimia.superheroes.superhero.model.dto.SuperheroDtoForBattle;
 
+import java.security.cert.CertPathValidatorException;
 import java.sql.Date;
 import java.time.LocalDate;
 
 @Slf4j
 @RequiredArgsConstructor
-@Service
-public class ArenaServiceImpl implements ArenaService {
+//@Service
+public class ArenaServiceRest implements ArenaService {
 
     private final ArenaRepository repository;
     private final ArenaMapper mapper;
@@ -34,11 +39,6 @@ public class ArenaServiceImpl implements ArenaService {
 
     private final RestTemplate restTemplate;
     private final static String URL_BATTLE = "/battle";
-
-    private final RabbitTemplate rabbitTemplate;
-    private final Queue queue;
-
-    private final MessageConverter messageConverter;
 
     @Override
     public MessageDto battle(BattleDto dto) {
@@ -57,14 +57,8 @@ public class ArenaServiceImpl implements ArenaService {
 
         MessageDto response;
         try {
-//            HttpEntity<Battle> request = new HttpEntity<>(battle);
-//            response = restTemplate.postForObject(URL_BATTLE, request, MessageDto.class);
-
-            rabbitTemplate.setMessageConverter(messageConverter);
-           // rabbitTemplate.convertAndSend(queue.getName(), battle.toString());
-            response = (MessageDto) rabbitTemplate.convertSendAndReceive(queue.getName(), battle);
-           // response = MessageDto.builder().message("Fight started").build();
-
+            HttpEntity<Battle> request = new HttpEntity<>(battle);
+            response = restTemplate.postForObject(URL_BATTLE, request, MessageDto.class);
             log.info("Response {}", response);
         } catch (Exception ex) {
             log.error(ex.getMessage());
@@ -96,5 +90,10 @@ public class ArenaServiceImpl implements ArenaService {
         mapper.toEntityUpdate(dto, battle);
 
         repository.save(battle);
+    }
+
+    @Override
+    public void restartNotFinishedFight() {
+
     }
 }
