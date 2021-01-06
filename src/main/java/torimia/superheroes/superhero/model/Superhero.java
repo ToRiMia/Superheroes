@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class Superhero {
+public class Superhero{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -40,13 +40,17 @@ public class Superhero {
     private Integer health;
 
     @Setter(AccessLevel.PRIVATE)
+    @Builder.Default
     @ManyToMany()
     private Set<Superhero> listOfFriends = new HashSet<>();
 
     @Setter(AccessLevel.PRIVATE)
+    @Builder.Default
     @ManyToMany()
     private Set<Superhero> listOfEnemies = new HashSet<>();
 
+    @Setter(AccessLevel.PRIVATE)
+    @Builder.Default
     @OneToMany(mappedBy = "superhero",
             cascade = CascadeType.ALL)
     private Set<Award> awards = new HashSet<>();

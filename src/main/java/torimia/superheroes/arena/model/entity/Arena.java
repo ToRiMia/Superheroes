@@ -2,10 +2,13 @@ package torimia.superheroes.arena.model.entity;
 
 import lombok.*;
 import torimia.superheroes.arena.model.dto.FightStatus;
+import torimia.superheroes.superhero.model.Superhero;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.sql.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table
@@ -20,10 +23,12 @@ public class Arena {
     private Long id;
 
     @NotNull
-    private Long winnerId;
+    @ManyToOne(cascade=CascadeType.ALL)
+    private Superhero winner;
 
     @NotNull
-    private Long loserId;
+    @ManyToOne(cascade=CascadeType.ALL)
+    private Superhero loser;
 
     @NotNull
     private Long battleTime;

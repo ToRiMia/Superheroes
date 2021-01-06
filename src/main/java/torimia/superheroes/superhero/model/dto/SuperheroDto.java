@@ -36,13 +36,18 @@ public class SuperheroDto {
     @Size(max = 1000, message = "Super power cannot be more than 1000 letters!")
     private String superPower;
 
+    @NotNull(message = "Damage cannot be empty!")
     private Integer damage;
 
+    @NotNull(message = "Health cannot be empty!")
     private Integer health;
 
+    @Setter(AccessLevel.PRIVATE)
     private List<Long> listOfFriendsId = new ArrayList<>();
 
+    @Setter(AccessLevel.PRIVATE)
     private List<Long> listOfEnemiesId = new ArrayList<>();
 
+    @Setter(AccessLevel.PRIVATE)
     private List<Long> awardsId = new ArrayList<>();
 }

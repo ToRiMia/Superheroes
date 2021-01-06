@@ -8,20 +8,27 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.annotation.Schedules;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import torimia.superheroes.MessageDto;
 import torimia.superheroes.arena.ArenaMapper;
 import torimia.superheroes.arena.ArenaRepository;
+import torimia.superheroes.arena.BattleParticipantRepository;
 import torimia.superheroes.arena.model.dto.*;
 import torimia.superheroes.arena.model.entity.Arena;
+import torimia.superheroes.arena.model.entity.BattleParticipant;
 import torimia.superheroes.superhero.SuperheroMapper;
 import torimia.superheroes.superhero.SuperheroRepository;
+import torimia.superheroes.superhero.model.Superhero;
 import torimia.superheroes.superhero.model.dto.SuperheroDtoForBattle;
 
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -32,6 +39,7 @@ public class ArenaServiceMQ implements ArenaService {
     private final ArenaRepository repository;
     private final ArenaMapper mapper;
     private final SuperheroRepository superheroRepository;
+    private final BattleParticipantRepository battleParticipantRepository;
     private final SuperheroMapper superheroMapper;
 
     @Value("${rabbitmq.queue.battle.name}")
@@ -41,15 +49,20 @@ public class ArenaServiceMQ implements ArenaService {
     @Override
     public MessageDto battle(BattleDto dto) {
 
+        Superhero defaultSuperhero = superheroRepository.getOne(1L);
+
         Arena arena = Arena.builder()
-                .loserId(1L)
-                .winnerId(1L)
+                .loser(defaultSuperhero)
+                .winner(defaultSuperhero)
                 .battleTime(0L)
                 .attackNumber(0)
                 .date(Date.valueOf(LocalDate.now()))
-                .fightStatus(FightStatus.NOT_STARTED)
+                .fightStatus(FightStatus.STARTED)
                 .build();
         repository.save(arena);
+
+        fillBattleParticipant(dto.getFirstFighterId(), arena);
+        fillBattleParticipant(dto.getSecondFighterId(), arena);
 
         Battle battle = createBattle(dto, arena.getId());
 
@@ -75,7 +88,8 @@ public class ArenaServiceMQ implements ArenaService {
         log.info("Received battle status: {}", message);
         if ((message.getMessage() != FightStatus.FINISHED_SUCCESSFUL) || (message.getMessage() != FightStatus.STARTED))
             arena.setFightStatus(message.getMessage());//  чи треба перевіряти енам, якщо приходить такий самий енам, тут може бути два статуси
-        else arena.setFightStatus(FightStatus.FINISHED_UNSUCCESSFUL); // якщо зробити, почне пропускати тільки правильні хороші статуси
+        else
+            arena.setFightStatus(FightStatus.FINISHED_UNSUCCESSFUL); // якщо зробити, почне пропускати тільки правильні хороші статуси
         repository.save(arena);
         log.info("Saved arena entity with status: {}", arena.toString());
     }
@@ -108,10 +122,34 @@ public class ArenaServiceMQ implements ArenaService {
         log.info("Saved battle result: {}", battle.toString());
     }
 
+    private void fillBattleParticipant(Long fighter, Arena arena) {
+        BattleParticipant battleParticipant = BattleParticipant.builder()
+                .arena(arena)
+                .superhero(superheroRepository.getOne(fighter))
+                .build();
+        battleParticipantRepository.save(battleParticipant);
+    }
+
+    @Scheduled(cron = "0 * * * ?")//every hour in 00 minutes
     @Override
     public void restartNotFinishedFight() {
-//        ArrayList<ArenaBattleView> notFinishedBattle = repository.findAllByFightStatusIsNot2();
-//        ArrayList<ArenaBattleDto> notFinishedBattleDto = mapper.toDtoFromView(notFinishedBattle);
-//        notFinishedBattleDto.stream().map(dto -> dto.)
+        ArrayList<Arena> notSuccessfulBattle = repository.findAllByFightStatusIsNot2();
+        List<Battle> battles = notSuccessfulBattle.stream().map(this::createBattle).collect(Collectors.toList());
+        battles.forEach(battle -> rabbitTemplate.convertAndSend(battleResultQueueName, battle));
+    }
+
+    private Battle createBattle(Arena arena) {
+        int firstFighterId = 0;
+        int secondFighterId = 1;
+
+        return Battle.builder()
+                .id(arena.getId())
+                .superhero1(superheroMapper.toDtoForBattle(
+                        superheroRepository.getOne(
+                                battleParticipantRepository.findAllByArena(arena).get(firstFighterId).getSuperhero().getId())))
+                .superhero2(superheroMapper.toDtoForBattle(
+                        superheroRepository.getOne(
+                                battleParticipantRepository.findAllByArena(arena).get(secondFighterId).getSuperhero().getId())))
+                .build();
     }
 }

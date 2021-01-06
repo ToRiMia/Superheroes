@@ -2,6 +2,7 @@ package torimia.superheroes.arena.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.bytebuddy.implementation.bind.annotation.Super;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -21,6 +22,7 @@ import torimia.superheroes.arena.model.dto.FightStatus;
 import torimia.superheroes.arena.model.entity.Arena;
 import torimia.superheroes.superhero.SuperheroMapper;
 import torimia.superheroes.superhero.SuperheroRepository;
+import torimia.superheroes.superhero.model.Superhero;
 import torimia.superheroes.superhero.model.dto.SuperheroDtoForBattle;
 
 import java.security.cert.CertPathValidatorException;
@@ -43,9 +45,11 @@ public class ArenaServiceRest implements ArenaService {
     @Override
     public MessageDto battle(BattleDto dto) {
 
+        Superhero defaultSuperhero = superheroRepository.getOne(1L);
+
         Arena arena = Arena.builder()
-                .loserId(1L)
-                .winnerId(1L)
+                .loser(defaultSuperhero)
+                .winner(defaultSuperhero)
                 .battleTime(0L)
                 .attackNumber(0)
                 .date(Date.valueOf(LocalDate.now()))

@@ -31,6 +31,7 @@ class SuperheroMapperTest {
     private Award award2;
 
     private SuperheroMapperImpl mapper;
+    private SuperheroRepository repository;
 
     private final Long SUPERHERO_ID = 56L;
     private final String SUPERHERO_NICKNAME = "Nickname";
@@ -47,7 +48,7 @@ class SuperheroMapperTest {
 
     @BeforeEach
     void setUp() throws NoSuchFieldException, IllegalAccessException {
-        mapper = new SuperheroMapperImpl(new AwardMapperImpl());
+        mapper = new SuperheroMapperImpl(new AwardMapperImpl(), repository);
 //        Field awardMapper = mapper.getClass().getDeclaredField("awardMapper");
 //        awardMapper.setAccessible(true);
 //        awardMapper.set(mapper, new AwardMapperImpl());

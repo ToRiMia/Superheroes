@@ -132,11 +132,13 @@ public class SuperheroesController {
 
 /*
 {
-    "nickname":"Batman",
-    "firstName":"Bruce",
-    "lastName":"Wayne",
-    "age":48,
-    "superPower":"The brutal voice"
+    "nickname": "Black Widow",
+    "firstName": "Natasha ",
+    "lastName": "Romanoff",
+    "age": 32,
+    "superPower": "Artificially Enhanced Physiology",
+    "damage":6,
+    "health":1000
 }
 */
 }
