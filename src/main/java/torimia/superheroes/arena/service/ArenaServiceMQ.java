@@ -1,15 +1,11 @@
 package torimia.superheroes.arena.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.scheduling.annotation.Schedules;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import torimia.superheroes.MessageDto;
@@ -43,7 +39,7 @@ public class ArenaServiceMQ implements ArenaService {
     private final SuperheroMapper superheroMapper;
 
     @Value("${rabbitmq.queue.battle.name}")
-    private String battleResultQueueName;
+    private final String battleResultQueueName;
     private final RabbitTemplate rabbitTemplate;
 
     @Override
@@ -83,13 +79,13 @@ public class ArenaServiceMQ implements ArenaService {
     }
 
     @RabbitListener(queues = "fight-status")
-    public void fightStatus(MessageDtoMQ message) {
+    public void fightStatus(StatusDto message) {
         Arena arena = repository.getOne(message.getId());
         log.info("Received battle status: {}", message);
         if ((message.getMessage() != FightStatus.FINISHED_SUCCESSFUL) || (message.getMessage() != FightStatus.STARTED))
-            arena.setFightStatus(message.getMessage());//  чи треба перевіряти енам, якщо приходить такий самий енам, тут може бути два статуси
+            arena.setFightStatus(message.getMessage());
         else
-            arena.setFightStatus(FightStatus.FINISHED_UNSUCCESSFUL); // якщо зробити, почне пропускати тільки правильні хороші статуси
+            arena.setFightStatus(FightStatus.FINISHED_UNSUCCESSFUL);
         repository.save(arena);
         log.info("Saved arena entity with status: {}", arena.toString());
     }
@@ -130,7 +126,7 @@ public class ArenaServiceMQ implements ArenaService {
         battleParticipantRepository.save(battleParticipant);
     }
 
-    @Scheduled(cron = "0 * * * ?")//every hour in 00 minutes
+    @Scheduled(cron = "0 0 */1 * * *")//every hour in 00 minutes 00 sec
     @Override
     public void restartNotFinishedFight() {
         ArrayList<Arena> notSuccessfulBattle = repository.findAllByFightStatusIsNot2();

@@ -27,18 +27,5 @@ public class ArenaController {
     public MessageDto battle(@Valid @RequestBody BattleDto dto) {
         return service.battle(dto);
     }
-
-    @TokenCheckable
-    @PostMapping("battle/result")
-    public void battleResult(@Valid @RequestBody ArenaBattleDto dto){
-        log.info("Result");
-        service.saveBattleResult(dto);
-    }
-
-    @TokenCheckable
-    @PostMapping("battle/result_error")
-    public void battleResultError(@Valid @RequestBody MessageDto message) {
-        log.error(message.getMessage());
-    }
 }
 
