@@ -1,6 +1,8 @@
 package torimia.superheroes.arena.model.entity;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import torimia.superheroes.superhero.model.Superhero;
 
 import javax.persistence.*;
@@ -10,7 +12,6 @@ import javax.persistence.*;
 @Data
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class BattleParticipant {
 
     @EmbeddedId
@@ -24,14 +25,13 @@ public class BattleParticipant {
     @JoinColumn(name = "id_participant", nullable = false, insertable = false, updatable = false)
     private Superhero superhero;
 
-    @PrePersist
-    private void prePersist() {
-        if (getId() == null) {
-            BattleParticipantKey pk = new BattleParticipantKey();
-            pk.setBattleId(arena.getId());
-            pk.setParticipantId(superhero.getId());
-            setId(pk);
-        }
+    public BattleParticipant(BattleParticipantKey id, Arena arena, Superhero superhero) {
+        BattleParticipantKey pk = new BattleParticipantKey();
+        pk.setBattleId(arena.getId());
+        pk.setParticipantId(superhero.getId());
+        this.id = pk;
+        this.arena = arena;
+        this.superhero = superhero;
     }
 }
 

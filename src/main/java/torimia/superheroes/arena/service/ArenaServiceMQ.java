@@ -45,11 +45,7 @@ public class ArenaServiceMQ implements ArenaService {
     @Override
     public MessageDto battle(BattleDto dto) {
 
-        Superhero defaultSuperhero = superheroRepository.getOne(1L);
-
         Arena arena = Arena.builder()
-                .loser(defaultSuperhero)
-                .winner(defaultSuperhero)
                 .battleTime(0L)
                 .attackNumber(0)
                 .date(Date.valueOf(LocalDate.now()))
@@ -127,11 +123,13 @@ public class ArenaServiceMQ implements ArenaService {
     }
 
     @Scheduled(cron = "0 0 */1 * * *")//every hour in 00 minutes 00 sec
+    //@Scheduled(fixedDelay = 60000)
     @Override
     public void restartNotFinishedFight() {
-        ArrayList<Arena> notSuccessfulBattle = repository.findAllByFightStatusIsNot2();
+        ArrayList<Arena> notSuccessfulBattle = repository.findAllByFightStatusIsNotFINISHED_SUCCESSFUL();
         List<Battle> battles = notSuccessfulBattle.stream().map(this::createBattle).collect(Collectors.toList());
         battles.forEach(battle -> rabbitTemplate.convertAndSend(battleResultQueueName, battle));
+        log.info("Sent not finished fight");
     }
 
     private Battle createBattle(Arena arena) {

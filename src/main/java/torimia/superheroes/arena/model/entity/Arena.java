@@ -22,11 +22,9 @@ public class Arena {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @NotNull
     @ManyToOne(cascade=CascadeType.ALL)
     private Superhero winner;
 
-    @NotNull
     @ManyToOne(cascade=CascadeType.ALL)
     private Superhero loser;
 
