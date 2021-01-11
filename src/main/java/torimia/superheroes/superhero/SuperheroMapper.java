@@ -5,6 +5,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.springframework.context.annotation.DependsOn;
+import torimia.superheroes.arena.model.entity.BattleParticipant;
+import torimia.superheroes.arena.model.entity.BattleParticipantKey;
 import torimia.superheroes.award.AwardMapper;
 import torimia.superheroes.award.model.dto.AwardView;
 import torimia.superheroes.award.model.entity.Award;
@@ -50,7 +52,18 @@ public interface SuperheroMapper {
     @Mapping(target = "awards", source = "awards")
     SuperheroAwardsDto toDtoSuperheroAwards(Superhero superhero, List<AwardView> awards);
 
-    SuperheroDtoForTop toDtoForTop(SuperheroViewForTop superhero);
-
     SuperheroDtoForBattle toDtoForBattle(Superhero superhero);
+
+    List<SuperheroDtoForBattle> toSuperheroDtoForBattle(List<BattleParticipant> value);
+
+    default SuperheroDtoForBattle toSuperheroDtoForBattleFromBattleParticipant(BattleParticipant battleParticipant) {
+        return SuperheroDtoForBattle.builder()
+                .id(battleParticipant.getSuperhero().getId())
+                .nickname(battleParticipant.getSuperhero().getNickname())
+                .health(battleParticipant.getSuperhero().getHealth())
+                .damage(battleParticipant.getSuperhero().getDamage())
+                .build();
+    }
+
+    SuperheroDtoForTop toDtoForTop(SuperheroViewForTop superheroViewForTop);
 }

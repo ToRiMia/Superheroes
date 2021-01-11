@@ -14,11 +14,8 @@ public class BattleDtoResultFromServerDto implements BattleDtoResultFromServerVi
     @NotNull
     private Long id;
 
-    @NotNull
+  //  @NotNull
     private Long winnerId;
-
-    @NotNull
-    private Long loserId;
 
     @NotNull
     private Long battleTime;

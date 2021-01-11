@@ -23,9 +23,6 @@ public class Battle {
     @ManyToOne(cascade=CascadeType.ALL)
     private Superhero winner;
 
-    @ManyToOne(cascade=CascadeType.ALL)
-    private Superhero loser;
-
     @NotNull
     private Long battleTime;
 

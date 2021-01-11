@@ -1,9 +1,12 @@
 package torimia.superheroes.arena.model.dto;
 
-import lombok.*;
-import torimia.superheroes.superhero.model.dto.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import torimia.superheroes.superhero.model.dto.SuperheroDtoForBattle;
 
-import java.io.Serializable;
+import java.util.List;
 
 @Data
 @Builder
@@ -13,7 +16,5 @@ public class BattleDtoForServer {
 
     private Long id;
 
-    private SuperheroDtoForBattle superhero1;
-
-    private SuperheroDtoForBattle superhero2;
+    private List<SuperheroDtoForBattle> superheroes;
 }

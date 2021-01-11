@@ -8,8 +8,6 @@ public interface BattleDtoResultFromServerView {
 
     Long getWinnerId();
 
-    Long getLoserId();
-
     Long getBattleTime();
 
     Integer getAttackNumber();

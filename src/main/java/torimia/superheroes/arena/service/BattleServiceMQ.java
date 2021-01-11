@@ -52,8 +52,7 @@ public class BattleServiceMQ implements BattleService {
                 .build();
         repository.save(battle);
 
-        fillBattleParticipant(dto.getFirstFighterId(), battle);
-        fillBattleParticipant(dto.getSecondFighterId(), battle);
+        dto.getFightersIds().forEach(fighter -> fillBattleParticipant(fighter, battle));// in method?
 
         BattleDtoForServer battleDtoForServer = createBattle(dto, battle.getId());
 
@@ -71,6 +70,27 @@ public class BattleServiceMQ implements BattleService {
         }
 
         return response;
+    }
+
+    private void fillBattleParticipant(Long fighter, Battle battle) {
+        BattleParticipant battleParticipant = BattleParticipant.builder()
+                .battle(battle)
+                .superhero(superheroRepository.getOne(fighter))
+                .build();
+        battleParticipantRepository.save(battleParticipant);
+    }
+
+    private BattleDtoForServer createBattle(ReceivingBattleDtoFromUser dto, Long id) {
+        return BattleDtoForServer.builder()
+                .id(id)
+                .superheroes(getFighters(dto.getFightersIds()))
+                .build();
+    }
+
+    private List<SuperheroDtoForBattle> getFighters(List<Long> ids) {
+        return ids.stream()
+                .map(id -> superheroMapper.toDtoForBattle(superheroRepository.getOne(id)))
+                .collect(Collectors.toList());
     }
 
     @RabbitListener(queues = "battle-status")
@@ -91,18 +111,6 @@ public class BattleServiceMQ implements BattleService {
         saveBattleResult(result);
     }
 
-    private BattleDtoForServer createBattle(ReceivingBattleDtoFromUser dto, Long id) {
-        return BattleDtoForServer.builder()
-                .id(id)
-                .superhero1(getFighter(dto.getFirstFighterId()))
-                .superhero2(getFighter(dto.getSecondFighterId()))
-                .build();
-    }
-
-    private SuperheroDtoForBattle getFighter(Long id) {
-        return superheroMapper.toDtoForBattle(superheroRepository.getOne(id));
-    }
-
     @Override
     public void saveBattleResult(BattleDtoResultFromServerDto dto) {
         Battle battle = repository.getOne(dto.getId());
@@ -111,14 +119,6 @@ public class BattleServiceMQ implements BattleService {
 
         repository.save(battle);
         log.info("Saved battle result: {}", battle.toString());
-    }
-
-    private void fillBattleParticipant(Long fighter, Battle battle) {
-        BattleParticipant battleParticipant = BattleParticipant.builder()
-                .battle(battle)
-                .superhero(superheroRepository.getOne(fighter))
-                .build();
-        battleParticipantRepository.save(battleParticipant);
     }
 
     @Scheduled(cron = "0 0 */1 * * *")//every hour in 00 minutes 00 sec
@@ -132,17 +132,9 @@ public class BattleServiceMQ implements BattleService {
     }
 
     private BattleDtoForServer createBattle(Battle battle) {
-        int firstFighterId = 0;
-        int secondFighterId = 1;
-
         return BattleDtoForServer.builder()
                 .id(battle.getId())
-                .superhero1(superheroMapper.toDtoForBattle(
-                        superheroRepository.getOne(
-                                battleParticipantRepository.findAllByBattle(battle).get(firstFighterId).getSuperhero().getId())))
-                .superhero2(superheroMapper.toDtoForBattle(
-                        superheroRepository.getOne(
-                                battleParticipantRepository.findAllByBattle(battle).get(secondFighterId).getSuperhero().getId())))
+                .superheroes(superheroMapper.toSuperheroDtoForBattle(battleParticipantRepository.findAllByBattle(battle)))
                 .build();
     }
 }

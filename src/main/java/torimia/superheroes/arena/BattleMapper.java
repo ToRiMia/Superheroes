@@ -17,21 +17,14 @@ import java.util.stream.Collectors;
 public interface BattleMapper {
 
     @Mapping(target = "winnerId", source = "winner")
-    @Mapping(target = "loserId", source = "loser")
     BattleDtoResultFromServerDto toDto(Battle battle);
 
     @Mapping(target = "winner", source = "winnerId")
-    @Mapping(target = "loser", source = "loserId")
     @Mapping(target = "battleStatus", ignore = true)
     @Mapping(target = "id", ignore = true)
     Battle toEntity(BattleDtoResultFromServerDto dto);
 
     @Mapping(target = "winner", source = "winnerId")
-    @Mapping(target = "loser", source = "loserId")
     @Mapping(target = "battleStatus",ignore = true)
     void toEntityUpdate(BattleDtoResultFromServerDto dto, @MappingTarget Battle battle);
-
-//    @Mapping(target = "winnerId", source = "winner")
-//    @Mapping(target = "loserId", source = "loser")
-//    ArrayList<BattleDtoResultFromServerDto> toDtoFromView(ArrayList<BattleDtoResultFromServerView> battle);
 }
