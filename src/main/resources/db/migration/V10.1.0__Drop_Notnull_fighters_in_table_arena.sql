@@ -1,0 +1,3 @@
+ALTER TABLE public.arena ALTER COLUMN winner_id DROP NOT NULL;
+
+ALTER TABLE public.arena ALTER COLUMN loser_id DROP NOT NULL;

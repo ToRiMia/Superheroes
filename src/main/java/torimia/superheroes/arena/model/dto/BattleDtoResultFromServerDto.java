@@ -1,7 +1,6 @@
 package torimia.superheroes.arena.model.dto;
 
 import lombok.*;
-import torimia.superheroes.enums.ValueOfEnum;
 
 import javax.validation.constraints.NotNull;
 import java.sql.Date;
@@ -10,7 +9,7 @@ import java.sql.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ArenaBattleDto implements ArenaBattleView{
+public class BattleDtoResultFromServerDto implements BattleDtoResultFromServerView {
 
     @NotNull
     private Long id;

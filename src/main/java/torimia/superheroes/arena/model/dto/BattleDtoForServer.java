@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Battle {
+public class BattleDtoForServer {
 
     private Long id;
 

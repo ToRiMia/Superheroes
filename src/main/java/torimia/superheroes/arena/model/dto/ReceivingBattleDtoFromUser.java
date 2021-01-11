@@ -6,7 +6,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 @Data
-public class BattleDto {
+public class ReceivingBattleDtoFromUser {
 
     @NotNull(message = "Id first fighter cannot be null!")
     @Min(value = 1, message = "Id first fighter cannot be less than 1!")

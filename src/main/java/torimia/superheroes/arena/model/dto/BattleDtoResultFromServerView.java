@@ -2,7 +2,7 @@ package torimia.superheroes.arena.model.dto;
 
 import java.sql.Date;
 
-public interface ArenaBattleView {
+public interface BattleDtoResultFromServerView {
 
     Long getId();
 

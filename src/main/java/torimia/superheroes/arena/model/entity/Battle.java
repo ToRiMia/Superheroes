@@ -1,14 +1,12 @@
 package torimia.superheroes.arena.model.entity;
 
 import lombok.*;
-import torimia.superheroes.arena.model.dto.FightStatus;
+import torimia.superheroes.arena.model.dto.BattleStatus;
 import torimia.superheroes.superhero.model.Superhero;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.sql.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table
@@ -16,7 +14,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class Arena {
+public class Battle {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -39,5 +37,5 @@ public class Arena {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private FightStatus fightStatus;
+    private BattleStatus battleStatus;
 }

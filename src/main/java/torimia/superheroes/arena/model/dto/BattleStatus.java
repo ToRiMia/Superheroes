@@ -3,13 +3,13 @@ package torimia.superheroes.arena.model.dto;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public enum FightStatus {
+public enum BattleStatus {
 
     NOT_STARTED(0),  STARTED(1), FINISHED_SUCCESSFUL(2), FINISHED_UNSUCCESSFUL(3);
 
     private final int value;
 
-    FightStatus(int value) {
+    BattleStatus(int value) {
         this.value = value;
     }
 
@@ -18,7 +18,7 @@ public enum FightStatus {
     }
 
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
-    public static FightStatus forValues(@JsonProperty("fightStatus") String fightStatus){
-        return FightStatus.valueOf(fightStatus);
+    public static BattleStatus forValues(@JsonProperty("battleStatus") String battleStatus){
+        return BattleStatus.valueOf(battleStatus);
     }
 }

@@ -2,16 +2,13 @@ package torimia.superheroes.arena;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import torimia.superheroes.MessageDto;
-import torimia.superheroes.arena.annotations.TokenCheckable;
-import torimia.superheroes.arena.model.dto.ArenaBattleDto;
-import torimia.superheroes.arena.model.dto.BattleDto;
-import torimia.superheroes.arena.service.ArenaService;
+import torimia.superheroes.arena.model.dto.ReceivingBattleDtoFromUser;
+import torimia.superheroes.arena.service.BattleService;
 
 import javax.validation.Valid;
 
@@ -19,13 +16,13 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("arena")
 @RequiredArgsConstructor
-public class ArenaController {
+public class BattleController {
 
-    private final ArenaService service;
+    private final BattleService service;
 
     @PostMapping("battle")
-    public MessageDto battle(@Valid @RequestBody BattleDto dto) {
-        return service.battle(dto);
+    public MessageDto battle(@Valid @RequestBody ReceivingBattleDtoFromUser dto) {
+        return service.battleStart(dto);
     }
 }
 

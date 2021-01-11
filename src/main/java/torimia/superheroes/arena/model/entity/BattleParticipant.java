@@ -19,18 +19,18 @@ public class BattleParticipant {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_battle", nullable = false, insertable = false, updatable = false)
-    private Arena arena;
+    private Battle battle;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_participant", nullable = false, insertable = false, updatable = false)
     private Superhero superhero;
 
-    public BattleParticipant(BattleParticipantKey id, Arena arena, Superhero superhero) {
+    public BattleParticipant(BattleParticipantKey id, Battle battle, Superhero superhero) {
         BattleParticipantKey pk = new BattleParticipantKey();
-        pk.setBattleId(arena.getId());
+        pk.setBattleId(battle.getId());
         pk.setParticipantId(superhero.getId());
         this.id = pk;
-        this.arena = arena;
+        this.battle = battle;
         this.superhero = superhero;
     }
 }

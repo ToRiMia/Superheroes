@@ -21,7 +21,7 @@ public class VerificationTokenAspect {
                 ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
                         .getRequest();
         String token = request.getHeader("token");
-        if (!token.equals("Arena response"))
+        if (!token.equals("BattleDtoForServer response"))
             throw new VerificationTokenException("Wrong token, access denied");
     }
 }

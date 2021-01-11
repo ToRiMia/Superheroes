@@ -1,0 +1,1 @@
+ALTER TABLE public.arena RENAME COLUMN fight_status TO battle_status;
