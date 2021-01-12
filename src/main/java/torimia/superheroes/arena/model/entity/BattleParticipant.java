@@ -1,5 +1,6 @@
 package torimia.superheroes.arena.model.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,6 +26,7 @@ public class BattleParticipant {
     @JoinColumn(name = "id_participant", nullable = false, insertable = false, updatable = false)
     private Superhero superhero;
 
+    //this constructor is used by lombok's builder for creating entity's id
     public BattleParticipant(BattleParticipantKey id, Battle battle, Superhero superhero) {
         BattleParticipantKey pk = new BattleParticipantKey();
         pk.setBattleId(battle.getId());

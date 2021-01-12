@@ -1,6 +1,5 @@
 package torimia.superheroes.exceptions.handler;
 
-import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +13,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import torimia.superheroes.exceptions.AddingToListException;
 
 import javax.persistence.EntityNotFoundException;
-import javax.security.sasl.AuthenticationException;
-import java.rmi.AccessException;
 import java.util.HashMap;
 import java.util.Map;
 

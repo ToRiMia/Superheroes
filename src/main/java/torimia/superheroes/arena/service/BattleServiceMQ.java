@@ -5,13 +5,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import torimia.superheroes.MessageDto;
 import torimia.superheroes.arena.BattleMapper;
-import torimia.superheroes.arena.BattleRepository;
 import torimia.superheroes.arena.BattleParticipantRepository;
+import torimia.superheroes.arena.BattleRepository;
 import torimia.superheroes.arena.model.dto.*;
 import torimia.superheroes.arena.model.entity.Battle;
 import torimia.superheroes.arena.model.entity.BattleParticipant;
@@ -36,23 +38,19 @@ public class BattleServiceMQ implements BattleService {
     private final SuperheroRepository superheroRepository;
     private final BattleParticipantRepository battleParticipantRepository;
     private final SuperheroMapper superheroMapper;
+    @Lazy
+    private final BattleService service;//self injection for nested transaction
 
     @Value("${rabbitmq.queue.battle.name}")
     private final String battleQueueName;
     private final RabbitTemplate rabbitTemplate;
 
+
     @Override
     public MessageDto battleStart(ReceivingBattleDtoFromUser dto) {
+        Battle battle = service.createBattle();
 
-        Battle battle = Battle.builder()
-                .battleTime(0L)
-                .attackNumber(0)
-                .date(Date.valueOf(LocalDate.now()))
-                .battleStatus(BattleStatus.STARTED)
-                .build();
-        repository.save(battle);
-
-        dto.getFightersIds().forEach(fighter -> fillBattleParticipant(fighter, battle));// in method?
+        dto.getFightersIds().forEach(fighter -> fillBattleParticipant(fighter, battle));
 
         BattleDtoForServer battleDtoForServer = createBattle(dto, battle.getId());
 
@@ -72,6 +70,18 @@ public class BattleServiceMQ implements BattleService {
         return response;
     }
 
+    @Transactional(propagation= Propagation.REQUIRES_NEW)
+    public Battle createBattle() {
+        Battle battle = Battle.builder()
+                .battleTime(0L)
+                .attackNumber(0)
+                .date(Date.valueOf(LocalDate.now()))
+                .battleStatus(BattleStatus.STARTED)
+                .build();
+        repository.save(battle);
+        return battle;
+    }
+
     private void fillBattleParticipant(Long fighter, Battle battle) {
         BattleParticipant battleParticipant = BattleParticipant.builder()
                 .battle(battle)
@@ -81,9 +91,12 @@ public class BattleServiceMQ implements BattleService {
     }
 
     private BattleDtoForServer createBattle(ReceivingBattleDtoFromUser dto, Long id) {
+
+        List<Long> list = new ArrayList<>(dto.getFightersIds());
+
         return BattleDtoForServer.builder()
                 .id(id)
-                .superheroes(getFighters(dto.getFightersIds()))
+                .superheroes(getFighters(list))
                 .build();
     }
 
