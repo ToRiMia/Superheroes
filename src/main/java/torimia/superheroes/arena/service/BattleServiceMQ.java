@@ -22,6 +22,7 @@ import torimia.superheroes.superhero.SuperheroRepository;
 import torimia.superheroes.superhero.model.dto.SuperheroDtoForBattle;
 
 import java.sql.Date;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -73,9 +74,8 @@ public class BattleServiceMQ implements BattleService {
     @Transactional(propagation= Propagation.REQUIRES_NEW)
     public Battle createBattle() {
         Battle battle = Battle.builder()
-                .battleTime(0L)
                 .attackNumber(0)
-                .date(Date.valueOf(LocalDate.now()))
+                .startOfBattle(Instant.now())
                 .battleStatus(BattleStatus.STARTED)
                 .build();
         repository.save(battle);

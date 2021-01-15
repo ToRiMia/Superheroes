@@ -11,10 +11,8 @@ import org.springframework.context.annotation.Primary;
 public class JavaConfig {
 
     @Bean
-    @Primary
     public ObjectMapper objectMapper() {
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         objectMapper.registerModule(new JavaTimeModule());
         return objectMapper;
     }

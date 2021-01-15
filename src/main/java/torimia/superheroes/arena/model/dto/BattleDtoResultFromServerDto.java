@@ -3,7 +3,9 @@ package torimia.superheroes.arena.model.dto;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.sql.Date;
+import java.time.Instant;
 
 @Data
 @Builder
@@ -14,15 +16,14 @@ public class BattleDtoResultFromServerDto implements BattleDtoResultFromServerVi
     @NotNull
     private Long id;
 
-  //  @NotNull
     private Long winnerId;
-
-    @NotNull
-    private Long battleTime;
 
     @NotNull
     private Integer attackNumber;
 
     @NotNull
-    private Date date;
+    private Instant startOfBattle;
+
+    @NotNull
+    private Instant endOfBattle;
 }

@@ -7,6 +7,7 @@ import torimia.superheroes.superhero.model.Superhero;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.sql.Date;
+import java.time.Instant;
 
 @Entity
 @Table
@@ -24,13 +25,12 @@ public class Battle {
     private Superhero winner;
 
     @NotNull
-    private Long battleTime;
-
-    @NotNull
     private Integer attackNumber;
 
     @NotNull
-    private Date date;
+    private Instant startOfBattle;
+
+    private Instant endOfBattle;
 
     @NotNull
     @Enumerated(EnumType.STRING)

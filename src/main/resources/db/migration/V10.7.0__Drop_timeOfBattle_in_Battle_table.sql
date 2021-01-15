@@ -1,0 +1,1 @@
+ALTER TABLE public.battle DROP COLUMN battle_time;

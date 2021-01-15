@@ -1,6 +1,6 @@
 package torimia.superheroes.arena.model.dto;
 
-import java.sql.Date;
+import java.time.Instant;
 
 public interface BattleDtoResultFromServerView {
 
@@ -8,9 +8,10 @@ public interface BattleDtoResultFromServerView {
 
     Long getWinnerId();
 
-    Long getBattleTime();
-
     Integer getAttackNumber();
 
-    Date getDate();
+    Instant getStartOfBattle();
+
+    Instant getEndOfBattle();
+
 }

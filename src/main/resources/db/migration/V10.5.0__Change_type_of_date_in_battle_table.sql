@@ -1,0 +1,1 @@
+ALTER TABLE public.battle ALTER COLUMN date TYPE timestamp;
