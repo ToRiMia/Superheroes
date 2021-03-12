@@ -1,5 +1,6 @@
 package torimia.superheroes.exceptions.handler;
 
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import torimia.superheroes.exceptions.AddingToListException;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,8 +40,15 @@ public class MainExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<String> handleEntityNotFound() {
-        return new ResponseEntity<>("Entity with this id does not exist", HttpStatus.NOT_FOUND);
+    public ResponseEntity<String> handleEntityNotFound(EntityNotFoundException ex) {
+        return new ResponseEntity<>("Entity with id: "
+                + ex.getMessage().split(" ")[ex.getMessage().split(" ").length - 1]
+                + " does not exist", HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(TokenExpiredException.class)
+    public ResponseEntity<String> handleTokenExpired(TokenExpiredException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(AddingToListException.class)

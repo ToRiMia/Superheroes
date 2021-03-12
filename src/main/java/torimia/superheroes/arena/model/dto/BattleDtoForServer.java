@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import torimia.superheroes.superhero.model.dto.SuperheroDtoForBattle;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Data
@@ -16,5 +17,6 @@ public class BattleDtoForServer {
 
     private Long id;
 
+    @Valid
     private List<SuperheroDtoForBattle> superheroes;
 }
