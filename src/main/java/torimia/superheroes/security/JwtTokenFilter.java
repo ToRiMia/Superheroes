@@ -7,8 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -40,8 +40,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
         String userInfo = decoded.getSubject();
 
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userInfo, null, Collections.emptyList());
-        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userInfo, null, Collections.emptyList());
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 

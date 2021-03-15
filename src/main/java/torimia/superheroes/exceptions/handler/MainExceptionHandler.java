@@ -14,7 +14,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import torimia.superheroes.exceptions.AddingToListException;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
