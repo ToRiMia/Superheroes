@@ -1,6 +1,5 @@
 package torimia.superheroes.exceptions.handler;
 
-import com.auth0.jwt.exceptions.TokenExpiredException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,8 +33,7 @@ public class MainExceptionHandler extends ResponseEntityExceptionHandler {
             String errorMessage = error.getDefaultMessage();
             data.put(fieldName, errorMessage);
         });
-        ValidationResponse response = new ValidationResponse("Validation failed", data);
-        return response;
+        return new ValidationResponse("Validation failed", data);
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
@@ -43,11 +41,6 @@ public class MainExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>("Entity with id: "
                 + ex.getMessage().split(" ")[ex.getMessage().split(" ").length - 1]
                 + " does not exist", HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(TokenExpiredException.class)
-    public ResponseEntity<String> handleTokenExpired(TokenExpiredException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(AddingToListException.class)

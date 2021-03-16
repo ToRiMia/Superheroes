@@ -2,11 +2,12 @@
 version: '3.1'
 
 services:
-
   db:
     image: postgres
     restart: always
     environment:
+      POSTGRES_DB: torimia_superhero
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: example
     ports:
       - 5432:5432
@@ -22,4 +23,18 @@ services:
     ports:
       - 5672:5672
       - 15672:15672
-
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: db
+      DB_DATABASE: torimia_user
+      DB_USER: postgres
+      DB_SCHEMA: public
+      DB_PASSWORD: example
+      KEYCLOAK_USER: admin1
+      KEYCLOAK_PASSWORD: admin
+    ports:
+      - 8082:8080
+    depends_on:
+      - db

@@ -97,16 +97,54 @@
             <groupId>org.springframework.amqp</groupId>
             <artifactId>spring-rabbit</artifactId>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-security</artifactId>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>com.auth0</groupId>-->
+<!--            <artifactId>java-jwt</artifactId>-->
+<!--            <version>3.10.2</version>-->
+<!--        </dependency>-->
+        <!-- https://mvnrepository.com/artifact/org.springframework.security.oauth/spring-security-oauth2 -->
+        <dependency>
+            <groupId>org.springframework.security.oauth</groupId>
+            <artifactId>spring-security-oauth2</artifactId>
+            <version>2.5.0.RELEASE</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework.security.oauth.boot/spring-security-oauth2-autoconfigure -->
+        <dependency>
+            <groupId>org.springframework.security.oauth.boot</groupId>
+            <artifactId>spring-security-oauth2-autoconfigure</artifactId>
+            <version>2.4.2</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
+            <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-jwt -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-jwt</artifactId>
+            <version>1.1.1.RELEASE</version>
         </dependency>
         <dependency>
-            <groupId>com.auth0</groupId>
-            <artifactId>java-jwt</artifactId>
-            <version>3.10.2</version>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-spring-boot-starter</artifactId>
         </dependency>
     </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.keycloak.bom</groupId>
+                <artifactId>keycloak-adapter-bom</artifactId>
+                <version>11.0.2</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <plugins>
