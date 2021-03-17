@@ -132,6 +132,11 @@
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-spring-boot-starter</artifactId>
         </dependency>
+        <dependency>
+            <artifactId>keycloak-admin-client</artifactId>
+            <groupId>org.keycloak</groupId>
+            <version>8.0.2</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
