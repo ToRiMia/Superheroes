@@ -1,5 +1,5 @@
 CREATE TABLE public.usr (
-	id int8 NOT NULL,
+	id varchar NOT NULL,
 	age int4 NULL,
 	email varchar NULL,
 	first_name varchar(255) NOT NULL,

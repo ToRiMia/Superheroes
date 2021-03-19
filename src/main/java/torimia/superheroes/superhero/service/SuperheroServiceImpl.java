@@ -35,7 +35,6 @@ public class SuperheroServiceImpl implements SuperheroService {
 
     @Override
     public SuperheroDto getById(Long id) {
-        System.out.println("getById");
         return mapper.toDto(repository.getOne(id));
     }
 

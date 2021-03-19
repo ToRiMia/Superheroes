@@ -2,18 +2,14 @@ package torimia.superheroes.user.model;
 
 import lombok.*;
 
-import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-@Entity
-@Table(name = "usr")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class User {
+public class UserDtoResponse {
 
-    @Id
     private String id;
 
     @NotNull
@@ -29,7 +25,5 @@ public class User {
 
     private String email;
 
-    @Builder.Default
-    @Enumerated(EnumType.STRING)
-    private AccountStatus status = AccountStatus.ACTIVE;
+    private AccountStatus status;
 }

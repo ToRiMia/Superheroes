@@ -1,5 +1,8 @@
 package torimia.superheroes.exceptions.handler;
 
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import org.keycloak.util.JsonSerialization;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +16,15 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import torimia.superheroes.exceptions.AddingToListException;
 
 import javax.persistence.EntityNotFoundException;
+import javax.ws.rs.ClientErrorException;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @ControllerAdvice
 public class MainExceptionHandler extends ResponseEntityExceptionHandler {
 
@@ -51,6 +60,23 @@ public class MainExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         return super.handleHttpMessageNotReadable(ex, headers, status, request);
+    }
+
+    @SneakyThrows
+    @ExceptionHandler(ClientErrorException.class)
+    public ResponseEntity<String> handleKeycloakClientError(ClientErrorException e) {
+        Response response = e.getResponse();
+        Map error = JsonSerialization.readValue((ByteArrayInputStream) response.getEntity(), Map.class);
+        log.error("Keycloak error description: " + error.get("error_description"));
+        return new ResponseEntity<>("Oops, something wrong.", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(WebApplicationException.class)
+    public ResponseEntity<String> handleKeycloakClientError(WebApplicationException e) {
+        if (e.getResponse().getStatus() == 409) {
+            log.error("Keycloak error, user with current username or email  already exist. Message: " + e.getMessage());
+            return new ResponseEntity<>("User with this username or email already exist!", HttpStatus.CONFLICT);
+        } else return new ResponseEntity<>(e.getMessage(), HttpStatus.valueOf(e.getResponse().getStatus()));
     }
 }
 

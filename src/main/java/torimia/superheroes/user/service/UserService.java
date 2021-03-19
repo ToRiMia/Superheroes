@@ -1,16 +1,15 @@
 package torimia.superheroes.user.service;
 
-import torimia.superheroes.user.model.UserDto;
+import torimia.superheroes.user.model.UserDtoRequest;
+import torimia.superheroes.user.model.UserDtoResponse;
 
 public interface UserService {
 
-    UserDto create(UserDto dto);
+    UserDtoResponse create(UserDtoRequest dto);
 
-    UserDto getById(Long id);
+    UserDtoResponse getById(String id);
 
-    UserDto update(Long id, UserDto dto);
+    UserDtoResponse update(String id, UserDtoRequest dto);
 
-    void delete(Long id);
-
-    //void restorePassword();
+    void delete(String id);
 }

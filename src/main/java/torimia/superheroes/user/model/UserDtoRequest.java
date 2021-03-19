@@ -8,9 +8,9 @@ import javax.validation.constraints.NotNull;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class UserDto {
+public class UserDtoRequest {
 
-    private Long id;
+    private String id;
 
     @NotNull
     private String username;
