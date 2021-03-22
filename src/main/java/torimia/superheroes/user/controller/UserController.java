@@ -8,7 +8,7 @@ import torimia.superheroes.user.service.UserService;
 
 import javax.validation.Valid;
 
-import static torimia.superheroes.user.controller.UserController.Path.BY_ID;
+import static torimia.superheroes.user.controller.UserController.Path.*;
 import static torimia.superheroes.user.controller.UserController.Path.Variable.ID;
 
 @RestController
@@ -28,7 +28,7 @@ public class UserController {
         }
     }
 
-    @PostMapping
+    @PostMapping(REGISTER)
     public UserDtoResponse create(@Valid @RequestBody UserDtoRequest dto) {
         return service.create(dto);
     }

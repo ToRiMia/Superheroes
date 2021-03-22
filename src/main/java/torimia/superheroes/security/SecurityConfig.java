@@ -16,6 +16,7 @@ import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
+import org.springframework.security.web.method.annotation.AuthenticationPrincipalArgumentResolver;
 
 @KeycloakConfiguration
 class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
@@ -29,11 +30,19 @@ class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     @Value("${keycloak.realm}")
     private String realm;
 
+    private static final String REGISTER_URL = "/user/register";
+    private static final String SECURED_URL = "/*";
+
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) {
         KeycloakAuthenticationProvider keycloakAuthenticationProvider = keycloakAuthenticationProvider();
         keycloakAuthenticationProvider.setGrantedAuthoritiesMapper(new SimpleAuthorityMapper());
         auth.authenticationProvider(keycloakAuthenticationProvider);
+    }
+
+    @Bean
+    public AuthenticationPrincipalArgumentResolver authenticationPrincipalArgumentResolver(){
+        return new AuthenticationPrincipalArgumentResolver();
     }
 
     @Bean
@@ -65,8 +74,8 @@ class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/user").permitAll()
-                .antMatchers("/*").hasRole("user")
+                .antMatchers(REGISTER_URL).permitAll()
+                .antMatchers(SECURED_URL).hasRole("user")
                 .anyRequest().authenticated();
     }
 }

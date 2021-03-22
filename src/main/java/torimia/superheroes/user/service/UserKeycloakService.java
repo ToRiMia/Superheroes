@@ -43,19 +43,12 @@ public class UserKeycloakService {
         return userId;
     }
 
-    public UserDtoRequest getById(Long id) {
-        return null;
-    }
-
-    public UserDtoRequest update(Long id, UserDtoRequest dto) {
-        return null;
-    }
-
-    public void delete(String id) {
+    public void update(String id, UserDtoRequest dto) {
         RealmResource realmResource = keycloak.realm(realm);
         UsersResource usersResource = realmResource.users();
 
-        usersResource.delete(id);
+        UserResource userResource = usersResource.get(id);
+        userResource.update(mapper.toUserRepresentation(dto));
     }
 
     private UserRepresentation toUserRepresentation(UserDtoRequest dto) {

@@ -1,9 +1,12 @@
 package torimia.superheroes.user.model;
 
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.Instant;
 
 @Entity
 @Table(name = "usr")
@@ -11,6 +14,8 @@ import javax.validation.constraints.NotNull;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Where(clause = "deleted_date IS NULL")
+@SQLDelete(sql = "UPDATE public.usr SET deleted_date = CURRENT_TIMESTAMP WHERE id =?")
 public class User {
 
     @Id
@@ -29,7 +34,14 @@ public class User {
 
     private String email;
 
+    private Instant deletedDate;
+
     @Builder.Default
     @Enumerated(EnumType.STRING)
     private AccountStatus status = AccountStatus.ACTIVE;
+
+    @PreRemove
+    public void deleteUser() {
+        this.deletedDate = Instant.now();
+    }
 }
