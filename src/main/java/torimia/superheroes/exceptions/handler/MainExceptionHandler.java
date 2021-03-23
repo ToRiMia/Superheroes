@@ -68,23 +68,30 @@ public class MainExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ClientErrorException.class)
     public ResponseEntity<String> handleKeycloakClientError(ClientErrorException e) {
         if (e.getResponse().getStatus() == 409) {
-            log.error("Keycloak error, user with current username or email  already exist. Message: " + e.getMessage());
-            return new ResponseEntity<>("User with this username or email already exist!", HttpStatus.CONFLICT);
+            return getInfoStatusConflict(e);// 409 conflict ClientErrorException, при апдейті почти на існуючу в базі на серваку вилітає SQL exception
         } else {
             Response response = e.getResponse();
-            Map error = JsonSerialization.readValue((ByteArrayInputStream) response.getEntity(), Map.class);
-            log.error("Keycloak error description: " + error.get("error_description"));
+            Map<String, String> error = JsonSerialization.readValue((ByteArrayInputStream) response.getEntity(), Map.class);
+            log.error("Keycloak error description: {}", error.get("error_description"));
             return new ResponseEntity<>("Oops, something wrong.", HttpStatus.INTERNAL_SERVER_ERROR);
-        }// TODO: 22.03.21 409 conflict ClientErrorException, при апдейті почти на існуючу в базі на серваку вилітає SQL exception
+        }
 
     }
 
+    private ResponseEntity<String> getInfoStatusConflict(Exception e) {
+        log.error("Keycloak error, user with current username or email  already exist. Message: {}", e.getMessage());
+        return new ResponseEntity<>("User with this username or email already exist!", HttpStatus.CONFLICT);
+    }
+
+    @SneakyThrows
     @ExceptionHandler(WebApplicationException.class)
     public ResponseEntity<String> handleKeycloakClientError(WebApplicationException e) {
         if (e.getResponse().getStatus() == 409) {
-            log.error("Keycloak error, user with current username or email  already exist. Message: " + e.getMessage());
-            return new ResponseEntity<>("User with this username or email already exist!", HttpStatus.CONFLICT);
-        } else return new ResponseEntity<>(e.getMessage(), HttpStatus.valueOf(e.getResponse().getStatus()));
+            return getInfoStatusConflict(e);
+        } else {
+            log.error("Keycloak error description: status[{}], description[{}]", e.getResponse().getStatus(), e.getMessage());
+            return new ResponseEntity<>("Oops, something wrong.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @ExceptionHandler(ForbiddenException.class)

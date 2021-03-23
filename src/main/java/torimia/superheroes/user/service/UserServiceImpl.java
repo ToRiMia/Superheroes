@@ -2,7 +2,6 @@ package torimia.superheroes.user.service;
 
 import lombok.RequiredArgsConstructor;
 import org.keycloak.KeycloakPrincipal;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import torimia.superheroes.user.UserMapper;
@@ -19,7 +18,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository repository;
     private final UserMapper mapper;
-    private final UserKeycloakService keycloakService; // TODO: 17.03.21 мб інтерфейс краще
+    private final UserKeycloakService keycloakService;
 
     @Override
     public UserDtoResponse create(UserDtoRequest dto) {
@@ -37,7 +36,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDtoResponse update(String id, UserDtoRequest dto) {
-        checkIdForIdentity(id); // TODO: 22.03.21 а що ,якщо акаунт не існує?
+        checkIdForIdentity(id);
 
         User user = repository.getOne(id);
         if (!dto.getUsername().equals(user.getUsername())) {
@@ -52,6 +51,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(String id) {
         checkIdForIdentity(id);
+        keycloakService.delete(id);
         repository.findUserById(id).ifPresent(user -> repository.deleteById(id));
     }
 

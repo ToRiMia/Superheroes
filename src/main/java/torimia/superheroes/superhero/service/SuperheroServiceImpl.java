@@ -1,11 +1,13 @@
 package torimia.superheroes.superhero.service;
 
 import lombok.RequiredArgsConstructor;
+import org.keycloak.KeycloakPrincipal;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import torimia.superheroes.award.AwardRepository;
 import torimia.superheroes.award.model.dto.AwardView;
@@ -14,8 +16,14 @@ import torimia.superheroes.exceptions.AddingToListException;
 import torimia.superheroes.superhero.SuperheroMapper;
 import torimia.superheroes.superhero.SuperheroRepository;
 import torimia.superheroes.superhero.model.Superhero;
-import torimia.superheroes.superhero.model.dto.*;
+import torimia.superheroes.superhero.model.dto.IdRequest;
+import torimia.superheroes.superhero.model.dto.SuperheroAwardsDto;
+import torimia.superheroes.superhero.model.dto.SuperheroDto;
+import torimia.superheroes.superhero.model.dto.SuperheroDtoForTop;
+import torimia.superheroes.user.model.User;
+import torimia.superheroes.user.repository.UserRepository;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,6 +34,7 @@ public class SuperheroServiceImpl implements SuperheroService {
     private final SuperheroRepository repository;
     private final AwardRepository awardRepository;
     private final SuperheroMapper mapper;
+    private final UserRepository userRepository;
 
     @Override
     public Page<SuperheroDto> getPage(Pageable page) {
@@ -42,7 +51,18 @@ public class SuperheroServiceImpl implements SuperheroService {
     public SuperheroDto create(SuperheroDto dto) {
         Superhero superhero = mapper.toEntity(dto);
         superhero.setId(null);
-        return mapper.toDto(repository.save(superhero));
+        Superhero savedSuperhero = repository.save(superhero);
+
+        User user = userRepository.findUserById(getUserId()).orElseThrow(EntityNotFoundException::new);
+        user.addSuperhero(savedSuperhero);
+        userRepository.save(user);
+
+        return mapper.toDto(savedSuperhero);
+    }
+
+    private String getUserId() {
+        KeycloakPrincipal principal = (KeycloakPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return principal.getName();
     }
 
     @Override

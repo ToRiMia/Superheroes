@@ -3,10 +3,13 @@ package torimia.superheroes.user.model;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import torimia.superheroes.superhero.model.Superhero;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collection;
 
 @Entity
 @Table(name = "usr")
@@ -16,6 +19,7 @@ import java.time.Instant;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Where(clause = "deleted_date IS NULL")
 @SQLDelete(sql = "UPDATE public.usr SET deleted_date = CURRENT_TIMESTAMP WHERE id =?")
+@EqualsAndHashCode(exclude = {"createdSuperhero"})
 public class User {
 
     @Id
@@ -36,6 +40,17 @@ public class User {
 
     private Instant deletedDate;
 
+    @Setter(AccessLevel.PRIVATE)
+    @Builder.Default
+    @OneToMany
+    @JoinTable
+            (
+                    name = "user_superheroes",
+                    joinColumns = {@JoinColumn(name = "id_user", referencedColumnName = "id")},
+                    inverseJoinColumns = {@JoinColumn(name = "id_superhero", referencedColumnName = "id", unique = true)}
+            )
+    private Collection<Superhero> createdSuperhero = new ArrayList<>();
+
     @Builder.Default
     @Enumerated(EnumType.STRING)
     private AccountStatus status = AccountStatus.ACTIVE;
@@ -43,5 +58,9 @@ public class User {
     @PreRemove
     public void deleteUser() {
         this.deletedDate = Instant.now();
+    }
+
+    public void addSuperhero(Superhero superhero) {
+        createdSuperhero.add(superhero);
     }
 }

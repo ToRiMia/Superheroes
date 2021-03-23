@@ -14,14 +14,12 @@ public interface UserMapper {
 
     UserDtoResponse toDtoResponse(User user);
 
+    @Mapping(target = "deletedDate", ignore = true)
     User toEntity(UserDtoRequest dto);
 
+    @Mapping(target = "deletedDate", ignore = true)
     @Mapping(target = "id", ignore = true)
     void toEntityUpdate(UserDtoRequest dto, @MappingTarget User user);
 
     UserRepresentation toUserRepresentation(UserDtoRequest dto);
-
-    @Mapping(target = "id", ignore = true)
-    void toEntityKeycloakUpdate(UserDtoRequest dto, @MappingTarget UserRepresentation user);
-
 }
