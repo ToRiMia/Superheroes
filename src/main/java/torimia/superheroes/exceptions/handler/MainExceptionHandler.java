@@ -80,7 +80,7 @@ public class MainExceptionHandler extends ResponseEntityExceptionHandler {
 
     private ResponseEntity<String> getInfoStatusConflict(Exception e) {
         log.error("Keycloak error, user with current username or email  already exist. Message: {}", e.getMessage());
-        return new ResponseEntity<>("User with this username or email already exist!", HttpStatus.CONFLICT);
+        return new ResponseEntity<>("CheckUser with this username or email already exist!", HttpStatus.CONFLICT);
     }
 
     @SneakyThrows

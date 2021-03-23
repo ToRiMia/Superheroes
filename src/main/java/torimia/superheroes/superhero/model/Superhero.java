@@ -58,7 +58,7 @@ public class Superhero{
 
 //    @Setter(AccessLevel.PRIVATE)
 //    @ManyToOne()
-//    private User user;
+//    private CheckUser user;
 
     public void addFriend(Superhero friend) {
         listOfEnemies.remove(friend);

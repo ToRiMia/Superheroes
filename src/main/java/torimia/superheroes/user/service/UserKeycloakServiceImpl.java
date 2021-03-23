@@ -38,7 +38,7 @@ public class UserKeycloakServiceImpl implements UserKeycloakService {
         Response response = usersResource.create(user);
 
         String userId = CreatedResponseUtil.getCreatedId(response);
-        log.info("User created with userId: {}", userId);
+        log.info("CheckUser created with userId: {}", userId);
 
         addRoleUser(realmResource, usersResource, userId);
         return userId;

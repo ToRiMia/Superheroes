@@ -30,7 +30,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDtoResponse getById(String id) {
-        checkIdForIdentity(id);
         return mapper.toDtoResponse(repository.getOne(id));
     }
 
