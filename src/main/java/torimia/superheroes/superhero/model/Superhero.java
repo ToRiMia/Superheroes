@@ -2,7 +2,6 @@ package torimia.superheroes.superhero.model;
 
 import lombok.*;
 import torimia.superheroes.award.model.entity.Award;
-import torimia.superheroes.user.model.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -55,10 +54,6 @@ public class Superhero{
     @OneToMany(mappedBy = "superhero",
             cascade = CascadeType.ALL)
     private Set<Award> awards = new HashSet<>();
-
-//    @Setter(AccessLevel.PRIVATE)
-//    @ManyToOne()
-//    private CheckUser user;
 
     public void addFriend(Superhero friend) {
         listOfEnemies.remove(friend);

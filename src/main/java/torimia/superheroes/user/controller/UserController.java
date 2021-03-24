@@ -2,7 +2,6 @@ package torimia.superheroes.user.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import torimia.superheroes.user.model.User;
 import torimia.superheroes.user.model.UserDtoRequest;
 import torimia.superheroes.user.model.UserDtoResponse;
 import torimia.superheroes.user.service.UserService;
@@ -12,6 +11,11 @@ import javax.validation.Valid;
 import static torimia.superheroes.user.controller.UserController.Path.BY_ID;
 import static torimia.superheroes.user.controller.UserController.Path.REGISTER;
 import static torimia.superheroes.user.controller.UserController.Path.Variable.ID;
+
+/**
+ * Before executing all methods except "create", the userId is checked from the token and from the path in VerificationUserIdAspect
+ * And throw ForbiddenException if they not the same
+ */
 
 @RestController
 @RequestMapping("user")
@@ -35,8 +39,9 @@ public class UserController {
         return service.create(dto);
     }
 
+
     @GetMapping(BY_ID)
-    public UserDtoResponse getById(@PathVariable(ID) String id, @CheckUser User user) {
+    public UserDtoResponse getById(@PathVariable(ID) String id) {
         return service.getById(id);
     }
 

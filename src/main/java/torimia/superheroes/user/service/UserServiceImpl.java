@@ -1,8 +1,6 @@
 package torimia.superheroes.user.service;
 
 import lombok.RequiredArgsConstructor;
-import org.keycloak.KeycloakPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import torimia.superheroes.user.UserMapper;
 import torimia.superheroes.user.model.User;
@@ -35,8 +33,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDtoResponse update(String id, UserDtoRequest dto) {
-        checkIdForIdentity(id);
-
         User user = repository.getOne(id);
         if (!dto.getUsername().equals(user.getUsername())) {
             throw new ForbiddenException("It is forbidden to change username!");
@@ -49,18 +45,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(String id) {
-        checkIdForIdentity(id);
         keycloakService.delete(id);
         repository.findUserById(id).ifPresent(user -> repository.deleteById(id));
-    }
-
-    private void checkIdForIdentity(String id) {
-        KeycloakPrincipal principal = (KeycloakPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String userId = principal.getName();// TODO: 22.03.21 німагу кидати юзера з контроллера(
-
-        if (!userId.equals(id)) {
-            throw new ForbiddenException("It is forbidden to interact with another account!");
-        }
     }
 }
 

@@ -5,15 +5,25 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.SortDefault;
 import org.springframework.web.bind.annotation.*;
-import torimia.superheroes.award.model.dto.*;
+import torimia.superheroes.award.model.dto.AwardView;
+import torimia.superheroes.superhero.model.dto.IdRequest;
+import torimia.superheroes.superhero.model.dto.SuperheroAwardsDto;
+import torimia.superheroes.superhero.model.dto.SuperheroDto;
+import torimia.superheroes.superhero.model.dto.SuperheroDtoForTop;
 import torimia.superheroes.superhero.service.SuperheroService;
-import torimia.superheroes.superhero.model.dto.*;
+import torimia.superheroes.user.model.User;
 
 import javax.validation.Valid;
 import java.util.List;
 
 import static torimia.superheroes.superhero.controller.SuperheroesController.Path.*;
 import static torimia.superheroes.superhero.controller.SuperheroesController.Path.Variable.ID;
+
+/**
+ * Before executing all methods except Post and Get mapping,
+ * the superheroId in the user's list "createdSuperhero" is checked in CheckingSuperheroCreatorAspect
+ * And throw ForbiddenException if superheroId not found
+ */
 
 @RestController
 @RequestMapping("superhero")
@@ -54,7 +64,7 @@ public class SuperheroesController {
     }
 
     @GetMapping
-    public Page<SuperheroDto> getAllPage(@SortDefault(sort = "id") Pageable page) {
+    public Page<SuperheroDto> getPage(@SortDefault(sort = "id") Pageable page) {
         return service.getPage(page);
     }
 
@@ -64,8 +74,8 @@ public class SuperheroesController {
     }
 
     @PostMapping
-    public SuperheroDto create(@Valid @RequestBody SuperheroDto dto) {
-        return service.create(dto);
+    public SuperheroDto create(@Valid @RequestBody SuperheroDto dto, User user) {
+        return service.create(dto, user);
     }
 
     @PutMapping(BY_ID)

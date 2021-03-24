@@ -1,13 +1,11 @@
 package torimia.superheroes.superhero.service;
 
 import lombok.RequiredArgsConstructor;
-import org.keycloak.KeycloakPrincipal;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import torimia.superheroes.award.AwardRepository;
 import torimia.superheroes.award.model.dto.AwardView;
@@ -23,7 +21,6 @@ import torimia.superheroes.superhero.model.dto.SuperheroDtoForTop;
 import torimia.superheroes.user.model.User;
 import torimia.superheroes.user.repository.UserRepository;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,21 +45,15 @@ public class SuperheroServiceImpl implements SuperheroService {
     }
 
     @Override
-    public SuperheroDto create(SuperheroDto dto) {
+    public SuperheroDto create(SuperheroDto dto, User user) {
         Superhero superhero = mapper.toEntity(dto);
         superhero.setId(null);
-        Superhero savedSuperhero = repository.save(superhero);
 
-        User user = userRepository.findUserById(getUserId()).orElseThrow(EntityNotFoundException::new);
+        Superhero savedSuperhero = repository.save(superhero);
         user.addSuperhero(savedSuperhero);
         userRepository.save(user);
-
+        
         return mapper.toDto(savedSuperhero);
-    }
-
-    private String getUserId() {
-        KeycloakPrincipal principal = (KeycloakPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return principal.getName();
     }
 
     @Override

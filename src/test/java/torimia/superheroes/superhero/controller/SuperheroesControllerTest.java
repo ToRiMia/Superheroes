@@ -12,8 +12,11 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import torimia.superheroes.superhero.model.dto.IdRequest;
 import torimia.superheroes.superhero.model.dto.SuperheroDto;
 import torimia.superheroes.superhero.service.SuperheroServiceImpl;
+import torimia.superheroes.user.model.User;
+import torimia.superheroes.user.repository.UserRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static torimia.superheroes.superhero.controller.SuperheroesController.Path.*;
 
@@ -24,7 +27,7 @@ class SuperheroesControllerTest extends ControllerConfigForTests {
     private SuperheroServiceImpl service;
 
     @InjectMocks
-    SuperheroesController controller;
+    private SuperheroesController controller;
 
     private final String ID = "/1";
 
@@ -49,7 +52,7 @@ class SuperheroesControllerTest extends ControllerConfigForTests {
     }
 
     @Test
-    void createWithNFirstNameNull() throws Exception {
+    void createWithFirstNameNull() throws Exception {
         SuperheroDto dto = createSuperheroDto();
         dto.setFirstName("");
 
@@ -233,6 +236,8 @@ class SuperheroesControllerTest extends ControllerConfigForTests {
         String SUPERHERO_LAST_NAME = "Semenuk";
         int SUPERHERO_AGE = 25;
         String SUPERHERO_SUPER_POWER = "No super power";
+        int SUPERHERO_DAMAGE = 10;
+        int SUPERHERO_HEALTH = 100;
 
         return SuperheroDto.builder()
                 .id(SUPERHERO_ID)
@@ -241,6 +246,8 @@ class SuperheroesControllerTest extends ControllerConfigForTests {
                 .lastName(SUPERHERO_LAST_NAME)
                 .age(SUPERHERO_AGE)
                 .superPower(SUPERHERO_SUPER_POWER)
+                .health(SUPERHERO_HEALTH)
+                .damage(SUPERHERO_DAMAGE)
                 .build();
     }
 

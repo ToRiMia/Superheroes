@@ -4,16 +4,14 @@ import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.springframework.context.annotation.DependsOn;
 import torimia.superheroes.arena.model.entity.BattleParticipant;
-import torimia.superheroes.arena.model.entity.BattleParticipantKey;
 import torimia.superheroes.award.AwardMapper;
 import torimia.superheroes.award.model.dto.AwardView;
 import torimia.superheroes.award.model.entity.Award;
 import torimia.superheroes.superhero.model.Superhero;
 import torimia.superheroes.superhero.model.dto.*;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -26,7 +24,7 @@ public interface SuperheroMapper {
     @Mapping(target = "awardsId", source = "awards")
     SuperheroDto toDto(Superhero superhero);
 
-    default List<Long> toIdsSuperhero(Set<Superhero> superheroes) {
+    default List<Long> toIdsSuperhero(Collection<Superhero> superheroes) {
         return superheroes.stream().map(Superhero::getId).collect(Collectors.toList());
     }
 

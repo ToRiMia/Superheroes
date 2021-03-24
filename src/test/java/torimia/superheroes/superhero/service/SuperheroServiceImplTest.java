@@ -6,6 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.web.embedded.undertow.UndertowServletWebServer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -16,6 +17,8 @@ import torimia.superheroes.superhero.model.Superhero;
 import torimia.superheroes.award.AwardRepository;
 import torimia.superheroes.superhero.SuperheroRepository;
 import torimia.superheroes.superhero.service.SuperheroServiceImpl;
+import torimia.superheroes.user.model.User;
+import torimia.superheroes.user.repository.UserRepository;
 
 import java.util.List;
 
@@ -35,6 +38,8 @@ class SuperheroServiceImplTest {
     private AwardRepository awardRepository;
     @Mock
     private SuperheroMapper mapper;
+    @Mock
+    private UserRepository userRepository;
 
     private Superhero superhero;
 
@@ -80,7 +85,10 @@ class SuperheroServiceImplTest {
         when(repository.save(mockSuperhero)).thenReturn(mockSuperhero);
         when(mapper.toDto(mockSuperhero)).thenReturn(dto);
 
-        SuperheroDto dtoResponse = service.create(dto);
+        User user = mock(User.class);
+        when(userRepository.save(user)).thenReturn(user);
+
+        SuperheroDto dtoResponse = service.create(dto, user);
 
         assertThat(dtoResponse).isEqualTo(dto);
 

@@ -3,6 +3,7 @@ package torimia.superheroes.user.model;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
+import java.util.Collection;
 
 @Data
 @Builder
@@ -26,4 +27,6 @@ public class UserDtoResponse {
     private String email;
 
     private AccountStatus status;
+
+    private Collection<Long> createdSuperheroId;
 }

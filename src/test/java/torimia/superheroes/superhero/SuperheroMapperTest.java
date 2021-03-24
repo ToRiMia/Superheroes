@@ -47,11 +47,8 @@ class SuperheroMapperTest {
 
 
     @BeforeEach
-    void setUp() throws NoSuchFieldException, IllegalAccessException {
+    void setUp() {
         mapper = new SuperheroMapperImpl(new AwardMapperImpl(), repository);
-//        Field awardMapper = mapper.getClass().getDeclaredField("awardMapper");
-//        awardMapper.setAccessible(true);
-//        awardMapper.set(mapper, new AwardMapperImpl());
 
         superhero = new Superhero();
 
@@ -147,9 +144,9 @@ class SuperheroMapperTest {
                 .returns(SUPERHERO_SUPER_POWER, Superhero::getSuperPower)
                 .returns(SUPERHERO_DAMAGE, Superhero::getDamage)
                 .returns(SUPERHERO_HEALTH, Superhero::getHealth);
-        assertThat(superhero.getListOfFriends()).isNull();
-        assertThat(superhero.getListOfEnemies()).isNull();
-        assertThat(superhero.getAwards()).isNull();
+        assertThat(superhero.getListOfFriends()).isEmpty();
+        assertThat(superhero.getListOfEnemies()).isEmpty();
+        assertThat(superhero.getAwards()).isEmpty();
     }
 
     @Test
