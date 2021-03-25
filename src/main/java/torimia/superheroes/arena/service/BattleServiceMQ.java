@@ -21,9 +21,7 @@ import torimia.superheroes.superhero.SuperheroMapper;
 import torimia.superheroes.superhero.SuperheroRepository;
 import torimia.superheroes.superhero.model.dto.SuperheroDtoForBattle;
 
-import java.sql.Date;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
