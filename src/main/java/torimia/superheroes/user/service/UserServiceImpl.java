@@ -2,6 +2,7 @@ package torimia.superheroes.user.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import torimia.superheroes.user.UserMapper;
 import torimia.superheroes.user.model.User;
 import torimia.superheroes.user.model.UserDtoRequest;
@@ -19,6 +20,13 @@ public class UserServiceImpl implements UserService {
     private final UserKeycloakService keycloakService;
 
     @Override
+    @Transactional(readOnly = true)
+    public UserDtoResponse getById(String id) {
+        return mapper.toDtoResponse(repository.getOne(id));
+    }
+
+    @Override
+    @Transactional
     public UserDtoResponse create(UserDtoRequest dto) {
         String userId = keycloakService.create(dto);
         User user = mapper.toEntity(dto);
@@ -27,11 +35,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDtoResponse getById(String id) {
-        return mapper.toDtoResponse(repository.getOne(id));
-    }
-
-    @Override
+    @Transactional
     public UserDtoResponse update(String id, UserDtoRequest dto) {
         User user = repository.getOne(id);
         if (!dto.getUsername().equals(user.getUsername())) {
@@ -44,9 +48,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void delete(String id) {
         keycloakService.delete(id);
-        repository.findUserById(id).ifPresent(user -> repository.deleteById(id));
+
+        if (repository.existsById(id)){
+            repository.deleteById(id);
+        }
     }
 }
 

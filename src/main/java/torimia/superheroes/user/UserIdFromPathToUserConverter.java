@@ -1,4 +1,4 @@
-package torimia.superheroes.user.controller;
+package torimia.superheroes.user;
 
 import lombok.RequiredArgsConstructor;
 import org.keycloak.KeycloakPrincipal;
@@ -18,7 +18,7 @@ public class UserIdFromPathToUserConverter implements Converter<SecurityContextH
     public User convert(SecurityContextHolder holder) {
         KeycloakPrincipal principal = (KeycloakPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String userId = principal.getName();
-        return repository.findUserById(userId).get();
+        return repository.getOne(userId);
     }
 }
 

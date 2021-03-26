@@ -69,7 +69,7 @@ public class BattleServiceMQ implements BattleService {
         return response;
     }
 
-    @Transactional(propagation= Propagation.REQUIRES_NEW)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public Battle createBattle() {
         Battle battle = Battle.builder()
                 .attackNumber(0)

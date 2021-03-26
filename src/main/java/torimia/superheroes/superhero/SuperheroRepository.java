@@ -6,8 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import torimia.superheroes.award.model.dto.AwardView;
-import torimia.superheroes.superhero.model.dto.*;
 import torimia.superheroes.superhero.model.Superhero;
+import torimia.superheroes.superhero.model.dto.SuperheroViewForTop;
 
 import java.util.List;
 

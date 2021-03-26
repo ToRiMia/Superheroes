@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.SortDefault;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import torimia.superheroes.award.model.dto.AwardView;
 import torimia.superheroes.superhero.model.dto.IdRequest;
@@ -11,9 +12,9 @@ import torimia.superheroes.superhero.model.dto.SuperheroAwardsDto;
 import torimia.superheroes.superhero.model.dto.SuperheroDto;
 import torimia.superheroes.superhero.model.dto.SuperheroDtoForTop;
 import torimia.superheroes.superhero.service.SuperheroService;
-import torimia.superheroes.user.model.User;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 
 import static torimia.superheroes.superhero.controller.SuperheroesController.Path.*;
@@ -74,8 +75,8 @@ public class SuperheroesController {
     }
 
     @PostMapping
-    public SuperheroDto create(@Valid @RequestBody SuperheroDto dto, User user) {
-        return service.create(dto, user);
+    public SuperheroDto create(@Valid @RequestBody SuperheroDto dto, @AuthenticationPrincipal Principal principal) {
+        return service.create(dto, principal.getName());
     }
 
     @PutMapping(BY_ID)

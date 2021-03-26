@@ -23,6 +23,7 @@ import torimia.superheroes.user.repository.UserRepository;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.within;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static torimia.superheroes.TestingUtils.createListOf;
@@ -86,9 +87,12 @@ class SuperheroServiceImplTest {
         when(mapper.toDto(mockSuperhero)).thenReturn(dto);
 
         User user = mock(User.class);
-        when(userRepository.save(user)).thenReturn(user);
+        String userId = "id";
 
-        SuperheroDto dtoResponse = service.create(dto, user);
+        when(userRepository.save(user)).thenReturn(user);
+        when(userRepository.getOne(userId)).thenReturn(user);
+
+        SuperheroDto dtoResponse = service.create(dto, userId);
 
         assertThat(dtoResponse).isEqualTo(dto);
 

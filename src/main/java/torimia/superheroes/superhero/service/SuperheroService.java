@@ -3,8 +3,10 @@ package torimia.superheroes.superhero.service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import torimia.superheroes.award.model.dto.AwardView;
-import torimia.superheroes.superhero.model.dto.*;
-import torimia.superheroes.user.model.User;
+import torimia.superheroes.superhero.model.dto.IdRequest;
+import torimia.superheroes.superhero.model.dto.SuperheroAwardsDto;
+import torimia.superheroes.superhero.model.dto.SuperheroDto;
+import torimia.superheroes.superhero.model.dto.SuperheroDtoForTop;
 
 import java.util.List;
 
@@ -14,7 +16,7 @@ public interface SuperheroService {
 
     SuperheroDto getById(Long id);
 
-    SuperheroDto create(SuperheroDto dto, User user);
+    SuperheroDto create(SuperheroDto dto, String userId);
 
     SuperheroDto update(Long id, SuperheroDto dto);
 

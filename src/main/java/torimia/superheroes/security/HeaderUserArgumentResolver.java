@@ -1,4 +1,4 @@
-package torimia.superheroes.user.controller;
+package torimia.superheroes.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;

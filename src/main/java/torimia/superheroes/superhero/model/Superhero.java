@@ -1,6 +1,8 @@
 package torimia.superheroes.superhero.model;
 
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import torimia.superheroes.award.model.entity.Award;
 
 import javax.persistence.*;
@@ -16,6 +18,8 @@ import java.util.stream.Collectors;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Where(clause = "deleted_date IS NULL")
+@SQLDelete(sql = "UPDATE public.superhero SET deleted_date = CURRENT_TIMESTAMP WHERE id =?")
 public class Superhero{
 
     @Id

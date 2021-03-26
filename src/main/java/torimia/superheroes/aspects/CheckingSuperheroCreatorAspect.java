@@ -5,6 +5,8 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.HandlerMapping;
@@ -14,6 +16,7 @@ import torimia.superheroes.user.model.User;
 import torimia.superheroes.user.repository.UserRepository;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transaction;
 import javax.ws.rs.ForbiddenException;
 import java.security.Principal;
 import java.util.LinkedHashMap;
@@ -25,6 +28,7 @@ public class CheckingSuperheroCreatorAspect {
 
     private final UserRepository userRepository;
     private final SuperheroRepository superheroRepository;
+    private final TransactionTemplate transactionTemplate;
 
     @Pointcut("execution(public * torimia.superheroes.superhero.controller.SuperheroesController.*(..))")
     public void callAllPublicMethods() {
@@ -39,12 +43,15 @@ public class CheckingSuperheroCreatorAspect {
     public void verificationSuperheroCreatorInvocation() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 
-        Superhero superhero = getSuperhero(request);
-        User user = getUser(request);
+        transactionTemplate.execute(transactionStatus -> {
+            Superhero superhero = getSuperhero(request);
+            User user = getUser(request);
 
-        if (!user.getCreatedSuperhero().contains(superhero)) {
-            throw new ForbiddenException("It is forbidden to interact with another account!");
-        }
+            if (!user.getCreatedSuperhero().contains(superhero)) {
+                throw new ForbiddenException("It is forbidden to interact with another account!");
+            }
+            return transactionStatus;
+        });
     }
 
     private User getUser(HttpServletRequest request) {

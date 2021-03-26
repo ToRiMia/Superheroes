@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import torimia.superheroes.award.AwardRepository;
 import torimia.superheroes.award.model.dto.AwardView;
 import torimia.superheroes.award.model.entity.Award;
@@ -34,29 +35,35 @@ public class SuperheroServiceImpl implements SuperheroService {
     private final UserRepository userRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public Page<SuperheroDto> getPage(Pageable page) {
         Page<Superhero> superheroes = repository.findAll(page);
         return superheroes.map(mapper::toDto);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public SuperheroDto getById(Long id) {
         return mapper.toDto(repository.getOne(id));
     }
 
     @Override
-    public SuperheroDto create(SuperheroDto dto, User user) {
+    @Transactional
+    public SuperheroDto create(SuperheroDto dto, String userId) {
         Superhero superhero = mapper.toEntity(dto);
         superhero.setId(null);
 
         Superhero savedSuperhero = repository.save(superhero);
+
+        User user = userRepository.getOne(userId);
         user.addSuperhero(savedSuperhero);
         userRepository.save(user);
-        
+
         return mapper.toDto(savedSuperhero);
     }
 
     @Override
+    @Transactional
     public SuperheroDto update(Long id, SuperheroDto dto) {
         Superhero superhero = repository.getOne(id);
         mapper.toEntityUpdate(dto, superhero);
@@ -64,6 +71,7 @@ public class SuperheroServiceImpl implements SuperheroService {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         repository.deleteById(id);
     }

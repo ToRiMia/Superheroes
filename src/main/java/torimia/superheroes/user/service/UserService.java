@@ -5,9 +5,9 @@ import torimia.superheroes.user.model.UserDtoResponse;
 
 public interface UserService {
 
-    UserDtoResponse create(UserDtoRequest dto);
-
     UserDtoResponse getById(String id);
+
+    UserDtoResponse create(UserDtoRequest dto);
 
     UserDtoResponse update(String id, UserDtoRequest dto);
 
