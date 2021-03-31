@@ -12,11 +12,8 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import torimia.superheroes.superhero.model.dto.IdRequest;
 import torimia.superheroes.superhero.model.dto.SuperheroDto;
 import torimia.superheroes.superhero.service.SuperheroServiceImpl;
-import torimia.superheroes.user.model.User;
-import torimia.superheroes.user.repository.UserRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static torimia.superheroes.superhero.controller.SuperheroesController.Path.*;
 
@@ -39,16 +36,6 @@ class SuperheroesControllerTest extends ControllerConfigForTests {
     @Override
     protected Object getMockMvc() {
         return controller;
-    }
-
-
-    @Test
-    void createSuccess() throws Exception {
-        SuperheroDto dto = createSuperheroDto();
-
-        MockHttpServletResponse response = createSuperhero(dto, BASE_URL);
-
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
     }
 
     @Test

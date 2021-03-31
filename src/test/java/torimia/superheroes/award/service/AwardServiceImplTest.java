@@ -104,6 +104,8 @@ class AwardServiceImplTest {
     void delete() {
         Long id = 1L;
 
+        when(repository.existsById(id)).thenReturn(true);
+
         service.delete(id);
 
         verify(repository).deleteById(id);

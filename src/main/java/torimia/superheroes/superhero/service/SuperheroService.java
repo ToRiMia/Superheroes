@@ -20,7 +20,7 @@ public interface SuperheroService {
 
     SuperheroDto update(Long id, SuperheroDto dto);
 
-    void delete(Long id);
+    void delete(Long id, String userId);
 
     SuperheroDto addFriend(Long superheroId, IdRequest id);
 

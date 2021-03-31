@@ -6,24 +6,20 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.web.embedded.undertow.UndertowServletWebServer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import torimia.superheroes.superhero.SuperheroMapper;
-import torimia.superheroes.superhero.model.dto.SuperheroDto;
-import torimia.superheroes.superhero.model.Superhero;
-import torimia.superheroes.award.AwardRepository;
 import torimia.superheroes.superhero.SuperheroRepository;
-import torimia.superheroes.superhero.service.SuperheroServiceImpl;
+import torimia.superheroes.superhero.model.Superhero;
+import torimia.superheroes.superhero.model.dto.SuperheroDto;
 import torimia.superheroes.user.model.User;
 import torimia.superheroes.user.repository.UserRepository;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.within;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static torimia.superheroes.TestingUtils.createListOf;
@@ -35,8 +31,6 @@ class SuperheroServiceImplTest {
     private SuperheroServiceImpl service;
     @Mock
     private SuperheroRepository repository;
-    @Mock
-    private AwardRepository awardRepository;
     @Mock
     private SuperheroMapper mapper;
     @Mock
@@ -119,10 +113,20 @@ class SuperheroServiceImplTest {
 
     @Test
     void delete() {
+        String userId = "id";
+        User user = mock(User.class);
+        when(userRepository.getOne(userId)).thenReturn(user);
+
         Long id = 1L;
+        when(repository.existsById(id)).thenReturn(true);
 
-        service.delete(id);
+        Superhero mockSuperhero = mock(Superhero.class);
+        when(repository.getOne(id)).thenReturn(mockSuperhero);
 
-        verify(repository).deleteById(id);
+        service.delete(id, userId);
+
+        verify(repository).existsById(id);
+        verify(repository).getOne(id);
+        verify(user).deleteSuperhero(repository.getOne(id));
     }
 }

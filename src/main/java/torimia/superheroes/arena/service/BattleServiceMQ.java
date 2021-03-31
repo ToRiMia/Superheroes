@@ -5,23 +5,22 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import torimia.superheroes.MessageDto;
+import torimia.superheroes.arena.BattleFactory;
 import torimia.superheroes.arena.BattleMapper;
 import torimia.superheroes.arena.BattleParticipantRepository;
 import torimia.superheroes.arena.BattleRepository;
 import torimia.superheroes.arena.model.dto.*;
 import torimia.superheroes.arena.model.entity.Battle;
-import torimia.superheroes.arena.model.entity.BattleParticipant;
+import torimia.superheroes.exceptions.BattleException;
+import torimia.superheroes.exceptions.BattleNotStartedException;
 import torimia.superheroes.superhero.SuperheroMapper;
 import torimia.superheroes.superhero.SuperheroRepository;
 import torimia.superheroes.superhero.model.dto.SuperheroDtoForBattle;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,19 +36,25 @@ public class BattleServiceMQ implements BattleService {
     private final SuperheroRepository superheroRepository;
     private final BattleParticipantRepository battleParticipantRepository;
     private final SuperheroMapper superheroMapper;
-    @Lazy
-    private final BattleService service;//self injection for nested transaction
+    private final BattleFactory factory;
 
     @Value("${rabbitmq.queue.battle.name}")
     private final String battleQueueName;
+    @Value("${rabbitmq.queue.battle-result.name}")
+    private final String battleResultQueueName;
+    @Value("${rabbitmq.queue.battle-status.name}")
+    private final String battleStatusQueueName;
+    @Value("${rabbitmq.queue.dead-letter.name}")
+    private final String deadMessageQueueName;
+
     private final RabbitTemplate rabbitTemplate;
 
 
     @Override
     public MessageDto battleStart(ReceivingBattleDtoFromUser dto) {
-        Battle battle = service.createBattle();
+        Battle battle = factory.createBattle();
 
-        dto.getFightersIds().forEach(fighter -> fillBattleParticipant(fighter, battle));
+        dto.getFightersIds().forEach(fighter -> factory.fillBattleParticipant(fighter, battle));
 
         BattleDtoForServer battleDtoForServer = createBattle(dto, battle.getId());
 
@@ -58,34 +63,18 @@ public class BattleServiceMQ implements BattleService {
             rabbitTemplate.convertAndSend(battleQueueName, battleDtoForServer);
             response = MessageDto.builder().message("Battle started").build();
 
-//            throw new RuntimeException();
+            if (((int) (Math.random() * 10)) == 5) {
+                throw new BattleException("Generated exception for checking service work during fatal battle ending");
+            }
+
         } catch (Exception ex) {
-            log.error("Error in sending battleDtoForServer request: {}, message: {}", ex, ex.getMessage());
-            response = MessageDto.builder().message("Battle not started").build(); // вертати статус 500?
             battle.setBattleStatus(BattleStatus.NOT_STARTED);
             repository.save(battle);
+            log.error("Error in sending battleDtoForServer request: {}, message: {}", ex, ex.getMessage());
+            throw new BattleNotStartedException("Battle not started");
         }
 
         return response;
-    }
-
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public Battle createBattle() {
-        Battle battle = Battle.builder()
-                .attackNumber(0)
-                .startOfBattle(Instant.now())
-                .battleStatus(BattleStatus.STARTED)
-                .build();
-        repository.save(battle);
-        return battle;
-    }
-
-    private void fillBattleParticipant(Long fighter, Battle battle) {
-        BattleParticipant battleParticipant = BattleParticipant.builder()
-                .battle(battle)
-                .superhero(superheroRepository.getOne(fighter))
-                .build();
-        battleParticipantRepository.save(battleParticipant);
     }
 
     private BattleDtoForServer createBattle(ReceivingBattleDtoFromUser dto, Long id) {
@@ -104,7 +93,7 @@ public class BattleServiceMQ implements BattleService {
                 .collect(Collectors.toList());
     }
 
-    @RabbitListener(queues = "battle-status")
+    @RabbitListener(queues = "battle-status", errorHandler = "rabbitMQExceptionHandler")
     public void battleStatus(BattleStatusDto message) {
         Battle battle = repository.getOne(message.getId());
         log.info("Received battle status: {}", message);
@@ -116,7 +105,7 @@ public class BattleServiceMQ implements BattleService {
         log.info("Saved battle entity with status: {}", battle.toString());
     }
 
-    @RabbitListener(queues = "battle-result")
+    @RabbitListener(queues = "battle-result", errorHandler = "rabbitMQExceptionHandler")
     public void battleResult(BattleDtoResultFromServerDto result) {
         log.info("BattleDtoForServer result: {}", result);
         saveBattleResult(result);

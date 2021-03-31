@@ -5,7 +5,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -16,7 +15,6 @@ import torimia.superheroes.user.model.User;
 import torimia.superheroes.user.repository.UserRepository;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transaction;
 import javax.ws.rs.ForbiddenException;
 import java.security.Principal;
 import java.util.LinkedHashMap;
@@ -47,7 +45,7 @@ public class CheckingSuperheroCreatorAspect {
             Superhero superhero = getSuperhero(request);
             User user = getUser(request);
 
-            if (!user.getCreatedSuperhero().contains(superhero)) {
+            if ((superhero != null) && (!user.getCreatedSuperhero().contains(superhero))) {
                 throw new ForbiddenException("It is forbidden to interact with another account!");
             }
             return transactionStatus;
@@ -64,7 +62,8 @@ public class CheckingSuperheroCreatorAspect {
         LinkedHashMap<String, String> attributes = (LinkedHashMap<String, String>) request
                 .getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
         Long superheroId = Long.valueOf(attributes.get("id"));
-        return superheroRepository.getOne(superheroId);
+        return superheroRepository.findById(superheroId).orElseGet(() -> null);
+        //in case when superhero is deleted, we give access instead of throw EntityNotFoundException
     }
 }
 

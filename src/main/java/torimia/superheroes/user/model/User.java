@@ -42,7 +42,7 @@ public class User {
 
     @Setter(AccessLevel.PRIVATE)
     @Builder.Default
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinTable
             (
                     name = "user_superheroes",

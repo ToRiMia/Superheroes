@@ -87,8 +87,8 @@ public class SuperheroesController {
     }
 
     @DeleteMapping(BY_ID)
-    public void remove(@PathVariable(ID) Long id) {
-        service.delete(id);
+    public void remove(@PathVariable(ID) Long id, @AuthenticationPrincipal Principal principal) {
+        service.delete(id, principal.getName());
     }
 
     @PatchMapping(ADD_FRIEND + BY_ID)

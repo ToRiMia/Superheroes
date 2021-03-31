@@ -72,14 +72,18 @@ public class SuperheroServiceImpl implements SuperheroService {
 
     @Override
     @Transactional
-    public void delete(Long id) {
-        repository.deleteById(id);
+    public void delete(Long id, String userId) {
+        if (repository.existsById(id)) {
+            User user = userRepository.getOne(userId);
+            user.deleteSuperhero(repository.getOne(id));
+        }
     }
 
     @Override
+    @Transactional
     public SuperheroDto addFriend(Long superheroId, IdRequest id) {
         if (superheroId.equals(id.getId())) {
-            throw new AddingToListException("It's forbidden to add yourself to the list of your friends or enemies");
+            throw new AddingToListException("It's forbidden to add yourself to the list of your friends");
         }
         Superhero superhero = repository.getOne(superheroId);
         Superhero friend = repository.getOne(id.getId());
@@ -88,6 +92,7 @@ public class SuperheroServiceImpl implements SuperheroService {
     }
 
     @Override
+    @Transactional
     public SuperheroDto deleteFriend(Long superheroId, IdRequest id) {
         Superhero superhero = repository.getOne(superheroId);
         Superhero friend = repository.getOne(id.getId());
@@ -96,9 +101,10 @@ public class SuperheroServiceImpl implements SuperheroService {
     }
 
     @Override
+    @Transactional
     public SuperheroDto addEnemy(Long superheroId, IdRequest id) {
         if (superheroId.equals(id.getId())) {
-            throw new AddingToListException("It's forbidden to add yourself to the list of your friends or enemies");
+            throw new AddingToListException("It's forbidden to add yourself to the list of your enemies");
         }
         Superhero superhero = repository.getOne(superheroId);
         Superhero enemy = repository.getOne(id.getId());
@@ -107,6 +113,7 @@ public class SuperheroServiceImpl implements SuperheroService {
     }
 
     @Override
+    @Transactional
     public SuperheroDto deleteEnemy(Long superheroId, IdRequest id) {
         Superhero superhero = repository.getOne(superheroId);
         Superhero enemy = repository.getOne(id.getId());
@@ -116,6 +123,7 @@ public class SuperheroServiceImpl implements SuperheroService {
 
     @CachePut(value = "getTopSuperheroWithFriends")
     @Override
+    @Transactional(readOnly = true)
     public List<SuperheroDtoForTop> getSuperheroesWithTheBiggestAmountsOfFriends(Integer amountOfSuperhero) {
         return repository.getSuperheroesWithTheBiggestAmountsOfFriends(amountOfSuperhero)
                 .stream().map(mapper::toDtoForTop).collect(Collectors.toList());
@@ -123,12 +131,14 @@ public class SuperheroServiceImpl implements SuperheroService {
 
     @CachePut(value = "getTopSuperheroWithEnemies")
     @Override
+    @Transactional(readOnly = true)
     public List<SuperheroDtoForTop> getSuperheroesWithTheBiggestAmountsOfEnemies(Integer amountOfSuperhero) {
         return repository.getSuperheroesWithTheBiggestAmountsOfEnemies(amountOfSuperhero)
                 .stream().map(mapper::toDtoForTop).collect(Collectors.toList());
     }
 
     @Override
+    @Transactional
     public SuperheroDto addAward(Long superheroId, IdRequest id) {
         Superhero superhero = repository.getOne(superheroId);
         Award award = awardRepository.getOne(id.getId());
@@ -137,6 +147,7 @@ public class SuperheroServiceImpl implements SuperheroService {
     }
 
     @Override
+    @Transactional
     public SuperheroDto deleteAward(Long superheroId, IdRequest id) {
         Superhero superhero = repository.getOne(superheroId);
         Award award = awardRepository.getOne(id.getId());
@@ -145,6 +156,7 @@ public class SuperheroServiceImpl implements SuperheroService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public SuperheroAwardsDto getSuperheroTop5Awards(Long id) {
         PageRequest page = PageRequest.of(0, 5, Sort.unsorted());
         Page<AwardView> responsePage = repository.getSuperheroAwards(id, page);
@@ -154,6 +166,7 @@ public class SuperheroServiceImpl implements SuperheroService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<AwardView> getSuperheroAwards(Long id, Pageable pageable) {
         return repository.getSuperheroAwards(id, pageable);
     }

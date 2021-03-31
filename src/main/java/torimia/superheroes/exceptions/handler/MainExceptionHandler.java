@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import torimia.superheroes.exceptions.AddingToListException;
+import torimia.superheroes.exceptions.BattleNotStartedException;
 
 import javax.persistence.EntityNotFoundException;
 import javax.ws.rs.ClientErrorException;
@@ -21,8 +22,6 @@ import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.nio.file.AccessDeniedException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -97,6 +96,11 @@ public class MainExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ForbiddenException.class)
     public ResponseEntity<String> handleForbiddenException(ForbiddenException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.valueOf(e.getResponse().getStatus()));
+    }
+
+    @ExceptionHandler(BattleNotStartedException.class)
+    public ResponseEntity<String> handleBattleNotStarted(BattleNotStartedException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
 
