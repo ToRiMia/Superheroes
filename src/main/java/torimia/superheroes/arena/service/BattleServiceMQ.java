@@ -1,5 +1,6 @@
 package torimia.superheroes.arena.service;
 
+import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -40,12 +41,6 @@ public class BattleServiceMQ implements BattleService {
 
     @Value("${rabbitmq.queue.battle.name}")
     private final String battleQueueName;
-    @Value("${rabbitmq.queue.battle-result.name}")
-    private final String battleResultQueueName;
-    @Value("${rabbitmq.queue.battle-status.name}")
-    private final String battleStatusQueueName;
-    @Value("${rabbitmq.queue.dead-letter.name}")
-    private final String deadMessageQueueName;
 
     private final RabbitTemplate rabbitTemplate;
 
@@ -63,7 +58,7 @@ public class BattleServiceMQ implements BattleService {
             rabbitTemplate.convertAndSend(battleQueueName, battleDtoForServer);
             response = MessageDto.builder().message("Battle started").build();
 
-            if (((int) (Math.random() * 10)) == 5) {
+            if (new Random().nextInt(10) == 5) {
                 throw new BattleException("Generated exception for checking service work during fatal battle ending");
             }
 
@@ -93,7 +88,7 @@ public class BattleServiceMQ implements BattleService {
                 .collect(Collectors.toList());
     }
 
-    @RabbitListener(queues = "battle-status", errorHandler = "rabbitMQExceptionHandler")
+    @RabbitListener(queues = "${rabbitmq.queue.battle-status.name}", errorHandler = "rabbitMQExceptionHandler")
     public void battleStatus(BattleStatusDto message) {
         Battle battle = repository.getOne(message.getId());
         log.info("Received battle status: {}", message);
@@ -105,7 +100,7 @@ public class BattleServiceMQ implements BattleService {
         log.info("Saved battle entity with status: {}", battle.toString());
     }
 
-    @RabbitListener(queues = "battle-result", errorHandler = "rabbitMQExceptionHandler")
+    @RabbitListener(queues = "${rabbitmq.queue.battle-result.name}", errorHandler = "rabbitMQExceptionHandler")
     public void battleResult(BattleDtoResultFromServerDto result) {
         log.info("BattleDtoForServer result: {}", result);
         saveBattleResult(result);
