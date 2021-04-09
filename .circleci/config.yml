@@ -19,8 +19,8 @@ jobs:
     steps:
       - checkout
       - run:
-        name: Connecting and deleting older version
-        command: ssh ec2-user@ec2-18-184-226-113.eu-central-1.compute.amazonaws.com; cd ..; cd superhero; sudo rm superheroes-0.0.1-SNAPSHOT.jar
+          name: Connecting and deleting older version
+          command: ssh ec2-user@ec2-18-184-226-113.eu-central-1.compute.amazonaws.com; cd ..; cd superhero; sudo rm superheroes-0.0.1-SNAPSHOT.jar
       - run:
           name: Install new version
           command: maven package; scp /target/superheroes-0.0.1-SNAPSHOT.jar ec2-user@ec2-18-184-226-113.eu-central-1.compute.amazonaws.com:/home/superhero
