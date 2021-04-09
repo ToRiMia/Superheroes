@@ -15,9 +15,10 @@ jobs:
   build:
     machine:
       image: ubuntu-2004:202101-01
+    working_directory: ~/Superheroes
     steps:
       - checkout
-      - run: cd Superheroes; mvn package
+      - run: mvn package
       - run:
           name: Connecting and deleting older version
           command: ssh ec2-user@ec2-18-184-226-113.eu-central-1.compute.amazonaws.com 'cd ..; cd superhero; sudo rm superheroes-0.0.1-SNAPSHOT.jar'
