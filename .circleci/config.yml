@@ -21,11 +21,11 @@ jobs:
 #      - run:
 #          name: Connecting and deleting older version
 #          command: ssh ec2-user@ec2-18-184-226-113.eu-central-1.compute.amazonaws.com 'cd ..; cd superhero; sudo rm superheroes-0.0.1-SNAPSHOT.jar'
-      - run:
-          name: Install new version
-          command: |
-            mvn package
-            scp /home/circleci/Superheroes/target/superheroes-0.0.1-SNAPSHOT.jar ec2-user@ec2-18-184-226-113.eu-central-1.compute.amazonaws.com:/home/superhero
+#      - run:
+#          name: Install new version
+#          command: |
+#            mvn package
+#            scp /home/circleci/Superheroes/target/superheroes-0.0.1-SNAPSHOT.jar ec2-user@ec2-18-184-226-113.eu-central-1.compute.amazonaws.com:/home/superhero
       - run:
           name: Starting server
-          command: ssh ec2-user@ec2-18-184-226-113.eu-central-1.compute.amazonaws.com 'java -jar superheroes-0.0.1-SNAPSHOT.jar'
+          command: ssh ec2-user@ec2-18-184-226-113.eu-central-1.compute.amazonaws.com 'cd ..; cd superhero; java -jar superheroes-0.0.1-SNAPSHOT.jar'
