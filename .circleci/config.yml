@@ -24,8 +24,8 @@ jobs:
       - run:
           name: Install new version
           command: |
-            mvn -DskipTests package
-            scp /target/superheroes-0.0.1-SNAPSHOT.jar ec2-user@ec2-18-184-226-113.eu-central-1.compute.amazonaws.com:/home/superhero
+            mvn package
+            scp /home/circleci/Superheroes/target/superheroes-0.0.1-SNAPSHOT.jar ec2-user@ec2-18-184-226-113.eu-central-1.compute.amazonaws.com:/home/superhero
       - run:
           name: Starting server
           command: ssh ec2-user@ec2-18-184-226-113.eu-central-1.compute.amazonaws.com 'java -jar superheroes-0.0.1-SNAPSHOT.jar'
