@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 
 orbs:
   maven: circleci/maven@1.1
@@ -7,13 +7,15 @@ orbs:
 #  maven_test:
 #    jobs:
 #      - maven/test
+#general:
+#  branches:
+#    only:
+#      - master
 
-general:
-  branches:
-    only:
-      - master
 jobs:
   build:
+    machine:
+      image: ubuntu-2004:202101-01
     steps:
       - checkout
       - run:
