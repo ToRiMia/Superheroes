@@ -112,12 +112,23 @@
             <groupId>org.keycloak</groupId>
             <version>8.0.2</version>
         </dependency>
-        <dependency>
-            <artifactId>rabbit-handler-spring-boot-starter</artifactId>
-            <groupId>torimia</groupId>
-            <version>1.0.0</version>
-        </dependency>
     </dependencies>
+
+    <profiles>
+        <profile>
+            <id>local</id>
+            <properties>
+                <spring.profiles.active>local</spring.profiles.active>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <artifactId>rabbit-handler-spring-boot-starter</artifactId>
+                    <groupId>torimia</groupId>
+                    <version>1.0.0</version>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
 
     <dependencyManagement>
         <dependencies>
@@ -138,6 +149,12 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
     </build>
 
 </project>
