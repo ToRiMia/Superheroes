@@ -32,8 +32,8 @@ services:
       DB_USER: postgres
       DB_SCHEMA: public
       DB_PASSWORD: example
-      KEYCLOAK_USER: admin1
-      KEYCLOAK_PASSWORD: adminadmin
+#      KEYCLOAK_USER: admin1
+#      KEYCLOAK_PASSWORD: adminadmin
 #      KEYCLOAK_LOGLEVEL: DEBUG
     ports:
       - 8082:8080

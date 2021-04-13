@@ -6,7 +6,6 @@ import torimia.superheroes.superhero.model.Superhero;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.sql.Date;
 import java.time.Instant;
 
 @Entity
