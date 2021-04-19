@@ -118,7 +118,7 @@ public class BattleServiceMQ implements BattleService {
         log.info("Saved battle result: {}", battle.toString());
     }
 
-    @Scheduled(cron = "0 0 */1 * * *")//every hour in 00 minutes 00 sec
+    @Scheduled(cron = "0 41 */1 * * *")//every hour in 00 minutes 00 sec
     //@Scheduled(fixedDelay = 60000)
     @Override
     public void restartNotFinishedBattle() {
